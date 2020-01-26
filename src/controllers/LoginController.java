@@ -9,21 +9,35 @@
 // lowercase letter at least one uppercase letter, at least one
 // special character with no whitespaces
 package controllers;
+import clientapplication.*;
 import help.RegixMethods;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 
 public class LoginController implements Initializable {
 
+    @FXML
+    private AnchorPane rootPane;
     @FXML
     private Label invalidLabel;
     @FXML
@@ -49,9 +63,8 @@ public class LoginController implements Initializable {
     * 
     * @param event   
     */
-    @FXML
-    private void handleButtonAction(ActionEvent event) {
-        
+ @FXML   
+    private void nextButtonPressed(ActionEvent event) {
         String email = emailText.getText();
         if (flagFalidEmail == false) 
         {
@@ -78,6 +91,18 @@ public class LoginController implements Initializable {
            
         }
     }
+    @FXML 
+        private void newAccountPressed(ActionEvent event) {
+     
+    
+        }
+            
+       
+       
+            
+            
+        
+
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {

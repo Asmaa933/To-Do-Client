@@ -15,6 +15,7 @@ import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.AnchorPane;
 
 /**
  *
@@ -22,6 +23,7 @@ import javafx.scene.control.TextField;
  */
 public class RegisterController implements Initializable {
 
+    @FXML AnchorPane rootPane;
     @FXML
     private Button closeButton;
     @FXML

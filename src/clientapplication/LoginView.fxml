@@ -11,9 +11,9 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.LoginController">
+<AnchorPane id="AnchorPane" fx:id="rootPane" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.LoginController">
     <children>
-        <Button fx:id="nextButton" layoutX="567.0" layoutY="342.0" onAction="#handleButtonAction" prefHeight="40.0" prefWidth="100.0" text="Next" textFill="#222121">
+        <Button fx:id="nextButton" layoutX="567.0" layoutY="342.0" onAction="#nextButtonPressed" prefHeight="40.0" prefWidth="100.0" text="Next" textFill="#222121">
          <font>
             <Font size="14.0" />
          </font></Button>
@@ -21,7 +21,7 @@
          <font>
             <Font size="18.0" />
          </font></Label>
-      <Hyperlink fx:id="createNewAccountButton" layoutX="412.0" layoutY="480.0" text="Create New Account ?">
+      <Hyperlink fx:id="createNewAccountButton" layoutX="412.0" layoutY="480.0" onAction="#newAccountPressed" text="Create New Account ?">
          <font>
             <Font size="13.0" />
          </font>

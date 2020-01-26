@@ -19,7 +19,7 @@ public class ClientApplication extends Application {
     
     @Override
     public void start(Stage stage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("RegisterView.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("LoginView.fxml"));
         
         Scene scene = new Scene(root);
         stage.initStyle(StageStyle.UNDECORATED);

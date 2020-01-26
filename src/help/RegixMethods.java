@@ -12,28 +12,17 @@ import java.util.regex.Pattern;
  * @author esma
  */
 public class RegixMethods {
-    public static boolean isValidEmail(String mail) {
-        String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\."
-                + "[a-zA-Z0-9_+&-]+)@"
-                + "(?:[a-zA-Z0-9-]+\\.)+[a-z"
-                + "A-Z]{2,7}$";
+    
+     public static boolean isValidEmail(String mail) {
 
-        Pattern pat = Pattern.compile(emailRegex);
-        if (mail == null) {
-            return false;
-        }
-        return pat.matcher(mail).matches();
-
+         String emailRegex = "^([A-z]|[0-9])([A-z]|[0-9]|(\\.)){5,30}@[a-z]{2,9}(\\.)[a-z]{2,3}$";
+         
+        return mail.matches(emailRegex);
     }
 
     public static boolean isValidPassword(String pass) {
         String passwordRegex
-                = "^(?=.[0-9])(?=.[a-z])(?=.[A-Z])(?=.[@#$%^&+=])(?=\\S+$).{8,16}$";
-
-        Pattern passwordPattern = Pattern.compile(passwordRegex);
-        if (pass == null) {
-            return false;
-        }
-        return passwordPattern.matcher(pass).matches();
+                = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{6,50}$";      
+        return pass.matches(passwordRegex);
     }
 }

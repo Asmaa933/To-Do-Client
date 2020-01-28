@@ -26,8 +26,8 @@ public class RegixMethods {
     
 }
     public static boolean isValidName(String name) {
-        String NameRegex = "[A-Za-z0-9_]+";      
-        return (name != null) && name.matches(NameRegex);
+        String NameRegex = "^[a-zA-Z]+((['_. -][a-zA-Z ])?[a-zA-Z]*)*$";      
+        return name.matches(NameRegex);
     
     
 }

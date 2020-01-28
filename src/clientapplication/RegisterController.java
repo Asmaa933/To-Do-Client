@@ -60,8 +60,25 @@ public class RegisterController {
     private void signUpPressed(ActionEvent event) {
         //validate goto home page or errrors
         // check if register before or not
-        validateInputs();
+       if(validateInputs()){
         //sign up data in database
+        if (true /* sign up success*/)
+        {
+        ((Node) event.getSource()).getScene().getWindow().hide();
+        FXMLLoader fxload = new FXMLLoader(getClass().getResource("HomeView.fxml"));
+        Parent root;
+        try {
+            root = (Parent) fxload.load();
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.initStyle(StageStyle.UNDECORATED);
+
+            stage.show();
+        } catch (IOException ex) {
+            Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        }
+       }
     }
 
     /**
@@ -112,7 +129,7 @@ public class RegisterController {
             nameErrorLabel.setText("Invalid Name");
             validateFlag = false;
         } else {
-            nameErrorLabel.setVisible(false);
+            nameErrorLabel.setText("");
         }
 
         if (passwordTextField.getText().isEmpty()) {

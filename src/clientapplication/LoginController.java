@@ -10,7 +10,6 @@ package clientapplication;
 // 8-16 characters password with at least one digit, at least one
 // lowercase letter at least one uppercase letter, at least one
 // special character with no whitespaces
-import help.RegixMethods;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -53,22 +52,22 @@ public class LoginController {
         validateEmail();
         } else {
             if (validatePassword()) {
-          //go to home page 
-        //((Node) event.getSource()).getScene().getWindow().hide();
-//        FXMLLoader fxload = new FXMLLoader(getClass().getResource("HomeView.fxml"));
-//        Parent root;
-//        try {
-//            root = (Parent) fxload.load();
-//            Stage stage = new Stage();
-//            stage.setScene(new Scene(root));
-//            stage.initStyle(StageStyle.UNDECORATED);
-//
-//            stage.show();
-//        } catch (IOException ex) {
-//            Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//
-System.out.println("heello");
+//          go to home page 
+//          pass id to home
+        ((Node) event.getSource()).getScene().getWindow().hide();
+        FXMLLoader fxload = new FXMLLoader(getClass().getResource("HomeView.fxml"));
+        Parent root;
+        try {
+            root = (Parent) fxload.load();
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.initStyle(StageStyle.UNDECORATED);
+
+            stage.show();
+        } catch (IOException ex) {
+            Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
             }
 
         }

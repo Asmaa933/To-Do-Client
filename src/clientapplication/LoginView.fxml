@@ -7,35 +7,42 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.effect.Bloom?>
 <?import javafx.scene.effect.InnerShadow?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" fx:id="rootPane" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.LoginController">
+<AnchorPane id="AnchorPane" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="clientapplication.LoginController">
     <children>
-        <Button fx:id="nextButton" layoutX="567.0" layoutY="342.0" onAction="#nextButtonPressed" prefHeight="40.0" prefWidth="100.0" text="Next" textFill="#222121">
+        <Button layoutX="535.0" layoutY="342.0" onAction="#nextButtonPressed" prefHeight="40.0" prefWidth="132.0" text="Next" textFill="#222121">
          <font>
             <Font size="14.0" />
          </font></Button>
-        <Label fx:id="emailPasswordLabel" layoutX="446.0" layoutY="224.0" minHeight="16" minWidth="69" prefHeight="27.0" prefWidth="69.0" text="Email">
-         <font>
-            <Font size="18.0" />
-         </font></Label>
-      <Hyperlink fx:id="createNewAccountButton" layoutX="412.0" layoutY="480.0" onAction="#newAccountPressed" text="Create New Account ?">
+      <Hyperlink layoutX="412.0" layoutY="480.0" onAction="#newAccountPressed" text="Create New Account ?">
          <font>
             <Font size="13.0" />
          </font>
       </Hyperlink>
-      <Label layoutX="515.0" layoutY="102.0" prefHeight="38.0" prefWidth="236.0" text="Welcome To Our App" textFill="#141414">
+      <Label layoutX="502.0" layoutY="121.0" prefHeight="38.0" prefWidth="236.0" text="Welcome To Our App" textFill="#141414">
          <font>
             <Font size="18.0" />
          </font>
       </Label>
-      <Label fx:id="invalidLabel" layoutX="594.0" layoutY="270.0" prefHeight="17.0" prefWidth="148.0" textFill="#ee0d0d" />
-      <PasswordField fx:id="passwordText" layoutX="572.0" layoutY="225.0" prefHeight="25.0" prefWidth="191.0" visible="false" />
-      <TextField fx:id="emailText" layoutX="572.0" layoutY="225.0" prefHeight="25.0" prefWidth="191.0" promptText="name@example.com" />
+      <Label fx:id="invalidLabel" layoutX="461.0" layoutY="270.0" prefHeight="17.0" prefWidth="281.0" textFill="#ee0d0d" />
+      <PasswordField fx:id="passwordText" layoutX="443.0" layoutY="225.0" prefHeight="27.0" prefWidth="320.0" promptText="Password" visible="false" />
+      <TextField fx:id="emailText" layoutX="443.0" layoutY="225.0" prefHeight="27.0" prefWidth="320.0" promptText="name@example.com" />
       <Pane fx:id="loginButton" layoutY="1.0" prefHeight="600.0" prefWidth="400.0" style="-fx-background-color: #2e86c1;" />
-      <Hyperlink fx:id="notYouButton" layoutX="588.0" layoutY="413.0" text="Not You ?" />
+      <Hyperlink fx:id="notYouHyperLink" layoutX="576.0" layoutY="392.0" onAction="#notYouPressed" prefHeight="25.0" prefWidth="104.0" text="Not You ?" textAlignment="CENTER" visible="false" />
+      <Button fx:id="closeButton" layoutX="737.0" layoutY="37.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#closeButtonPressed" prefHeight="40.0" prefWidth="40.0">
+         <graphic>
+            <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/close.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </Button>
     </children>
    <effect>
       <Bloom threshold="1.0">

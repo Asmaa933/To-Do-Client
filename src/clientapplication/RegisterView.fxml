@@ -11,21 +11,21 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="clientapplication.RegisterController">
    <children>
       <Label layoutX="531.0" layoutY="110.0" text="Create New Account">
          <font>
             <Font size="18.0" />
          </font>
       </Label>
-      <Button fx:id="signUpButton" layoutX="491.0" layoutY="454.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="237.0" text="Sign Up">
+      <Button layoutX="491.0" layoutY="454.0" mnemonicParsing="false" onAction="#signUpPressed" prefHeight="44.0" prefWidth="237.0" text="Sign Up">
          <font>
             <Font size="14.0" />
          </font>
       </Button>
       <TextField fx:id="nameTextField" layoutX="424.0" layoutY="145.0" prefHeight="27.0" prefWidth="347.0" promptText="Name" />
       <TextField fx:id="emailTextField" layoutX="424.0" layoutY="209.0" prefHeight="27.0" prefWidth="347.0" promptText="name@example.com" />
-      <Hyperlink fx:id="logInHyperlink" layoutX="580.0" layoutY="505.0" prefHeight="28.0" prefWidth="157.0" text="Log In">
+      <Hyperlink fx:id="logInHyperlink" layoutX="580.0" layoutY="505.0" onAction="#loginPressed" prefHeight="28.0" prefWidth="157.0" text="Log In">
          <font>
             <Font size="14.0" />
          </font>
@@ -34,7 +34,7 @@
       <PasswordField fx:id="passwordTextField" layoutX="424.0" layoutY="274.0" prefHeight="27.0" prefWidth="347.0" promptText="Password" />
       <Pane layoutY="1.0" prefHeight="600.0" prefWidth="400.0" style="-fx-background-color: #2E86C1;" />
       <Label fx:id="confirmPassErrorLabel" layoutX="424.0" layoutY="385.0" prefHeight="23.0" prefWidth="347.0" />
-      <Button fx:id="closeButton" layoutX="737.0" layoutY="37.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="40.0" prefWidth="40.0">
+      <Button layoutX="737.0" layoutY="37.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#closeButtonPressed" prefHeight="40.0" prefWidth="40.0">
          <graphic>
             <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
                <image>

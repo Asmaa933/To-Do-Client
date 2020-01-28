@@ -5,8 +5,6 @@
  */
 package help;
 
-import java.util.regex.Pattern;
-
 /**
  *
  * @author esma
@@ -24,5 +22,13 @@ public class RegixMethods {
         String passwordRegex
                 = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{6,50}$";      
         return pass.matches(passwordRegex);
-    }
+    
+    
+}
+    public static boolean isValidName(String name) {
+        String NameRegex = "[A-Za-z0-9_]+";      
+        return (name != null) && name.matches(NameRegex);
+    
+    
+}
 }

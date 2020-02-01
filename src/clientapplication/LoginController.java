@@ -10,6 +10,7 @@ package clientapplication;
 // 8-16 characters password with at least one digit, at least one
 // lowercase letter at least one uppercase letter, at least one
 // special character with no whitespaces
+import help.RegixMethods;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -97,21 +98,6 @@ public class LoginController {
         } catch (IOException ex) {
             Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
         }
-      
-//        FXMLLoader fxload = new FXMLLoader(getClass().getResource("RegisterView.fxml"));
-//        Parent root;
-//        try {
-//            root = (Parent) fxload.load();
-//            Stage stage = new Stage();
-//                 RegisterController reg = (RegisterController)fxload.getController();
-//            reg.setX(17);
-//            stage.setScene(new Scene(root));
-//            stage.initStyle(StageStyle.UNDECORATED);
-//
-//            stage.show();
-//        } catch (IOException ex) {
-//            Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
-//        }
 
     }
 
@@ -144,7 +130,8 @@ public class LoginController {
         if (emailText.getText().isEmpty()) {
             invalidLabel.setText("Enter email");
 
-        } else if (true/*replace with query in db*/){//query email;
+        }else if (RegixMethods.isValidEmail(emailText.getText())) {
+          if (true/*replace with query in db*/){//query email;
             emailText.setVisible(false);
             passwordText.setVisible(true);
             notYouHyperLink.setVisible(true);
@@ -156,7 +143,11 @@ public class LoginController {
             checkEmail = true;
         } else {
             invalidLabel.setText("Could't find your email");
-        }
+        }  
+        }else{
+         invalidLabel.setText("Enter valid email");
+
+        } 
         return checkEmail;
     }
 
@@ -165,13 +156,18 @@ public class LoginController {
         if (passwordText.getText().isEmpty()) {
             invalidLabel.setText("Enter password");
 
-        } else if (true /* query on password in db*/) {
+        }else if (RegixMethods.isValidPassword(passwordText.getText())) {
+            if (true /* query on password in db*/) {
             passwordText.setText("");
             invalidLabel.setText("");
             checkPassword = true;
         } else {
             invalidLabel.setText("Wrong password");
         }
-        return checkPassword;
+        }
+        else{
+         invalidLabel.setText("Enter valid password");
+    }
+                return checkPassword;
     }
 }

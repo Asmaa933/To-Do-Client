@@ -1,11 +1,9 @@
-package clientapplication;
-
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
+package clientapplication;
 
 import java.io.DataInputStream;
 import java.io.IOException;
@@ -21,24 +19,43 @@ import org.json.simple.JSONObject;
  */
 public class ClientConnector {
 
-    public static final String STATIC_IP = "127.0.0.1";
-    public static final int PORT_NO = 5005;
+    private static final String STATIC_IP = "127.0.0.1";
+    private static final int PORT_NO = 5005;
 
-    private Socket socket;
-    private DataInputStream dis;
-    private PrintStream ps;
+    private static Socket socket;
+    private static DataInputStream dis;
+    private static PrintStream ps;
+    
+    private static Thread myThread;
 
     /**
-     * init connection with the server
+     * startConnection connection with the server
      */
-    public void init() {
+    public static void startConnection() {
         try {
             socket = new Socket(STATIC_IP, PORT_NO);
             dis = new DataInputStream(socket.getInputStream());
             ps = new PrintStream(socket.getOutputStream());
         } catch (IOException ex) {
-            Logger.getLogger(ClientConnector.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();  
         }
+        
+        myThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while(true) {                    
+                    try {   
+                        //checkMyConnection();
+                        String replyMsg = dis.readLine();
+                        //Use Massage 
+                        System.out.println("Client Message From Server (replyMsg)= " + replyMsg);
+                    } catch (IOException ex) {
+                       ex.printStackTrace();
+                    }
+                }
+            }
+        });
+        myThread.start();
     }
 
     /**
@@ -46,25 +63,28 @@ public class ClientConnector {
      *
      * @param msg to be sent to the server
      */
-    public void sendMessage(String msg) {
+    public static void sendMessage(String msg) {
         ps.println(msg);
     }
     
-     public void sendMessage(JSONObject msg) {
+     public static void sendMessage(JSONObject msg) {
         ps.println(msg);
     }
 
     /**
      * close connection and release resources
      */
-    public void closeConnection() {
+    public static void closeConnection() {
         try {
-            dis.close();
+            ps.println("JavaTODO_ClientFINISH");
             ps.close();
+            dis.close();
             socket.close();
+            myThread.stop();
         } catch (IOException ex) {
-            Logger.getLogger(ClientConnector.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
         }
-
     }
+    
+    
 }

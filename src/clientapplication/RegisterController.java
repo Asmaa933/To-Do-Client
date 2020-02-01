@@ -55,11 +55,22 @@ public class RegisterController {
 
     @FXML
     private Button signUpButton;
+    
+        private int x = 0;
+
+    public int getX() {
+        return x;
+    }
+
+    public void setX(int x) {
+        this.x = x;
+    }
 
     @FXML
     private void signUpPressed(ActionEvent event) {
         //validate goto home page or errrors
         // check if register before or not
+        System.out.println(x);
        if(validateInputs()){
         //sign up data in database
         if (true /* sign up success*/)

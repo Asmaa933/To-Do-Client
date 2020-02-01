@@ -41,6 +41,9 @@ public class LoginController {
     private Hyperlink notYouHyperLink;
 
     private boolean flagEmail = false;
+    
+
+    
 
     /**
      *
@@ -60,6 +63,7 @@ public class LoginController {
         try {
             root = (Parent) fxload.load();
             Stage stage = new Stage();
+       
             stage.setScene(new Scene(root));
             stage.initStyle(StageStyle.UNDECORATED);
 
@@ -80,19 +84,34 @@ public class LoginController {
      */
     @FXML
     private void newAccountPressed(ActionEvent event) {
-
-        FXMLLoader fxload = new FXMLLoader(getClass().getResource("RegisterView.fxml"));
-        Parent root;
+        Parent tableViewParent;
         try {
-            root = (Parent) fxload.load();
-            Stage stage = new Stage();
-            stage.setScene(new Scene(root));
-            stage.initStyle(StageStyle.UNDECORATED);
-
-            stage.show();
+            tableViewParent = FXMLLoader.load(getClass().getResource("RegisterView.fxml"));
+              Scene tableViewScene = new Scene(tableViewParent);
+        
+        //This line gets the Stage information
+        Stage window = (Stage)((Node)event.getSource()).getScene().getWindow();
+        
+        window.setScene(tableViewScene);
+        window.show();
         } catch (IOException ex) {
             Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
         }
+      
+//        FXMLLoader fxload = new FXMLLoader(getClass().getResource("RegisterView.fxml"));
+//        Parent root;
+//        try {
+//            root = (Parent) fxload.load();
+//            Stage stage = new Stage();
+//                 RegisterController reg = (RegisterController)fxload.getController();
+//            reg.setX(17);
+//            stage.setScene(new Scene(root));
+//            stage.initStyle(StageStyle.UNDECORATED);
+//
+//            stage.show();
+//        } catch (IOException ex) {
+//            Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
+//        }
 
     }
 
@@ -130,7 +149,7 @@ public class LoginController {
             passwordText.setVisible(true);
             notYouHyperLink.setVisible(true);
             
-
+           
             flagEmail = true;
             invalidLabel.setText("");
             passwordText.setText("");

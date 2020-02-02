@@ -8,8 +8,9 @@
   </information>
   <resources>
     <j2se version="1.6+" href="http://java.sun.com/products/autodl/j2se"/>
-    <jar href="ClientApplication.jar" size="28778" download="eager" />
-    <jar href="lib/json-simple-1.1.1.jar" size="23737" download="eager" />
+    <jar href="ClientApplication.jar" size="35451" download="eager" />
+    <jar href="lib/javax.json-1.0.4.jar" size="85147" download="eager" />
+    <jar href="lib/javax.json-api-1.0.jar" size="19754" download="eager" />
   </resources>
   <applet-desc  width="800" height="600" main-class="com.javafx.main.NoJavaFXFallback"  name="ClientApplication" >
     <param name="requiredFXVersion" value="8.0+"/>

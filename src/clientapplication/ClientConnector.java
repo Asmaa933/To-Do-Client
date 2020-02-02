@@ -9,9 +9,6 @@ import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.net.Socket;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import org.json.simple.JSONObject;
 
 /**
  *
@@ -67,9 +64,9 @@ public class ClientConnector {
         ps.println(msg);
     }
     
-     public static void sendMessage(JSONObject msg) {
+    /* public static void sendMessage(JSONObject msg) {
         ps.println(msg);
-    }
+    }*/
 
     /**
      * close connection and release resources

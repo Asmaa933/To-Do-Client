@@ -6,14 +6,12 @@ package clientapplication;
  * and open the template in the editor.
  */
  
-import help.JSONHelper;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import org.json.simple.JSONObject;
 
 /**
  *
@@ -29,13 +27,7 @@ public class ClientApplication extends Application {
 
         stage.setScene(scene);
         stage.show();
-        
-//      JSONObject a =  JSONHelper.getJSON("signin", "email", "remonger@gmail.com");
-//      ClientConnector conn = new ClientConnector();
-//      conn.init();
-//      conn.sendMessage(a);
-//        System.out.println(a);
-        
+
     }
 
     /**

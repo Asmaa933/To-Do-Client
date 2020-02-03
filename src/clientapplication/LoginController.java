@@ -70,10 +70,10 @@ public class LoginController {
      */
     @FXML
     private void newAccountPressed(ActionEvent event) {
-        Parent tableViewParent;
+        Parent registerScene;
         try {
-            tableViewParent = FXMLLoader.load(getClass().getResource("RegisterView.fxml"));
-            Scene tableViewScene = new Scene(tableViewParent);
+            registerScene = FXMLLoader.load(getClass().getResource("RegisterView.fxml"));
+            Scene tableViewScene = new Scene(registerScene);
 
             //This line gets the Stage information
             Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();

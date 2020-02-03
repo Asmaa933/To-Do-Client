@@ -7,6 +7,7 @@ package network;
 
 import javax.json.Json;
 import javax.json.JsonObject;
+import model.UserModel;
 
 /**
  *
@@ -34,7 +35,6 @@ public class JsonUtil {
     /**
      * takes an password and converts it to JSON
      * @param password to be converted to JSON
-     * @param id id of the user
      * @return the JSON object from the password
      */
     public static JsonObject createJsonPassword(String password, int id) {
@@ -46,8 +46,20 @@ public class JsonUtil {
         return obj;
     }
     
+    // ٍchange name to -- parseBoolean //ToJsonObject  // as using in Sign up
     public static boolean convertFromJsonPasswordResponse(JsonObject obj){
-        return obj.getBoolean(JsonConst.TYPE_PASSWORD_SIGNIN_RESPONSE);
+        return obj.getBoolean(JsonConst.TYPE_PASSWORD_SIGNIN_RESPONSE); //TypeParseBoolean
+    }
+    
+    public static JsonObject convertToJsonUser(UserModel user){
+        JsonObject obj = Json.createObjectBuilder()
+                .add(JsonConst.TYPE, JsonConst.TYPE_SIGNUP_REQUEST)
+                .add("id", user.getId())
+                .add("name", user.getName())
+                .add("email", user.getEmail())
+                .add("password", user.getPassword())
+                .build();
+        return obj;
     }
     
 }

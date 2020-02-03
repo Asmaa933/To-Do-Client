@@ -42,6 +42,7 @@ public class RequestHandler {
             
             ps.println(request);
             String read = dis.readLine();
+            System.out.println("RequestHandler-Readline= " +read);
             JsonReader jsonReader = Json.createReader(new StringReader(read));
             response = jsonReader.readObject();
             jsonReader.close();

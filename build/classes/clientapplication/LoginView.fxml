@@ -4,6 +4,7 @@
 <?import javafx.scene.control.Hyperlink?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.ProgressIndicator?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.effect.Bloom?>
 <?import javafx.scene.effect.InnerShadow?>
@@ -15,7 +16,9 @@
 
 <AnchorPane id="AnchorPane" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="clientapplication.LoginController">
     <children>
-        <Button layoutX="535.0" layoutY="342.0" onAction="#nextButtonPressed" prefHeight="40.0" prefWidth="132.0" text="Next" textFill="#222121">
+      <TextField fx:id="emailText" layoutX="443.0" layoutY="225.0" prefHeight="27.0" prefWidth="320.0" promptText="name@example.com" />
+      <PasswordField fx:id="passwordText" layoutX="443.0" layoutY="225.0" prefHeight="27.0" prefWidth="320.0" promptText="Password" visible="false" />
+        <Button fx:id="nextBtn" layoutX="535.0" layoutY="342.0" onAction="#nextButtonPressed" prefHeight="40.0" prefWidth="132.0" text="Next" textFill="#222121">
          <font>
             <Font size="14.0" />
          </font></Button>
@@ -24,17 +27,15 @@
             <Font size="13.0" />
          </font>
       </Hyperlink>
+      <Hyperlink fx:id="notYouHyperLink" layoutX="576.0" layoutY="392.0" onAction="#notYouPressed" prefHeight="25.0" prefWidth="104.0" text="Not You ?" textAlignment="CENTER" visible="false" />
+      <Label fx:id="invalidLabel" layoutX="461.0" layoutY="270.0" prefHeight="17.0" prefWidth="281.0" textFill="#ee0d0d" />
+      <Pane layoutY="1.0" prefHeight="600.0" prefWidth="400.0" style="-fx-background-color: #2e86c1;" />
       <Label layoutX="502.0" layoutY="121.0" prefHeight="38.0" prefWidth="236.0" text="Welcome To Our App" textFill="#141414">
          <font>
             <Font size="18.0" />
          </font>
       </Label>
-      <Label fx:id="invalidLabel" layoutX="461.0" layoutY="270.0" prefHeight="17.0" prefWidth="281.0" textFill="#ee0d0d" />
-      <PasswordField fx:id="passwordText" layoutX="443.0" layoutY="225.0" prefHeight="27.0" prefWidth="320.0" promptText="Password" visible="false" />
-      <TextField fx:id="emailText" layoutX="443.0" layoutY="225.0" prefHeight="27.0" prefWidth="320.0" promptText="name@example.com" />
-      <Pane fx:id="loginButton" layoutY="1.0" prefHeight="600.0" prefWidth="400.0" style="-fx-background-color: #2e86c1;" />
-      <Hyperlink fx:id="notYouHyperLink" layoutX="576.0" layoutY="392.0" onAction="#notYouPressed" prefHeight="25.0" prefWidth="104.0" text="Not You ?" textAlignment="CENTER" visible="false" />
-      <Button fx:id="closeButton" layoutX="737.0" layoutY="37.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#closeButtonPressed" prefHeight="40.0" prefWidth="40.0">
+      <Button layoutX="737.0" layoutY="37.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#closeButtonPressed" prefHeight="40.0" prefWidth="40.0">
          <graphic>
             <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
                <image>
@@ -43,6 +44,7 @@
             </ImageView>
          </graphic>
       </Button>
+      <ProgressIndicator fx:id="progressIndicator" layoutX="586.0" layoutY="342.0" prefHeight="40.0" prefWidth="30.0" visible="false" />
     </children>
    <effect>
       <Bloom threshold="1.0">

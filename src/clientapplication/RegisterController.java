@@ -20,9 +20,10 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
+import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import javax.json.JsonObject;
 import model.UserModel;
 import network.JsonUtil;
@@ -53,13 +54,21 @@ public class RegisterController {
     @FXML
     private Label confirmPassErrorLabel;
     @FXML
-    private Button signUpButton;
+    private AnchorPane rootPane;
+    @FXML
+    private ProgressIndicator progressIndicator;
+    @FXML
+    private Button signUpBtn;
 
     @FXML
     private void signUpPressed(ActionEvent event) {
         //validate goto home page or errrors
         // check if register before or not
         if (validateInputs()) {
+            signUpBtn.setDisable(true);
+            signUpBtn.setText("");
+            progressIndicator.setVisible(true);
+            logInHyperlink.setVisible(false);
             new Thread(() -> {
                 UserModel user = new UserModel(nameTextField.getText(), emailTextField.getText(), passwordTextField.getText());
                 JsonObject jsonObject = JsonUtil.convertToJsonUser(user);
@@ -67,6 +76,10 @@ public class RegisterController {
                 boolean addFlag = JsonUtil.convertFromJsonPasswordResponse(response);
                 System.out.println("aaaaa" + addFlag);
                 Platform.runLater(() -> {
+                         signUpBtn.setDisable(false);
+            signUpBtn.setText("Sign Up");
+       
+            progressIndicator.setVisible(false);
                     if (addFlag == true) {
                         Parent loginScene;
                         try {
@@ -79,8 +92,9 @@ public class RegisterController {
                             Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     } else {
-                        System.out.println("This email already registered");
                         emailErrorLabel.setText("This email already registered");
+                                    logInHyperlink.setVisible(true);
+
                         // Aller Signup Again  // And Existes Email
                     }
                 });

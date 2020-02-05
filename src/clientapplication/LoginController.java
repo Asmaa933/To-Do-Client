@@ -21,12 +21,13 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
+import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import javax.json.JsonObject;
 import network.JsonUtil;
 import network.RequestHandler;
@@ -43,9 +44,11 @@ public class LoginController {
     private PasswordField passwordText;
     @FXML
     private Hyperlink notYouHyperLink;
-
+    @FXML
+    private ProgressIndicator progressIndicator;
+    @FXML
+    private Button nextBtn;
     private boolean flagEmail = false;
-
     private int id = -1;
     ActionEvent eventSource = null;
 
@@ -73,12 +76,12 @@ public class LoginController {
         Parent registerScene;
         try {
             registerScene = FXMLLoader.load(getClass().getResource("RegisterView.fxml"));
-            Scene tableViewScene = new Scene(registerScene);
+            Scene registerViewScene = new Scene(registerScene);
 
             //This line gets the Stage information
             Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
 
-            window.setScene(tableViewScene);
+            window.setScene(registerViewScene);
             window.show();
         } catch (IOException ex) {
             Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
@@ -93,7 +96,7 @@ public class LoginController {
     @FXML
     private void closeButtonPressed(ActionEvent event) {
         Platform.exit();
-
+        System.exit(0);
     }
 
     /**
@@ -114,19 +117,24 @@ public class LoginController {
         if (emailText.getText().isEmpty()) {
             invalidLabel.setText("Enter email");
         } else if (RegixMethods.isValidEmail(emailText.getText())) {
-
+            nextBtn.setText("");
+            nextBtn.setDisable(true);
+            progressIndicator.setVisible(true);
             new Thread(() -> {
                 JsonObject jsonObject = JsonUtil.createJsonEmail(emailText.getText());
                 JsonObject response = new RequestHandler().makeRequest(jsonObject);
                 System.out.println(response);
                 id = JsonUtil.convertFromJsonId(response);
-                
+
                 Platform.runLater(() -> {
+                    nextBtn.setText("Next");
+                    nextBtn.setDisable(false);
+                    progressIndicator.setVisible(false);
                     if (id != -1) {
                         emailText.setVisible(false);
                         passwordText.setVisible(true);
                         notYouHyperLink.setVisible(true);
-                        
+
                         flagEmail = true;
                         invalidLabel.setText("");
                         passwordText.setText("");
@@ -134,24 +142,25 @@ public class LoginController {
                         invalidLabel.setText("Could't find your email");
                     }
                 });
-  
+
             }).start();
 
         } else {
             Platform.runLater(() -> {
                 invalidLabel.setText("Enter valid email");
-            });   
+            });
         }
-        
+
     }
 
-    
     private void validatePassword() {
         if (passwordText.getText().isEmpty()) {
             invalidLabel.setText("Enter password");
 
         } else if (RegixMethods.isValidPassword(passwordText.getText())) {
-
+            nextBtn.setText("");
+            nextBtn.setDisable(true);
+            progressIndicator.setVisible(true);
             new Thread(() -> {
                 JsonObject jsonObject = JsonUtil.createJsonPassword(passwordText.getText(), id);
                 JsonObject response = new RequestHandler().makeRequest(jsonObject);
@@ -166,17 +175,19 @@ public class LoginController {
 
                         //   go to home page
                         //  pass id to home
-                        ((Node) eventSource.getSource()).getScene().getWindow().hide();
-                        FXMLLoader fxload = new FXMLLoader(getClass().getResource("HomeView.fxml"));
-                        Parent root;
+                        Parent homeScene;
                         try {
-                            root = (Parent) fxload.load();
-                            Stage stage = new Stage();
+                            homeScene = FXMLLoader.load(getClass().getResource("HomeView.fxml"));
+                            Scene homeViewScene = new Scene(homeScene);
 
-                            stage.setScene(new Scene(root));
-                            stage.initStyle(StageStyle.UNDECORATED);
+                            //This line gets the Stage information
+                            Stage window = (Stage) ((Node) eventSource.getSource()).getScene().getWindow();
+                            window.setScene(homeViewScene);
+                            window.hide();
 
-                            stage.show();
+                            window.show();
+                            window.setMaximized(true);
+
                         } catch (IOException ex) {
                             Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
                         }
@@ -185,6 +196,9 @@ public class LoginController {
 
                 } else {
                     Platform.runLater(() -> {
+                        nextBtn.setText("Next");
+                        nextBtn.setDisable(false);
+                        progressIndicator.setVisible(false);
                         invalidLabel.setText("Wrong password");
                     });
                 }

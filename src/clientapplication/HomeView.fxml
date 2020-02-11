@@ -15,7 +15,7 @@
             <Button layoutX="1047.0" layoutY="107.0" mnemonicParsing="false" text="Assigned Tasks" />
             <Button layoutX="948.0" layoutY="107.0" mnemonicParsing="false" text="Own Projects" />
             <Button layoutX="865.0" layoutY="107.0" mnemonicParsing="false" text="My Friends" />
-            <Button layoutX="753.0" layoutY="107.0" mnemonicParsing="false" text="Friend Requests" />
+            <Button layoutX="753.0" layoutY="107.0" mnemonicParsing="false" onAction="#friend" text="Friend Requests" />
          </children>
       </Pane>
       <ListView layoutX="220.0" layoutY="203.0" prefHeight="456.0" prefWidth="295.0" />

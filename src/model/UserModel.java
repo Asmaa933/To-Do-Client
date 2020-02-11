@@ -10,11 +10,11 @@ package model;
  * @author Mazen Mohamed
  */
 public class UserModel {
-    private int id;
-    private String name;
-    private String email;
-    private String password;
-    private String online_status;
+    private int id = -1;
+    private String name = "";
+    private String email = "";
+    private String password = "";
+    private String online_status = ONLINE_STATUS.OFFLINE;
     
     public static final class ONLINE_STATUS{
         public static final String OFFLINE = "offline";

@@ -6,32 +6,32 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
-<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.ProgressIndicator?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="457.0" prefWidth="395.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="clientapplication.ListViewController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="475.0" prefWidth="395.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="clientapplication.ListViewController">
    <children>
-      <TextField fx:id="nameText" layoutX="134.0" layoutY="105.0" prefHeight="25.0" prefWidth="174.0" promptText="Enter List Name" />
-      <Label layoutX="36.0" layoutY="158.0" text="List Color" />
-      <Label layoutX="34.0" layoutY="200.0" text="Created Date" />
-      <Label layoutX="36.0" layoutY="243.0" text="Collaborators" />
-      <ColorPicker fx:id="colorPicker" layoutX="134.0" layoutY="154.0" prefHeight="25.0" prefWidth="174.0" />
-      <Button fx:id="addButton" layoutX="326.0" layoutY="239.0" mnemonicParsing="false" onAction="#addButtonPressed" text="Add" />
-      <ListView fx:id="listFriend" layoutX="134.0" layoutY="280.0" prefHeight="98.0" prefWidth="174.0" />
-      <Label layoutX="34.0" layoutY="64.0" prefHeight="25.0" prefWidth="50.0" text="Owner" visible="false" />
+      <TextField fx:id="titleText" layoutX="139.0" layoutY="80.0" prefHeight="25.0" prefWidth="174.0" promptText="Enter List Name" />
+      <Label layoutX="41.0" layoutY="127.0" text="List Color" />
+      <Label layoutX="39.0" layoutY="169.0" text="Created Date" />
+      <Label layoutX="34.0" layoutY="278.0" text="Collaborators" />
+      <ColorPicker fx:id="colorPicker" layoutX="139.0" layoutY="123.0" prefHeight="25.0" prefWidth="174.0" />
+      <Button fx:id="addButton" layoutX="316.0" layoutY="274.0" mnemonicParsing="false" onAction="#addButtonPressed" prefHeight="25.0" prefWidth="70.0" text="Add" />
+      <ListView fx:id="collaborateListView" layoutX="133.0" layoutY="311.0" prefHeight="111.0" prefWidth="174.0" />
       <ButtonBar layoutX="-11.0" prefHeight="40.0" prefWidth="395.0">
         <buttons>
-            <Label fx:id="AddListLabel" minWidth="68.0" prefHeight="17.0" prefWidth="209.0" text="Add List" />
-            <Separator prefWidth="200.0" visible="false" />
-            <Button fx:id="deleteButton" minWidth="74.0" mnemonicParsing="false" onAction="#deleteButtonPressed" prefHeight="25.0" text="Delete" visible="false" />
-            <Button fx:id="saveButton" minWidth="60.0" mnemonicParsing="false" onAction="#saveButtonPressed" prefHeight="25.0" text="Save" />
+            <Button fx:id="deleteButton" minWidth="72.0" mnemonicParsing="false" onAction="#deleteButtonPressed" prefHeight="25.0" prefWidth="75.0" text="Delete" />
         </buttons>
       </ButtonBar>
-      <Button fx:id="cancelButton" layoutX="326.0" layoutY="404.0" mnemonicParsing="false" onAction="#CancelButtonPressed" text="Cancel" />
-      <Label layoutX="36.0" layoutY="105.0" prefHeight="25.0" prefWidth="60.0" text="List Name" />
-      <Label fx:id="OwnerNameLabel" layoutX="134.0" layoutY="64.0" prefHeight="25.0" prefWidth="174.0" text="Owner Name" visible="false" />
-      <ComboBox fx:id="selectCombobox" layoutX="134.0" layoutY="238.0" prefHeight="25.0" prefWidth="174.0" promptText="Select Friend" />
-      <TextField fx:id="dateText" editable="false" layoutX="134.0" layoutY="196.0" prefHeight="25.0" prefWidth="174.0" />
+      <Button fx:id="cancelButton" layoutX="313.0" layoutY="429.0" mnemonicParsing="false" onAction="#CancelButtonPressed" text="Cancel" />
+      <Label layoutX="41.0" layoutY="80.0" prefHeight="25.0" prefWidth="60.0" text="List Name" />
+      <Label layoutX="39.0" layoutY="39.0" prefHeight="25.0" prefWidth="50.0" text="Owner" />
+      <ComboBox fx:id="teammatesCombobox" layoutX="133.0" layoutY="274.0" prefHeight="25.0" prefWidth="174.0" promptText="Select Friend" />
+      <TextField fx:id="dateText" editable="false" layoutX="139.0" layoutY="165.0" prefHeight="25.0" prefWidth="174.0" />
+      <TextField fx:id="OwnerNameText" editable="false" layoutX="139.0" layoutY="39.0" prefHeight="25.0" prefWidth="174.0" />
+      <Button fx:id="saveButton" layoutX="274.0" layoutY="201.0" mnemonicParsing="false" onAction="#saveButtonPressed" prefHeight="25.0" prefWidth="100.0" text="Save" />
+      <ProgressIndicator fx:id="ProgressIndicator" layoutX="274.0" layoutY="201.0" prefHeight="25.0" prefWidth="38.0" visible="false" />
+      <ProgressIndicator fx:id="ProgressIndicator2" layoutX="317.0" layoutY="278.0" prefHeight="17.0" prefWidth="21.0" visible="false" />
    </children>
 </AnchorPane>

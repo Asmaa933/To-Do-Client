@@ -6,11 +6,12 @@
 package clientapplication;
 
 import java.net.URL;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.text.SimpleDateFormat;
+import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import javafx.application.Platform;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -25,20 +26,25 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
-import model.ListModel;
+import javafx.scene.paint.Color;
+import javafx.stage.Stage;
+import javax.json.JsonObject;
+import model.*;
+import network.*;
 
 /**
  *
- * @author ghost //....Don't forget to add constructor to ListModel has title, color & date.... 
+ * @author ghost color & date....
  */
 public class ListViewController implements Initializable {
-    
+
     @FXML
-    private TextField nameText;
+    private TextField titleText;
     @FXML
     private ColorPicker colorPicker;
     @FXML
@@ -46,128 +52,260 @@ public class ListViewController implements Initializable {
     @FXML
     private Button addButton;
     @FXML
-    private ListView<String> listFriend;
+    private ListView<String> collaborateListView;
     @FXML
     private Button saveButton;
     @FXML
-    private Label OwnerNameLabel;
-    @FXML
-    private Label AddListLabel;
+    private TextField OwnerNameText;
     @FXML
     private Button deleteButton;
     @FXML
     private Button cancelButton;
     @FXML
-    private ComboBox selectCombobox;
+    private ComboBox teammatesCombobox;
+
+    ObservableList<String> teammatesList = FXCollections.observableArrayList();
+    ObservableList<String> collaborateList = FXCollections.observableArrayList();
+
+    private ListModel list;
+    private List<UserModel> teammates;
+    private List<UserModel> collaborators;
+    private boolean editFlag;
+    @FXML
+    private ProgressIndicator ProgressIndicator;
+
+    @FXML
+    private ProgressIndicator ProgressIndicator2;
     
-    ObservableList<String> selectedFriends;
-    //ObservableList<String> selectedFriends = FXCollections.observableArrayList("zeynab","esma","mazen","remon","ahmed");
-    ListModel newList;
-   
-   static class Cell extends ListCell<String>{
-       
-       HBox hbox =new HBox();
-      
-//       Image profile  = new Image("F:\\\\AssignmentsOfJava\\\\lab9\\\\ListToDo\\\\src\\\\listtodo\\\\profile.png");
-//
-//       ImageView image = new ImageView(profile);
-       
-       Label userName =new Label();
-       Pane pane =new Pane();
-       Button delete=new Button("Delete");
-       
-       public Cell() {
-            super();
-            hbox.getChildren().addAll(userName,pane,delete);
-            hbox.setHgrow(pane, Priority.ALWAYS);
-            
-            delete.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                
-                Alert alert = new Alert(Alert.AlertType.WARNING);
-                alert.setTitle("Delete Friend");
-                alert.setHeaderText("Do you want to delete this Friend");
-                Optional<ButtonType> result = alert.showAndWait();
-                if (result.get() == ButtonType.OK){
-                     getListView().getItems().remove(getItem());
-                }
-               
-            }
-        });
+    @Override
+    public void initialize(URL url, ResourceBundle rb) {
+
+    }
+
+    public void setList(ListModel listModel) {
+        this.list = listModel;
+
+        if (list.getList_id() == -1) {
+            editFlag = false;
+            deleteButton.setVisible(false);
+        } else {
+            editFlag = true;
         }
-       
-          @Override
+
+        dateText.setText(new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(list.getCreate_date()));
+        OwnerNameText.setText(list.getUser().getName());
+        titleText.setText(list.getTitle());
+        colorPicker.setValue(Color.web(list.getColor()));
+
+        new Thread(() -> {
+            // get teammates
+            JsonObject jsonObject = JsonUtil.fromId(JsonConst.TYPE_GET_ALL_FRIENDS, list.getUser().getId());
+            JsonObject response = new RequestHandler().makeRequest(jsonObject);
+            teammates = JsonUtil.toUsersList(response);
+
+            if (editFlag == true) {
+                // get collaborator
+                jsonObject = JsonUtil.fromId(JsonConst.TYPE_COLLABORATOR_LIST, list.getList_id());
+                response = new RequestHandler().makeRequest(jsonObject);
+                collaborators = JsonUtil.toUsersList(response);
+            }
+            Platform.runLater(() -> {
+                // set teammates
+                for (UserModel teammate : teammates) {
+                    teammatesList.add(teammate.getName());
+                }
+                teammatesCombobox.setItems(teammatesList);
+
+                if (editFlag == true) {
+                    //set collaborator
+                    for (UserModel collaborator : collaborators) {
+                        collaborateList.add(collaborator.getName());
+                    }
+                    collaborateListView.setItems(collaborateList);
+                    collaborateListView.setCellFactory(param -> new Cell());
+                }
+
+            });
+        }).start();
+
+    }
+
+    //static 
+    class Cell extends ListCell<String> {
+
+        HBox hbox = new HBox();
+        Label userName = new Label();
+        Pane pane = new Pane();
+        Button delete = new Button("Delete");
+
+        public Cell() {
+            super();
+            hbox.getChildren().addAll(userName, pane, delete);
+            hbox.setHgrow(pane, Priority.ALWAYS);
+
+            delete.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                    alert.setHeaderText(null);
+                    alert.setTitle("Delete Collaborator");
+                    alert.setContentText("Do you want to delete this Collaborator");
+                    Optional<ButtonType> result = alert.showAndWait();
+                    if (result.get() == ButtonType.OK) {
+                        //getListView().getItems().remove(getItem());
+                        int cellIndex = getIndex();
+                        CollaboratorModel collaborator = new CollaboratorModel(list.getList_id(), collaborators.get(cellIndex).getId());
+                        //remove from db
+                        new Thread(() -> {
+                            JsonObject jsonObject = JsonUtil.fromCollaborator(JsonConst.TYPE_REMOVE_COLLABORATOR, collaborator);
+                            JsonObject response = new RequestHandler().makeRequest(jsonObject);
+                            boolean deleteFlag = JsonUtil.convertFromJsonPasswordResponse(response); // change name of method
+                            if (deleteFlag) {
+                                Platform.runLater(() -> {
+                                    collaborators.remove(cellIndex);
+                                    collaborateList.remove(cellIndex);
+                                    collaborateListView.refresh(); // copy the write code
+                                });
+                            }
+                            //else // alert don't delete collaborate
+                        }).start();
+                    } else if (result.get() == ButtonType.CANCEL) {
+                        alert.close();
+                    }
+                }
+            });
+        }
+
+        @Override
         protected void updateItem(String item, boolean empty) {
             super.updateItem(item, empty); //To change body of generated methods, choose Tools | Templates.
             setText(null);
             setGraphic(null);
-            
+
             if (item != null && !empty) {
                 userName.setText(item);
                 setGraphic(hbox);
             }
         }
-
-   }
-    
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
-        // Add date & time In Run Time
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");  
-        LocalDateTime now = LocalDateTime.now();  
-        System.out.println(dtf.format(now));  
-        dateText.setText(dtf.format(now));
-        
-    //    deleteButton.setVisible(true);
-        
-//Add Freinds in run time in comboBox At run Time
-        ////////////Query of getting user's Friend in a lis of kind ObservableList<String> to match with the comboBox
-        /////selectCombobox.setItems(list From Query);
-
     }
-            
-    
-    
-    @FXML
+
+    @FXML /////// indecator // stop button
     private void addButtonPressed(ActionEvent event) {
 
-        selectedFriends=(ObservableList<String>) selectCombobox.getSelectionModel().getSelectedItem();
-        listFriend.setItems(selectedFriends);
-        listFriend.setCellFactory(param-> new Cell());
-        ////Query for take the selectedFriends to database with considered the owner
+        boolean selectedFlag = false;
+        int selectedIndex = teammatesCombobox.getSelectionModel().getSelectedIndex();
+
+        if (list.getList_id() != -1) {
+            if (selectedIndex != -1) {
+                ProgressIndicator2.setVisible(true);
+                UserModel selectedUser = teammates.get(selectedIndex);
+                for (UserModel collaborator : collaborators) {
+                    if (collaborator.getId() == selectedUser.getId()) {
+                        selectedFlag = true;
+
+                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                        alert.setHeaderText(null);
+                        alert.setTitle("Add Collaborator");
+                        alert.setContentText("This teammate is already added in this list !!");
+                        alert.showAndWait();
+                    }
+                }
+                if (selectedFlag == false) {
+                    new Thread(() -> {
+                        CollaboratorModel collaboratorModel = new CollaboratorModel(list.getList_id(), selectedUser.getId());
+                        JsonObject jsonObject = JsonUtil.fromCollaborator(JsonConst.TYPE_ADD_COLLABORATOR, collaboratorModel);
+                        JsonObject response = new RequestHandler().makeRequest(jsonObject);
+                        boolean insertFlag = JsonUtil.convertFromJsonPasswordResponse(response); // change name of method    
+                        if (insertFlag) {
+                            Platform.runLater(() -> {
+                                collaborators.add(selectedUser);
+                                collaborateList.add(selectedUser.getName());
+                                collaborateListView.setItems(collaborateList);
+                                collaborateListView.setCellFactory(param -> new Cell());
+                            });
+                        }
+                        //else// alert show wrong in insert in DB
+
+                        Platform.runLater(() -> {
+                            ProgressIndicator2.setVisible(false);
+                            addButton.setDisable(false);
+                        });
+                    }).start();
+                }else{
+                    ProgressIndicator2.setVisible(false);
+                }
+            }
+            
+        } else {
+            ProgressIndicator2.setVisible(false);
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setHeaderText(null);
+            alert.setTitle("Add Collaborator");
+            alert.setContentText("Please save the list first, then add Collaborators ");
+            alert.showAndWait();
+        }
+
     }
-    
+
     @FXML
     private void saveButtonPressed(ActionEvent event) {
-
-      String hex1 = "#" + Integer.toHexString(colorPicker.getValue().hashCode());
-      
-      newList=new ListModel(nameText.getText(), hex1,Timestamp.valueOf(dateText.getText()));
-      
-      ////Query for take the list data from obj newList to database with considered the owner   
+        saveButton.setDisable(true);
         
+        if (!titleText.getText().trim().isEmpty()) {
+            ProgressIndicator.setVisible(true);
+            list.setTitle(titleText.getText());
+            list.setColor(colorPicker.getValue().toString());
+
+            new Thread(() -> {
+                if (editFlag == false) {
+                    JsonObject jsonObject = JsonUtil.fromList(JsonConst.TYPE_INSERT_LIST, list);
+                    JsonObject response = new RequestHandler().makeRequest(jsonObject);
+                    list.setList_id(JsonUtil.convertFromJsonId(response));
+                } else {
+                    JsonObject jsonObject = JsonUtil.fromList(JsonConst.TYPE_UPDATE_LIST, list);
+                    JsonObject response = new RequestHandler().makeRequest(jsonObject);
+                    int id = JsonUtil.convertFromJsonId(response);
+                    if (list.getList_id() != id || id == -1) {
+                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                        alert.setHeaderText(null);
+                        alert.setTitle("Update List");
+                        alert.setContentText("List didn't updated, please try again ");
+                        alert.showAndWait();
+                    }
+                }
+
+                Platform.runLater(() -> {
+                    ProgressIndicator.setVisible(false);
+                    saveButton.setDisable(false);
+                });
+            }).start();
+        } else {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setHeaderText(null);
+            alert.setTitle("Save List");
+            alert.setContentText("Please enter list name ");
+            alert.showAndWait();
+        }
     }
 
     @FXML
     private void CancelButtonPressed(ActionEvent event) {
-       //.........hide this Scene..........
-
-       ((Node) event.getSource()).getScene().getWindow().hide();
+        //((Node) event.getSource()).getScene().getWindow().hide();
+        ((Stage) ((Node) event.getSource()).getScene().getWindow()).close();
     }
-    
-    
 
     @FXML
     private void deleteButtonPressed(ActionEvent event) {
-        Alert alert = new Alert(Alert.AlertType.WARNING);
-    alert.setTitle("Delete List");
-    alert.setHeaderText("Do you want to delete this List");
-   // alert.setContentText("Careful with the next step!");
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Delete List");
+        alert.setHeaderText(null);
+        alert.setContentText("Do you want to delete this List !? this will delete the List with it's tasks and your collaborator can't find Them ? ");
 
         Optional<ButtonType> result = alert.showAndWait();
-        if (result.get() == ButtonType.OK){
+        if (result.get() == ButtonType.OK) {
             // ...Function Query to delete the List
+        } else if (result.get() == ButtonType.CANCEL) {
+            alert.close();
         }
     }
 

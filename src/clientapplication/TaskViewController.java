@@ -43,7 +43,7 @@ import network.RequestHandler;
  * @author esma
  */
 public class TaskViewController implements Initializable {
-    
+
     @FXML
     private Label titleLabel;
     @FXML
@@ -61,8 +61,8 @@ public class TaskViewController implements Initializable {
     @FXML
     private ComboBox assignToComboBox;
     @FXML
-    private TextField titleTextField;    
-    
+    private TextField titleTextField;
+
     private static final String TO_DO = "To Do";
     private static final String IN_PROGRESS = "In Progress";
     private static final String DONE = "Done";
@@ -71,7 +71,7 @@ public class TaskViewController implements Initializable {
     private ObservableList<String> statusList = FXCollections.observableArrayList(TO_DO, IN_PROGRESS, DONE);
     private ObservableList<String> collaboratorList = FXCollections.observableArrayList();
     private ObservableList<CommentModel> commentsList = FXCollections.observableArrayList();
-    
+
     private List<UserModel> users = new ArrayList<>();
     private List<CommentModel> comments = new ArrayList<>();
     private int taskID;
@@ -89,9 +89,9 @@ public class TaskViewController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         statusComboBox.setItems(statusList);
-        
+
     }
-    
+
     public void setFromLastView(boolean isNew, TaskModel task) {
         this.isNew = isNew;
         this.taskID = task.getTask_id();
@@ -99,9 +99,9 @@ public class TaskViewController implements Initializable {
         if (this.isNew) {
             editButton.setDisable(true);
             titleLabel.setText("Add Task");
-            
+
             resetFields();
-            
+
         } else {
             editButton.setDisable(false);
             titleLabel.setText("Task Details");
@@ -114,12 +114,12 @@ public class TaskViewController implements Initializable {
             saveButton.setDisable(true);
             disableOrEnableFields(true);
             getAllComments();
-            
+
         }
         getAllCollaborators();
-        
+
     }
-    
+
     private void getAllCollaborators() {
         new Thread(new Runnable() {
             @Override
@@ -138,10 +138,10 @@ public class TaskViewController implements Initializable {
                     }
                 });
             }
-            
+
         }).start();
     }
-    
+
     private void getAllComments() {
         new Thread(new Runnable() {
             @Override
@@ -161,7 +161,7 @@ public class TaskViewController implements Initializable {
                 });
             }
         }).start();
-        
+
     }
 
     @FXML
@@ -177,16 +177,16 @@ public class TaskViewController implements Initializable {
                     case TO_DO:
                         status = TaskModel.TASK_STATUS.TODO;
                         break;
-                    
+
                     case IN_PROGRESS:
                         status = TaskModel.TASK_STATUS.INPROGRESS;
                         break;
-                    
+
                     case DONE:
                         status = TaskModel.TASK_STATUS.DONE;
                         break;
                 }
-                
+
                 task.setTask_status(status);
                 task.setDeadline(Timestamp.valueOf(deadlineDatePicker.getValue().atStartOfDay()));
                 //to get from List 
@@ -195,11 +195,15 @@ public class TaskViewController implements Initializable {
                 task.setUser_id(1);
                 task.setAssign_date(Timestamp.valueOf(assignDatePicker.getValue().atStartOfDay()));
                 task.setAssign_status(TaskModel.ASSIGN_STATUS.PENDING);
+                task.setTask_id(taskID);
                 JsonObject jsonObject = null;
                 if (isEdit) {
-                    System.out.println("HELLO");                    
+                    jsonObject = JsonUtil.updateFromTask(task);
+                    JsonObject response = new RequestHandler().makeRequest(jsonObject);
                 } else {
                     jsonObject = JsonUtil.fromTask(task);
+                    JsonObject response = new RequestHandler().makeRequest(jsonObject);
+                    taskID = response.getInt(JsonConst.ID);
                 }
                 JsonObject response = new RequestHandler().makeRequest(jsonObject);
                 taskID = response.getInt(JsonConst.ID);
@@ -207,24 +211,24 @@ public class TaskViewController implements Initializable {
                     @Override
                     public void run() {
                         disableOrEnableFields(true);
-                        editButton.setDisable(false);                        
-                        saveButton.setDisable(true);                        
+                        editButton.setDisable(false);
+                        saveButton.setDisable(true);
                     }
                 });
-                
+
             }
         }).start();
-        
+
     }
-    
+
     @FXML
     private void editButtonPressed(ActionEvent event) {
         disableOrEnableFields(false);
-        editButton.setDisable(true);        
-        saveButton.setDisable(false);        
+        editButton.setDisable(true);
+        saveButton.setDisable(false);
         isEdit = true;
     }
-    
+
     @FXML
     private void addCommentPressed(ActionEvent event) {
         new Thread(new Runnable() {
@@ -247,31 +251,31 @@ public class TaskViewController implements Initializable {
                 });
             }
         }).start();
-        
+
     }
-    
+
     @FXML
     private void cancelButtonPressed(ActionEvent event) {
         ((Node) (event.getSource())).getScene().getWindow().hide();
         //((Stage)((Node) event.getSource()).getScene().getWindow()).close();
 
     }
-    
+
     static class Cell extends ListCell<CommentModel> {
-        
+
         VBox vbox = new VBox();
         HBox hbox = new HBox();
         Pane pane = new Pane();
         Label userName = new Label();
         Label date = new Label();
         TextArea commentsArea = new TextArea();
-        
+
         @Override
         protected void updateItem(CommentModel item, boolean empty) {
             super.updateItem(item, empty);
             setText(null);
             setGraphic(null);
-            
+
             if (item != null && !empty) {
                 userName.setText(item.getUserName());
                 commentsArea.setText(item.getComment_text());
@@ -281,22 +285,22 @@ public class TaskViewController implements Initializable {
                 setGraphic(vbox);
             }
         }
-        
+
         public Cell() {
             super();
             hbox.getChildren().addAll(userName, pane, date);
             hbox.setHgrow(pane, Priority.ALWAYS);
-            
+
             vbox.getChildren().addAll(hbox, commentsArea);
             vbox.setVgrow(pane, Priority.ALWAYS);
             commentsArea.setPrefHeight(50);
             commentsArea.setPrefWidth(50);
             commentsArea.setEditable(false);
-            
+
         }
-        
+
     }
-    
+
     private void resetFields() {
         titleTextField.setText("");
         titleTextField.setDisable(false);
@@ -304,19 +308,19 @@ public class TaskViewController implements Initializable {
         assignToComboBox.setDisable(false);
         assignDatePicker.setDisable(false);
         assignDatePicker.getEditor().setDisable(true);
-        
+
         assignDatePicker.setDisable(false);
         assignDatePicker.setValue(null);
-        
+
         deadlineDatePicker.setValue(null);
         deadlineDatePicker.getEditor().setDisable(true);
-        
+
         statusComboBox.getSelectionModel().clearSelection();
         statusComboBox.setDisable(false);;
         descriptionTextArea.setDisable(false);;
         descriptionTextArea.setText("");
     }
-    
+
     private void disableOrEnableFields(boolean state) {
         titleTextField.setDisable(state);
         assignToComboBox.setDisable(state);
@@ -326,7 +330,7 @@ public class TaskViewController implements Initializable {
         deadlineDatePicker.setDisable(state);
         statusComboBox.setDisable(state);
         descriptionTextArea.setDisable(state);
-        
+
     }
-    
+
 }

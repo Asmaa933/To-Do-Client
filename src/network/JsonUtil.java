@@ -179,6 +179,22 @@ public class JsonUtil {
         
         return comments;        
     }
+        public static JsonObject updateFromTask(TaskModel task) {
+        JsonObject obj = Json.createObjectBuilder()
+                .add(JsonConst.TYPE, JsonConst.TYPE_UPDATE_TASK_REQUEST)
+                .add("task_id",task.getTask_id())
+                .add("title", task.getTitle())
+                .add("description", task.getDescription())
+                .add("task_status", task.getTask_status())
+                .add("deadline", task.getDeadline().toString())
+                .add("list_id", task.getList_id())
+                .add("user_id", task.getUser_id())
+                .add("assign_date", task.getAssign_date().toString())
+                .add("assign_status", task.getAssign_status())
+                .build();
+        
+        return obj;
+    }
 
     
 }

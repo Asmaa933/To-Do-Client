@@ -79,11 +79,28 @@ public class HomeController implements Initializable {
     ObservableList<String> FriendListObservable = FXCollections.observableArrayList("zeynab","esma","mazen","remon","ahmed");
     ObservableList<String> toDoListObservable = FXCollections.observableArrayList("zeynab","esma","mazen","remon","ahmed");
     ObservableList<String> toDoListObservable2 = FXCollections.observableArrayList("zeynab","esma","mazen","remon","ahmed"); 
+    ObservableList<String> notificationObservable = FXCollections.observableArrayList("zeynab","esma","mazen","remon","ahmed");
+    ObservableList<String> taskRequestObservable = FXCollections.observableArrayList("zeynab","esma","mazen","remon","ahmed");
+    
     @FXML
     private Button friendButton;
     @FXML
     private AnchorPane friendAnchor;
-   
+    @FXML
+    private Button taskRequestButton;
+    @FXML
+    private AnchorPane notificationAnchor;
+    @FXML
+    private ListView<String> notificationList;
+    @FXML
+    private AnchorPane taskRequestAnchor;
+    @FXML
+    private ListView<String> taskRequestList;
+    
+    boolean friendFlag =false;
+    boolean notificationFlag =false;
+    boolean taskRequestFlag =false;
+    
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -98,18 +115,15 @@ public class HomeController implements Initializable {
         
         toDoList.setItems(toDoListObservable);     
         toDoList.setCellFactory(param-> new CellToDO());
-        friendAnchor.setVisible(false);
         
-        //tabPane.setTabClosingPolicy(TabClosingPolicy.ALL_TABS);
-       // tabPane.getOnMouseClicked();
-       //tabPane.setClosable(false);
-      // tabPane.getSelectionModel().select(friendTap);
-     // tabPane.getSelectionModel().
-    }    
+        notificationList.setItems(notificationObservable);     
+        notificationList.setCellFactory(param-> new CellNotification());
+        
+        taskRequestList.setItems(taskRequestObservable);     
+        taskRequestList.setCellFactory(param-> new CellTaskRequest());
 
-    @FXML
-    private void notificationPressed(ActionEvent event) {
-    }
+    }    
+    
 
     @FXML
     private void makeNewListPressed(ActionEvent event) {
@@ -127,7 +141,7 @@ public class HomeController implements Initializable {
     private void logOutPressed(ActionEvent event) {
         
     }   
-boolean friendFlag =false;
+
     @FXML
     private void friendButtonPressed(ActionEvent event) {
         if(friendFlag==false){
@@ -139,7 +153,27 @@ boolean friendFlag =false;
         }
     }
 
-    
+    @FXML
+    private void taskRequestPressed(ActionEvent event) {
+        if(taskRequestFlag==false){
+            taskRequestAnchor.setVisible(true);
+            taskRequestFlag =true;
+        }else{
+            taskRequestAnchor.setVisible(false);
+            taskRequestFlag =false;
+        }
+    }
+
+    @FXML
+    private void notificationPressed(ActionEvent event) {
+        if(notificationFlag==false){
+            notificationAnchor.setVisible(true);
+            notificationFlag =true;
+        }else{
+            notificationAnchor.setVisible(false);
+            notificationFlag =false;
+        }
+    }
     
     static class CellFriendRequest extends ListCell<String>{
        
@@ -213,6 +247,52 @@ boolean friendFlag =false;
 
    }
     
+    static class CellNotification extends ListCell<String>{
+       HBox hbox =new HBox();
+       TextArea textArea=new TextArea();
+       @Override
+        protected void updateItem(String item, boolean empty) {
+            super.updateItem(item, empty); 
+            setText(null);
+            setGraphic(null);
+            
+            if (item != null && !empty) {
+                textArea.setText(item);
+                setGraphic(hbox);
+            }
+        }
+        public CellNotification() {
+            super();
+            hbox.getChildren().addAll(textArea);
+            textArea.setMaxWidth(223);
+            textArea.setMaxHeight(70);
+            textArea.setEditable(false);
+        }
+   }
+    
+    static class CellTaskRequest extends ListCell<String>{
+       HBox hbox =new HBox();
+       TextArea textArea=new TextArea();
+       @Override
+        protected void updateItem(String item, boolean empty) {
+            super.updateItem(item, empty); 
+            setText(null);
+            setGraphic(null);
+            
+            if (item != null && !empty) {
+                textArea.setText(item);
+                setGraphic(hbox);
+            }
+        }
+        public CellTaskRequest() {
+            super();
+            hbox.getChildren().addAll(textArea);
+            textArea.setMaxWidth(223);
+            textArea.setMaxHeight(70);
+            textArea.setEditable(false);
+        }
+   }
+    
     static class Cellfriend extends ListCell<String>{
        
        HBox hbox =new HBox();
@@ -249,7 +329,7 @@ boolean friendFlag =false;
        VBox vbox =new VBox(); 
        HBox hbox1 =new HBox();
        Label taskNameLabel =new Label();
-       Button options=new Button("Options");
+       Button delete=new Button("Delete");
        HBox hbox2 =new HBox();
        Label assignToLabel =new Label("Assign To:        ");
        Label assignTotext =new Label();
@@ -280,7 +360,7 @@ boolean friendFlag =false;
 
         public CellToDO() {
             super();
-            hbox1.getChildren().addAll(taskNameLabel,pane3,options);
+            hbox1.getChildren().addAll(taskNameLabel,pane3,delete);
             hbox2.getChildren().addAll(assignToLabel,assignTotext);
             hbox3.getChildren().addAll(deadlineLabel,deadlinetext);
             hbox4.getChildren().addAll(pane4,readMore,pane);
@@ -294,7 +374,7 @@ boolean friendFlag =false;
             taskNameLabel.setText("Title");
             deadlinetext.setText("9/2/2020");
             VBox.setMargin(vbox, new Insets(10, 10, 10, 10));
-            options.setOnAction(new EventHandler<ActionEvent>() {
+            delete.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 //go to list reject scene 

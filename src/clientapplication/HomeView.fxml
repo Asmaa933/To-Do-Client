@@ -19,20 +19,21 @@
             <Button fx:id="logOutButton" layoutX="7.0" layoutY="37.0" mnemonicParsing="false" onAction="#logOutPressed" text="Log Out" />
             <Button fx:id="makeNewTaskButton" layoutX="197.0" layoutY="37.0" mnemonicParsing="false" onAction="#makeNewTaskPressed" text="Make New Task" />
             <Button fx:id="friendButton" layoutX="1087.0" layoutY="37.0" mnemonicParsing="false" onAction="#friendButtonPressed" text="Friends" />
+            <Button fx:id="taskRequestButton" layoutX="406.0" layoutY="37.0" mnemonicParsing="false" onAction="#taskRequestPressed" text="Task Request" />
          </children>
       </Pane>
       <ListView fx:id="toDoList" layoutX="228.0" layoutY="114.0" prefHeight="395.0" prefWidth="295.0">
          <padding>
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
          </padding></ListView>
-      <ListView fx:id="doingList" layoutX="535.0" layoutY="114.0" prefHeight="395.0" prefWidth="303.0" />
+      <ListView fx:id="doingList" layoutX="532.0" layoutY="114.0" prefHeight="395.0" prefWidth="303.0" />
       <ListView fx:id="doneList" layoutX="848.0" layoutY="114.0" prefHeight="395.0" prefWidth="295.0" />
       <Label layoutX="14.0" layoutY="74.0" prefHeight="33.0" prefWidth="120.0" text="Lists" />
       <ListView fx:id="listsList" layoutX="7.0" layoutY="114.0" prefHeight="395.0" prefWidth="187.0" />
-      <Label layoutX="315.0" layoutY="74.0" prefHeight="33.0" prefWidth="120.0" text="To Do" />
-      <Label layoutX="627.0" layoutY="74.0" prefHeight="33.0" prefWidth="120.0" text="In Progress" />
+      <Label layoutX="347.0" layoutY="74.0" prefHeight="33.0" prefWidth="120.0" text="To Do" />
+      <Label layoutX="643.0" layoutY="74.0" prefHeight="33.0" prefWidth="120.0" text="In Progress" />
       <Label layoutX="964.0" layoutY="74.0" prefHeight="33.0" prefWidth="120.0" text="Done" />
-      <AnchorPane fx:id="friendAnchor" layoutX="943.0" layoutY="62.0" prefHeight="447.0" prefWidth="200.0">
+      <AnchorPane fx:id="friendAnchor" layoutX="943.0" layoutY="62.0" prefHeight="447.0" prefWidth="200.0" visible="false">
          <children>
             <TabPane accessibleRole="BUTTON" prefHeight="458.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE">
               <tabs>
@@ -58,6 +59,16 @@
                 </Tab>
               </tabs>
             </TabPane>
+         </children>
+      </AnchorPane>
+      <AnchorPane fx:id="notificationAnchor" layoutX="315.0" layoutY="62.0" prefHeight="448.0" prefWidth="257.0" visible="false">
+         <children>
+            <ListView fx:id="notificationList" layoutX="9.0" layoutY="8.0" prefHeight="432.0" prefWidth="239.0" />
+         </children>
+      </AnchorPane>
+      <AnchorPane fx:id="taskRequestAnchor" layoutX="407.0" layoutY="62.0" prefHeight="448.0" prefWidth="257.0" visible="false">
+         <children>
+            <ListView fx:id="taskRequestList" layoutX="7.0" layoutY="8.0" prefHeight="432.0" prefWidth="239.0" />
          </children>
       </AnchorPane>
    </children>

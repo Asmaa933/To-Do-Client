@@ -195,6 +195,13 @@ public class JsonUtil {
         
         return obj;
     }
-
+ public static JsonObject fromBoolean(boolean b,int id) {
+        JsonObject obj = Json.createObjectBuilder()
+                .add(JsonConst.TYPE, JsonConst.TYPE_CHANGE_ONLINE_STATUS)
+                .add("status", b)
+                .add(JsonConst.ID, id)
+                .build();
+        return obj;
+    }
     
 }

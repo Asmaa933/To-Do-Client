@@ -52,6 +52,10 @@ public class LoginController {
     private int id = -1;
     ActionEvent eventSource = null;
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
     /**
      *
      * @param event go to password if email was valid
@@ -123,7 +127,6 @@ public class LoginController {
             new Thread(() -> {
                 JsonObject jsonObject = JsonUtil.createJsonEmail(emailText.getText());
                 JsonObject response = new RequestHandler().makeRequest(jsonObject);
-                System.out.println(response);
                 id = JsonUtil.convertFromJsonId(response);
 
                 Platform.runLater(() -> {
@@ -165,7 +168,9 @@ public class LoginController {
                 JsonObject jsonObject = JsonUtil.createJsonPassword(passwordText.getText(), id);
                 JsonObject response = new RequestHandler().makeRequest(jsonObject);
                 boolean passflag = JsonUtil.convertFromJsonPasswordResponse(response);
-
+//change status
+                JsonObject request = JsonUtil.fromBoolean(passflag, id);
+                JsonObject response2 = new RequestHandler().makeRequest(request);
                 if (passflag == true) {
 
                     Platform.runLater(() -> {
@@ -175,18 +180,18 @@ public class LoginController {
 
                         //   go to home page
                         //  pass id to home
-                        Parent homeScene;
+                        Parent root;
                         try {
-                            homeScene = FXMLLoader.load(getClass().getResource("HomeView.fxml"));
-                            Scene homeViewScene = new Scene(homeScene);
-
-                            //This line gets the Stage information
+                              FXMLLoader fxload = new FXMLLoader(getClass().getResource("HomeView.fxml"));
+            root = (Parent) fxload.load();
+            HomeController home = (HomeController) fxload.getController();
+            home.setLoginUserID(id);
+                          
                             Stage window = (Stage) ((Node) eventSource.getSource()).getScene().getWindow();
-                            window.setScene(homeViewScene);
+                            window.setScene(new Scene(root));
                             window.hide();
 
                             window.show();
-                            window.setMaximized(true);
 
                         } catch (IOException ex) {
                             Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);

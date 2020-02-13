@@ -19,6 +19,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -43,7 +44,10 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import javax.json.JsonObject;
 import model.*;
+import network.JsonUtil;
+import network.RequestHandler;
 
 /**
  * FXML Controller class
@@ -107,10 +111,15 @@ public class HomeController implements Initializable {
     private AnchorPane taskRequestAnchor;
     @FXML
     private ListView<String> taskRequestList;
+    private int loginUserID;
 
     boolean friendFlag = false;
     boolean notificationFlag = false;
     boolean taskRequestFlag = false;
+
+    public void setLoginUserID(int loginUserID) {
+        this.loginUserID = loginUserID;
+    }
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -173,7 +182,7 @@ public class HomeController implements Initializable {
             TaskModel task = new TaskModel();
             reg.setFromLastView(true, task);
             stage.setScene(new Scene(root));
-                    stage.setTitle("Add Task");
+            stage.setTitle("Add Task");
             stage.initStyle(StageStyle.UNDECORATED);
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.showAndWait();
@@ -189,8 +198,28 @@ public class HomeController implements Initializable {
 
     @FXML
     private void logOutPressed(ActionEvent event) {
+        //make user offline
+    JsonObject request = JsonUtil.fromBoolean(false, loginUserID);
+                JsonObject response2 = new RequestHandler().makeRequest(request);
+        Parent root;
+                  try{
+                  FXMLLoader fxload = new FXMLLoader(getClass().getResource("LoginView.fxml"));
+            root = (Parent) fxload.load();
+            LoginController login = (LoginController) fxload.getController();
+            login.setId(-1);
 
-    }
+            //This line gets the Stage information
+                            Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                            window.setScene(new Scene(root));
+                            window.hide();
+                            window.show();
+
+                        } catch (IOException ex) {
+                            Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                        
+}             
+    
 
     @FXML
     private void friendButtonPressed(ActionEvent event) {

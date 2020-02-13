@@ -89,6 +89,8 @@ public class TaskViewController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         statusComboBox.setItems(statusList);
+        assignDatePicker.getEditor().setDisable(true);
+        deadlineDatePicker.getEditor().setDisable(true);
 
     }
 
@@ -307,13 +309,10 @@ public class TaskViewController implements Initializable {
         assignToComboBox.getSelectionModel().clearSelection();
         assignToComboBox.setDisable(false);
         assignDatePicker.setDisable(false);
-        assignDatePicker.getEditor().setDisable(true);
-
         assignDatePicker.setDisable(false);
         assignDatePicker.setValue(null);
 
         deadlineDatePicker.setValue(null);
-        deadlineDatePicker.getEditor().setDisable(true);
 
         statusComboBox.getSelectionModel().clearSelection();
         statusComboBox.setDisable(false);;

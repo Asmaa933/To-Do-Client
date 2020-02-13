@@ -203,5 +203,30 @@ public class JsonUtil {
                 .build();
         return obj;
     }
+  public static ArrayList<ListModel> toListOfListModels(JsonObject obj) {
+        ArrayList<ListModel> lists = new ArrayList<ListModel>();
+        JsonArray jsonArray = obj.getJsonArray("array");
+        
+        if (jsonArray != null) {
+            
+            for (int i = 0; i < jsonArray.size(); i++) {
+                JsonObject jObj = (JsonObject) jsonArray.get(i);
+                
+                ListModel list = new ListModel();
+                list.setList_id(jObj.getInt("id"));
+                list.setTitle(jObj.getString("title"));
+                list.setColor(jObj.getString("color"));
+                String s =jObj.getString("createDate");
+                list.setCreate_date(Timestamp.valueOf(s));
+                list.getUser().setId(jObj.getInt("userid"));
+                list.getUser().setName(jObj.getString("username"));
+                list.getUser().setEmail(jObj.getString("useremail"));
+                list.getUser().setOnline_status(jObj.getString("userstates"));
+                lists.add(list);
+            }
+        }
+        
+        return lists;        
+    }
     
 }

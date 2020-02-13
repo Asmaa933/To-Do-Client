@@ -182,11 +182,11 @@ public class LoginController {
                         //  pass id to home
                         Parent root;
                         try {
-                              FXMLLoader fxload = new FXMLLoader(getClass().getResource("HomeView.fxml"));
-            root = (Parent) fxload.load();
-            HomeController home = (HomeController) fxload.getController();
-            home.setLoginUserID(id);
-                          
+                            FXMLLoader fxload = new FXMLLoader(getClass().getResource("HomeView.fxml"));
+                            root = (Parent) fxload.load();
+                            HomeController home = (HomeController) fxload.getController();
+                            home.setLoginUserID(id);
+
                             Stage window = (Stage) ((Node) eventSource.getSource()).getScene().getWindow();
                             window.setScene(new Scene(root));
                             window.hide();

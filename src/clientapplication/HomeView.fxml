@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
 
-<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="521.0" prefWidth="1157.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="clientapplication.HomeController">
+<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="521.0" prefWidth="1157.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="clientapplication.HomeController">
    <children>
       <Pane layoutX="2.0" prefHeight="74.0" prefWidth="1153.0">
          <children>
@@ -29,7 +29,7 @@
       <ListView fx:id="doingList" layoutX="532.0" layoutY="114.0" prefHeight="395.0" prefWidth="303.0" />
       <ListView fx:id="doneList" layoutX="848.0" layoutY="114.0" prefHeight="395.0" prefWidth="295.0" />
       <Label layoutX="14.0" layoutY="74.0" prefHeight="33.0" prefWidth="120.0" text="Lists" />
-      <ListView fx:id="listsList" layoutX="7.0" layoutY="114.0" prefHeight="395.0" prefWidth="187.0" />
+      <ListView fx:id="listsList" layoutX="7.0" layoutY="114.0" onMouseClicked="#listItemClicked" prefHeight="395.0" prefWidth="187.0" />
       <Label layoutX="347.0" layoutY="74.0" prefHeight="33.0" prefWidth="120.0" text="To Do" />
       <Label layoutX="643.0" layoutY="74.0" prefHeight="33.0" prefWidth="120.0" text="In Progress" />
       <Label layoutX="964.0" layoutY="74.0" prefHeight="33.0" prefWidth="120.0" text="Done" />

@@ -8,6 +8,7 @@ package clientapplication;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -36,6 +37,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.TitledPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -46,6 +48,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javax.json.JsonObject;
 import model.*;
+import network.JsonConst;
 import network.JsonUtil;
 import network.RequestHandler;
 
@@ -89,14 +92,6 @@ public class HomeController implements Initializable {
     @FXML
     private Tab friendRequestTap;
 
-    ObservableList<String> friendRequestObservable = FXCollections.observableArrayList("zeynab", "esma", "mazen", "remon", "ahmed");
-    ObservableList<String> listListsObservable = FXCollections.observableArrayList("zeynab", "esma", "mazen", "remon", "ahmed");
-    ObservableList<String> FriendListObservable = FXCollections.observableArrayList("zeynab", "esma", "mazen", "remon", "ahmed");
-    ObservableList<String> toDoListObservable = FXCollections.observableArrayList("zeynab", "esma", "mazen", "remon", "ahmed");
-    ObservableList<String> toDoListObservable2 = FXCollections.observableArrayList("zeynab", "esma", "mazen", "remon", "ahmed");
-    ObservableList<String> notificationObservable = FXCollections.observableArrayList("zeynab", "esma", "mazen", "remon", "ahmed");
-    ObservableList<String> taskRequestObservable = FXCollections.observableArrayList("zeynab", "esma", "mazen", "remon", "ahmed");
-
     @FXML
     private Button friendButton;
     @FXML
@@ -111,14 +106,48 @@ public class HomeController implements Initializable {
     private AnchorPane taskRequestAnchor;
     @FXML
     private ListView<String> taskRequestList;
+
+    ObservableList<String> friendRequestObservable = FXCollections.observableArrayList("zeynab", "esma", "mazen", "remon", "ahmed");
+    ObservableList<String> listListsObservable = FXCollections.observableArrayList();
+    ObservableList<String> FriendListObservable = FXCollections.observableArrayList("zeynab", "esma", "mazen", "remon", "ahmed");
+    ObservableList<String> toDoListObservable = FXCollections.observableArrayList("zeynab", "esma", "mazen", "remon", "ahmed");
+    ObservableList<String> toDoListObservable2 = FXCollections.observableArrayList("zeynab", "esma", "mazen", "remon", "ahmed");
+    ObservableList<String> notificationObservable = FXCollections.observableArrayList("zeynab", "esma", "mazen", "remon", "ahmed");
+    ObservableList<String> taskRequestObservable = FXCollections.observableArrayList("zeynab", "esma", "mazen", "remon", "ahmed");
+
     private int loginUserID;
 
     boolean friendFlag = false;
     boolean notificationFlag = false;
     boolean taskRequestFlag = false;
 
+    private ArrayList<ListModel> userLists;
+    private ArrayList<ListModel> userCollaborateLists;
+
     public void setLoginUserID(int loginUserID) {
         this.loginUserID = loginUserID;
+        setLists(loginUserID);
+    }
+
+    private void setLists(int userID) {
+        //UserList
+        JsonObject requestAllLists = JsonUtil.fromId(JsonConst.TYPE_SELECT_ALL_LIST, userID);
+        JsonObject responseAllLists = new RequestHandler().makeRequest(requestAllLists);
+        userLists = JsonUtil.toListOfListModels(responseAllLists);
+
+        for (ListModel list : userLists) {
+            listListsObservable.add(list.getTitle());
+        }
+        /*
+        //UserCollabortorList
+        JsonObject requestAllCollaborateLists = JsonUtil.fromId(JsonConst.TYPE_SELECT_ALL_COLLABORATOR_LIST, userID);
+        JsonObject responseAllCollaborateLists = new RequestHandler().makeRequest(requestAllCollaborateLists);
+        userCollaborateLists = JsonUtil.toListOfListModels(responseAllCollaborateLists);
+        
+        for (ListModel list : userCollaborateLists) {
+            listListsObservable.add(list.getTitle());
+        }
+         */
     }
 
     @Override
@@ -145,30 +174,29 @@ public class HomeController implements Initializable {
 
     @FXML
     private void makeNewListPressed(ActionEvent event) {
-          FXMLLoader fxload = new FXMLLoader(getClass().getResource("ListView.fxml"));
+        FXMLLoader fxload = new FXMLLoader(getClass().getResource("ListView.fxml"));
         Parent root;
         try {
             root = (Parent) fxload.load();
             Stage stage = new Stage();
-        ListViewController listController = fxload.getController();
+            ListViewController listController = fxload.getController();
             ListModel list = new ListModel();
             //change
-            
-        list.setList_id(2);
-        list.getUser().setName("zeynab");
-        list.getUser().setId(1);
-        listController.setList(list);
+            list.setList_id(2);
+            list.getUser().setName("zeynab");
+            list.getUser().setId(1);
+            listController.setList(list);
 
             stage.setScene(new Scene(root));
             stage.initStyle(StageStyle.UNDECORATED);
-         stage.initModality(Modality.APPLICATION_MODAL);
-        stage.setResizable(false);
-        stage.setTitle("Add List");
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setResizable(false);
+            stage.setTitle("Add List");
             stage.showAndWait();
         } catch (IOException ex) {
             Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
         }
-       
+
     }
 
     @FXML
@@ -199,27 +227,26 @@ public class HomeController implements Initializable {
     @FXML
     private void logOutPressed(ActionEvent event) {
         //make user offline
-    JsonObject request = JsonUtil.fromBoolean(false, loginUserID);
-                JsonObject response2 = new RequestHandler().makeRequest(request);
+        JsonObject request = JsonUtil.fromBoolean(false, loginUserID);
+        JsonObject response2 = new RequestHandler().makeRequest(request);
         Parent root;
-                  try{
-                  FXMLLoader fxload = new FXMLLoader(getClass().getResource("LoginView.fxml"));
+        try {
+            FXMLLoader fxload = new FXMLLoader(getClass().getResource("LoginView.fxml"));
             root = (Parent) fxload.load();
             LoginController login = (LoginController) fxload.getController();
             login.setId(-1);
 
             //This line gets the Stage information
-                            Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
-                            window.setScene(new Scene(root));
-                            window.hide();
-                            window.show();
+            Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            window.setScene(new Scene(root));
+            window.hide();
+            window.show();
 
-                        } catch (IOException ex) {
-                            Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                        
-}             
-    
+        } catch (IOException ex) {
+            Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
 
     @FXML
     private void friendButtonPressed(ActionEvent event) {
@@ -254,7 +281,11 @@ public class HomeController implements Initializable {
         }
     }
 
-    static class CellFriendRequest extends ListCell<String> {
+    @FXML
+    private void listItemClicked(MouseEvent event) {
+    }
+
+    class CellFriendRequest extends ListCell<String> {
 
         HBox hbox = new HBox();
         Label friendRequestName = new Label();
@@ -294,7 +325,7 @@ public class HomeController implements Initializable {
 
     }
 
-    static class CellLists extends ListCell<String> {
+    class CellLists extends ListCell<String> {
 
         HBox hbox = new HBox();
         Label listNameLabel = new Label();
@@ -320,14 +351,29 @@ public class HomeController implements Initializable {
             edit.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
-                    //go to list reject scene 
+                    // ((Node) event.getSource()).getScene().getWindow().hide();
+
+                    try {
+                        FXMLLoader loader = new FXMLLoader(getClass().getResource("ListView.fxml"));
+                        Parent root = loader.load();
+                        ListViewController listController = loader.getController();
+                        listController.setList(userLists.get(getIndex()));
+                        Scene scene = new Scene(root);
+                        Stage stage = new Stage();
+                        stage.setResizable(false);
+                        stage.setScene(scene);
+                        stage.setTitle("Add List");
+                        stage.show();
+                    } catch (IOException ex) {
+                        Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 }
             });
         }
 
     }
 
-    static class CellNotification extends ListCell<String> {
+     class CellNotification extends ListCell<String> {
 
         HBox hbox = new HBox();
         TextArea textArea = new TextArea();
@@ -353,7 +399,7 @@ public class HomeController implements Initializable {
         }
     }
 
-    static class CellTaskRequest extends ListCell<String> {
+     class CellTaskRequest extends ListCell<String> {
 
         HBox hbox = new HBox();
         TextArea textArea = new TextArea();
@@ -480,7 +526,7 @@ public class HomeController implements Initializable {
 
                         taskControl.setFromLastView(false, task);
                         stage.setScene(new Scene(root));
-                                            stage.setTitle("Task Details");
+                        stage.setTitle("Task Details");
 
                         stage.initStyle(StageStyle.UNDECORATED);
                         stage.initModality(Modality.APPLICATION_MODAL);

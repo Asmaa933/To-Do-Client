@@ -59,9 +59,9 @@ public class TaskViewController implements Initializable {
     @FXML
     private ListView<CommentModel> commentsListView;
     @FXML
-    private ComboBox statusComboBox;
+    private ComboBox<String> statusComboBox;
     @FXML
-    private ComboBox assignToComboBox;
+    private ComboBox<String> assignToComboBox;
     @FXML
     private TextField titleTextField;
 
@@ -79,6 +79,8 @@ public class TaskViewController implements Initializable {
     private boolean isEdit = false;
     private boolean isNew = true;
     private TaskModel selectedTask;
+    private int loginUserID;
+
     @FXML
     private Button saveButton;
     @FXML
@@ -95,10 +97,11 @@ public class TaskViewController implements Initializable {
 
     }
 
-    public void setFromLastView(boolean isNew, TaskModel task) {
+    public void setFromLastView(boolean isNew, TaskModel task, int loginUserID) {
         this.isNew = isNew;
         this.taskID = task.getTask_id();
         this.selectedTask = task;
+        this.loginUserID = loginUserID;
         if (this.isNew) {
             editButton.setDisable(true);
             titleLabel.setText("Add Task");
@@ -204,8 +207,14 @@ public class TaskViewController implements Initializable {
                 task.setDeadline(Timestamp.valueOf(deadlineDatePicker.getValue().atStartOfDay()));
                 //to get from List 
                 task.setList_id(selectedTask.getList_id());
-                int userIndex = assignToComboBox.getSelectionModel().getSelectedIndex();
-                task.setUser_id(users.get(userIndex).getId());
+                String assignUserName = assignToComboBox.getValue().toString();
+                int assignUserID = 0;
+                for (UserModel user : users) {
+                    if (user.getName().equals(assignUserName)) {
+                        assignUserID = user.getId();
+                    }
+                }
+                   task.setUser_id(assignUserID);
                 task.setAssign_date(Timestamp.valueOf(assignDatePicker.getValue().atStartOfDay()));
                 task.setAssign_status(TaskModel.ASSIGN_STATUS.PENDING);
                 task.setTask_id(taskID);
@@ -247,11 +256,10 @@ public class TaskViewController implements Initializable {
             public void run() {
                 CommentModel comment = new CommentModel();
                 comment.setTask_id(taskID);
-                comment.setUser_id(1); // pending captian mazen
+                comment.setUser_id(loginUserID);
                 comment.setComment_text(commentTextArea.getText());
                 comment.setComment_date(new Timestamp(new Date().getTime()));
                 JsonObject request = JsonUtil.fromComment(comment);
-                System.out.println(request);
                 new RequestHandler().makeRequest(request);
                 Platform.runLater(new Runnable() {
                     @Override

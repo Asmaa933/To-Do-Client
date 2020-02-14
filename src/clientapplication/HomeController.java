@@ -113,7 +113,6 @@ public class HomeController implements Initializable {
     private ObservableList<TaskModel> inProgressListObservable = FXCollections.observableArrayList();
    private ObservableList<TaskModel> doneListObservable = FXCollections.observableArrayList();
 
-    private ObservableList<String> toDoListObservable2 = FXCollections.observableArrayList("zeynab", "esma", "mazen", "remon", "ahmed");
     private ObservableList<String> notificationObservable = FXCollections.observableArrayList("zeynab", "esma", "mazen", "remon", "ahmed");
     private ObservableList<String> taskRequestObservable = FXCollections.observableArrayList("zeynab", "esma", "mazen", "remon", "ahmed");
 
@@ -130,7 +129,7 @@ public class HomeController implements Initializable {
     private ArrayList<TaskModel> inProgressTasks;
     private ArrayList<TaskModel> doneTasks;
     private int listID;
-
+    private TaskModel selectedTask;
     public void setLoginUserID(int loginUserID) {
         this.loginUserID = loginUserID;
         setLists(loginUserID);
@@ -160,9 +159,10 @@ public class HomeController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        makeNewTaskButton.setDisable(true);
         listsList.setItems(listListsObservable);
         listsList.setCellFactory(param -> new CellLists());
-
+        
         friendList.setItems(FriendListObservable);
         friendList.setCellFactory(param -> new Cellfriend());
 
@@ -214,7 +214,7 @@ public class HomeController implements Initializable {
             TaskViewController reg = (TaskViewController) fxload.getController();
             TaskModel task = new TaskModel();
             task.setList_id(listID);
-            reg.setFromLastView(true, task);
+            reg.setFromLastView(true, task,loginUserID);
             stage.setScene(new Scene(root));
             stage.setTitle("Add Task");
             stage.initStyle(StageStyle.UNDECORATED);
@@ -289,9 +289,34 @@ public class HomeController implements Initializable {
 
     @FXML
     private void listItemClicked(MouseEvent event) {
+                makeNewTaskButton.setDisable(false);
         int selectedindex = listsList.getSelectionModel().getSelectedIndex();
         int listID = userLists.get(selectedindex).getList_id();
         updateTasksLists(listID);
+    }
+   
+     @FXML
+    private void taskItemClicked(MouseEvent event) {
+               FXMLLoader fxload = new FXMLLoader(getClass().getResource("TaskView.fxml"));
+                    Parent root;
+                    try {
+                        root = (Parent) fxload.load();
+                        Stage stage = new Stage();
+                        TaskViewController taskControl = (TaskViewController) fxload.getController();
+                        TaskModel task = selectedTask;
+                        taskControl.setFromLastView(false, task,loginUserID);
+                        stage.setScene(new Scene(root));
+                        stage.setTitle("Task Details");
+
+                        stage.initStyle(StageStyle.UNDECORATED);
+                        stage.initModality(Modality.APPLICATION_MODAL);
+
+                        stage.showAndWait();
+                        updateTasksLists(selectedTask.getList_id());
+                    } catch (IOException ex) {
+                        Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+        
     }
 
     public void updateTasksLists(int listID) {
@@ -318,7 +343,6 @@ public class HomeController implements Initializable {
                             break;
                     }
                 }
-                System.out.println(toDoTasks.size());
                 Platform.runLater(() -> {
 
                     toDoListObservable.setAll(toDoTasks);
@@ -521,16 +545,14 @@ public class HomeController implements Initializable {
         HBox hbox3 = new HBox();
         Label deadlineLabel = new Label("Deadline Time: ");
         Label deadlinetext = new Label();
-        HBox hbox4 = new HBox();
-        Hyperlink readMore = new Hyperlink("Read More");
+      
         HBox hbox5 = new HBox();
         CheckBox move = new CheckBox("Move To The Next");
         Pane pane = new Pane();
         Pane pane2 = new Pane();
         Pane pane3 = new Pane();
-        Pane pane4 = new Pane();
         Pane pane5 = new Pane();
-        private TaskModel selectedTask;
+       
 
         @Override
         protected void updateItem(TaskModel item, boolean empty) {
@@ -552,13 +574,10 @@ public class HomeController implements Initializable {
             hbox1.getChildren().addAll(taskNameLabel, pane3, delete);
             hbox2.getChildren().addAll(assignToLabel, assignTotext);
             hbox3.getChildren().addAll(deadlineLabel, deadlinetext);
-            hbox4.getChildren().addAll(pane4, readMore, pane);
             hbox5.getChildren().addAll(pane2, move);
-            vbox.getChildren().addAll(hbox1, hbox2, hbox3, hbox4, hbox5, pane5);
-            hbox4.setHgrow(pane4, Priority.ALWAYS);
+            vbox.getChildren().addAll(hbox1, hbox2, hbox3, hbox5, pane5);
             hbox5.setHgrow(pane2, Priority.ALWAYS);
             hbox1.setHgrow(pane3, Priority.ALWAYS);
-            hbox4.setHgrow(pane, Priority.ALWAYS);
             vbox.setVgrow(pane5, Priority.ALWAYS);
             VBox.setMargin(vbox, new Insets(10, 10, 10, 10));
 
@@ -568,31 +587,7 @@ public class HomeController implements Initializable {
                     //go to list reject scene 
                 }
             });
-            readMore.setOnAction(new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent event) {
-                    FXMLLoader fxload = new FXMLLoader(getClass().getResource("TaskView.fxml"));
-                    Parent root;
-                    try {
-                        root = (Parent) fxload.load();
-                        Stage stage = new Stage();
-                        TaskViewController taskControl = (TaskViewController) fxload.getController();
-                        TaskModel task = selectedTask;
-                        taskControl.setFromLastView(false, task);
-                        stage.setScene(new Scene(root));
-                        stage.setTitle("Task Details");
-
-                        stage.initStyle(StageStyle.UNDECORATED);
-                        stage.initModality(Modality.APPLICATION_MODAL);
-
-                        stage.showAndWait();
-                        updateTasksLists(selectedTask.getList_id());
-                    } catch (IOException ex) {
-                        Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-
-                }
-            });
+    
         }
     }
 

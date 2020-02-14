@@ -104,6 +104,7 @@ public class HomeController implements Initializable {
     private AnchorPane taskRequestAnchor;
     @FXML
     private ListView<String> taskRequestList;
+   
 
     private ObservableList<String> friendRequestObservable = FXCollections.observableArrayList("zeynab", "esma", "mazen", "remon", "ahmed");
 
@@ -223,9 +224,8 @@ public class HomeController implements Initializable {
             stage.setTitle("Add List");
 
             stage.showAndWait();
-             Platform.runLater(() -> {
-                setLists(listID);
-                        });
+                setLists(loginUserID);
+                      
         } catch (IOException ex) {
             Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -504,31 +504,6 @@ public class HomeController implements Initializable {
         }
     }
 
-    class CellTaskRequest extends ListCell<String> {
-
-        HBox hbox = new HBox();
-        TextArea textArea = new TextArea();
-
-        @Override
-        protected void updateItem(String item, boolean empty) {
-            super.updateItem(item, empty);
-            setText(null);
-            setGraphic(null);
-
-            if (item != null && !empty) {
-                textArea.setText(item);
-                setGraphic(hbox);
-            }
-        }
-
-        public CellTaskRequest() {
-            super();
-            hbox.getChildren().addAll(textArea);
-            textArea.setMaxWidth(223);
-            textArea.setMaxHeight(70);
-            textArea.setEditable(false);
-        }
-    }
 
     static class Cellfriend extends ListCell<String> {
 
@@ -670,5 +645,71 @@ public class HomeController implements Initializable {
             });
         }
     }
+      class CellTaskRequest extends ListCell<String>{
+       VBox vbox =new VBox(); 
+       HBox hbox1 =new HBox();
+       Label taskNameLabel =new Label("Task                 :");
+       Label taskNametext =new Label();
+       HBox hbox2 =new HBox();
+       Button reject=new Button("Reject");
+       Button accept=new Button("Accept");
+       Label assignToLabel =new Label("Assign Date     :          ");
+       Label assignTotext =new Label();
+       HBox hbox3 =new HBox();
+       Label deadlineLabel =new Label("Deadline Time : ");
+       Label deadlinetext =new Label();
+       HBox hbox4 =new HBox();
+       Pane pane =new Pane();
+       Pane pane2 =new Pane();
+       Pane pane3 =new Pane();
+       Pane pane4 =new Pane();
+       Pane pane5 =new Pane();
+       Pane pane6 =new Pane();
+       Pane pane7 =new Pane();
+       HBox hbox5 =new HBox();
+       @Override
+        protected void updateItem(String item, boolean empty) {
+            super.updateItem(item, empty); 
+            setText(null);
+            setGraphic(null);
+            
+            if (item != null && !empty) {
+                assignTotext.setText(item);
+                setGraphic(vbox);
+            }
+        }
+
+        public CellTaskRequest() {
+            super();
+            hbox1.getChildren().addAll(taskNameLabel,taskNametext,pane7);
+            hbox2.getChildren().addAll(assignToLabel,assignTotext);
+            hbox3.getChildren().addAll(deadlineLabel,deadlinetext);
+            hbox4.getChildren().addAll(pane2,accept,pane,reject,pane4);
+            hbox5.getChildren().addAll(pane3);
+            vbox.getChildren().addAll(hbox1,hbox2,hbox3,hbox4,pane5);
+            deadlinetext.setText("9/2/2020");
+            taskNametext.setText("TO DO");
+
+            hbox1.setHgrow(pane7, Priority.ALWAYS);
+            hbox4.setHgrow(pane4, Priority.ALWAYS);
+            hbox4.setHgrow(pane, Priority.ALWAYS);
+            hbox4.setHgrow(pane2, Priority.ALWAYS);
+            hbox5.setHgrow(pane3, Priority.ALWAYS);
+            vbox.setVgrow(pane5, Priority.ALWAYS);
+            VBox.setMargin(vbox, new Insets(10, 10, 10, 10));
+            reject.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                getListView().getItems().remove(getItem()); 
+            }
+        });
+            accept.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                //accept friend request 
+            }
+        });
+        }
+        }
 
 }

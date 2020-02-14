@@ -102,7 +102,6 @@ public class TaskViewController implements Initializable {
         this.isNew = isNew;
         this.selectedTask = task;
         this.taskID = selectedTask.getTask_id();
-
         this.loginUserID = loginUserID;
         if (this.isNew) {
             editButton.setDisable(true);
@@ -164,7 +163,7 @@ public class TaskViewController implements Initializable {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                JsonObject commentsRequest = JsonUtil.fromTaskId(taskID,JsonConst.TYPE_COMMENT_LIST_REQUEST);
+                JsonObject commentsRequest = JsonUtil.fromTaskId(taskID, JsonConst.TYPE_COMMENT_LIST_REQUEST);
                 JsonObject commentsResponse = new RequestHandler().makeRequest(commentsRequest);
                 comments = JsonUtil.fromJsonCommentsList(commentsResponse);
                 Platform.runLater(new Runnable() {
@@ -216,7 +215,7 @@ public class TaskViewController implements Initializable {
                         assignUserID = user.getId();
                     }
                 }
-                   task.setUser_id(assignUserID);
+                task.setUser_id(assignUserID);
                 task.setAssign_date(Timestamp.valueOf(assignDatePicker.getValue().atStartOfDay()));
                 task.setAssign_status(TaskModel.ASSIGN_STATUS.PENDING);
                 task.setTask_id(taskID);
@@ -253,35 +252,37 @@ public class TaskViewController implements Initializable {
 
     @FXML
     private void addCommentPressed(ActionEvent event) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                CommentModel comment = new CommentModel();
-                comment.setTask_id(taskID);
-                comment.setUser_id(loginUserID);
-                comment.setComment_text(commentTextArea.getText());
-                comment.setComment_date(new Timestamp(new Date().getTime()));
-                JsonObject request = JsonUtil.fromComment(comment);
-                new RequestHandler().makeRequest(request);
-                Platform.runLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        commentTextArea.setText("");
-                        getAllComments();
-                    }
-                });
-            }
-        }).start();
-// Alert alert = new Alert(Alert.AlertType.INFORMATION);
-//                        alert.setHeaderText(null);
-//                        alert.setTitle("Add Collaborator");
-//                        alert.setContentText("This teammate is already added in this list !!");
-//                        alert.showAndWait();
+        if (selectedTask.getTask_id() != -1) {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    CommentModel comment = new CommentModel();
+                    comment.setTask_id(taskID);
+                    comment.setUser_id(loginUserID);
+                    comment.setComment_text(commentTextArea.getText());
+                    comment.setComment_date(new Timestamp(new Date().getTime()));
+                    JsonObject request = JsonUtil.fromComment(comment);
+                    new RequestHandler().makeRequest(request);
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            commentTextArea.setText("");
+                            getAllComments();
+                        }
+                    });
+                }
+            }).start();
+        } else {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setHeaderText(null);
+            alert.setTitle("Add Comment");
+            alert.setContentText("Add task first then add comment");
+            alert.showAndWait();
+        }
     }
 
     @FXML
     private void cancelButtonPressed(ActionEvent event) {
-
 
         ((Node) (event.getSource())).getScene().getWindow().hide();
 

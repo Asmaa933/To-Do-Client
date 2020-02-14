@@ -5,7 +5,6 @@ package clientapplication;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
- 
 import javafx.application.Application;
 import static javafx.application.Application.launch;
 import javafx.fxml.FXMLLoader;
@@ -19,13 +18,13 @@ import javafx.stage.StageStyle;
  * @author esma
  */
 public class ClientApplication extends Application {
-    
-     @Override
+
+    @Override
     public void start(Stage stage) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("LoginView.fxml"));
-       
         Scene scene = new Scene(root);
-        
+        scene.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
+        stage.initStyle(StageStyle.UNDECORATED);
         stage.setScene(scene);
         stage.show();
     }
@@ -36,5 +35,5 @@ public class ClientApplication extends Application {
     public static void main(String[] args) {
         launch(args);
     }
-    
+
 }

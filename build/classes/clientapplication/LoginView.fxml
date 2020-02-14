@@ -14,37 +14,50 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="clientapplication.LoginController">
+<AnchorPane id="AnchorPane" fx:id="loginPane2" prefHeight="600.0" prefWidth="800.0" stylesheets="@StyleSheet.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="clientapplication.LoginController">
     <children>
-      <TextField fx:id="emailText" layoutX="443.0" layoutY="225.0" prefHeight="27.0" prefWidth="320.0" promptText="name@example.com" />
-      <PasswordField fx:id="passwordText" layoutX="443.0" layoutY="225.0" prefHeight="27.0" prefWidth="320.0" promptText="Password" visible="false" />
-        <Button fx:id="nextBtn" layoutX="535.0" layoutY="342.0" onAction="#nextButtonPressed" prefHeight="40.0" prefWidth="132.0" text="Next" textFill="#222121">
+      <TextField fx:id="emailText" layoutX="488.0" layoutY="263.0" prefHeight="38.0" prefWidth="276.0" promptText="name@example.com" />
+      <PasswordField fx:id="passwordText" layoutX="489.0" layoutY="263.0" prefHeight="38.0" prefWidth="276.0" promptText="Password" visible="false" />
+        <Button fx:id="nextBtn" layoutX="543.0" layoutY="396.0" onAction="#nextButtonPressed" prefHeight="40.0" prefWidth="132.0" text="Next" textFill="#222121">
          <font>
             <Font size="14.0" />
          </font></Button>
-      <Hyperlink layoutX="412.0" layoutY="480.0" onAction="#newAccountPressed" text="Create New Account ?">
+      <Hyperlink layoutX="443.0" layoutY="527.0" onAction="#newAccountPressed" text="Create New Account ?">
          <font>
             <Font size="13.0" />
          </font>
       </Hyperlink>
-      <Hyperlink fx:id="notYouHyperLink" layoutX="576.0" layoutY="392.0" onAction="#notYouPressed" prefHeight="25.0" prefWidth="104.0" text="Not You ?" textAlignment="CENTER" visible="false" />
-      <Label fx:id="invalidLabel" layoutX="461.0" layoutY="270.0" prefHeight="17.0" prefWidth="281.0" textFill="#ee0d0d" />
-      <Pane layoutY="1.0" prefHeight="600.0" prefWidth="400.0" style="-fx-background-color: #2e86c1;" />
-      <Label layoutX="502.0" layoutY="121.0" prefHeight="38.0" prefWidth="236.0" text="Welcome To Our App" textFill="#141414">
-         <font>
-            <Font size="18.0" />
-         </font>
-      </Label>
-      <Button layoutX="737.0" layoutY="37.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#closeButtonPressed" prefHeight="40.0" prefWidth="40.0">
-         <graphic>
-            <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+      <Hyperlink fx:id="notYouHyperLink" layoutX="582.0" layoutY="454.0" onAction="#notYouPressed" prefHeight="25.0" prefWidth="104.0" text="Not You ?" textAlignment="CENTER" visible="false" />
+      <Label fx:id="invalidLabel" layoutX="508.0" layoutY="317.0" prefHeight="25.0" prefWidth="268.0" textFill="#ee0d0d" />
+      <Pane fx:id="loginPane1" layoutY="1.0" prefHeight="600.0" prefWidth="400.0" style="-fx-background-color: #2e86c1;">
+         <children>
+            <ImageView fitHeight="241.0" fitWidth="203.0" layoutX="97.0" layoutY="151.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../images/close.png" />
+                  <Image url="@../images/logo2.png" />
                </image>
             </ImageView>
-         </graphic>
-      </Button>
-      <ProgressIndicator fx:id="progressIndicator" layoutX="586.0" layoutY="342.0" prefHeight="40.0" prefWidth="30.0" visible="false" />
+         </children></Pane>
+      <Button fx:id="closeButton" layoutX="745.0" layoutY="14.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#closeButtonPressed" prefHeight="40.0" prefWidth="40.0" />
+      <ProgressIndicator fx:id="progressIndicator" layoutX="596.0" layoutY="396.0" prefHeight="40.0" prefWidth="30.0" visible="false" />
+      <ImageView fitHeight="40.0" fitWidth="73.0" layoutX="423.0" layoutY="262.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/11.png" />
+         </image></ImageView>
+      <ImageView fx:id="imagePassword" fitHeight="40.0" fitWidth="40.0" layoutX="423.0" layoutY="262.0" pickOnBounds="true" preserveRatio="true" visible="false">
+         <image>
+            <Image url="@../images/22.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="imageLogin" fitHeight="128.0" fitWidth="137.0" layoutX="545.0" layoutY="73.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/avatar.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="51.0" fitWidth="55.0" layoutX="740.0" layoutY="9.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/4.jpg" />
+         </image>
+      </ImageView>
     </children>
    <effect>
       <Bloom threshold="1.0">

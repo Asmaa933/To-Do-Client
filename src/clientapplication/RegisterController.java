@@ -22,6 +22,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TextField;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javax.json.JsonObject;
@@ -54,11 +55,11 @@ public class RegisterController {
     @FXML
     private Label confirmPassErrorLabel;
     @FXML
-    private AnchorPane rootPane;
-    @FXML
     private ProgressIndicator progressIndicator;
     @FXML
     private Button signUpBtn;
+    @FXML
+    private AnchorPane AnchorPane;
 
     @FXML
     private void signUpPressed(ActionEvent event) {

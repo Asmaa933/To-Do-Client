@@ -27,6 +27,9 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TextField;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javax.json.JsonObject;
 import network.JsonUtil;
@@ -51,6 +54,16 @@ public class LoginController {
     private boolean flagEmail = false;
     private int id = -1;
     ActionEvent eventSource = null;
+    @FXML
+    private AnchorPane loginPane2;
+    @FXML
+    private Pane loginPane1;
+    @FXML
+    private Button closeButton;
+    @FXML
+    private ImageView imagePassword;
+    @FXML
+    private ImageView imageLogin;
 
     public void setId(int id) {
         this.id = id;
@@ -136,6 +149,7 @@ public class LoginController {
                     if (id != -1) {
                         emailText.setVisible(false);
                         passwordText.setVisible(true);
+                        imagePassword.setVisible(true);
                         notYouHyperLink.setVisible(true);
 
                         flagEmail = true;

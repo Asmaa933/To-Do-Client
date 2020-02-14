@@ -1,0 +1,150 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : Feb 14, 2020, 10:47:55 AM
+    Author     : ghost
+*/
+#cancel{/*
+  -fx-text-fill: white;
+    -fx-font-family: "Arial Narrow";
+    -fx-font-weight: bold;
+    -fx-background-color: linear-gradient(#61a2b1, #2A5058);
+    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 );
+    */
+    /*  -fx-text-fill: white;
+    -fx-font-family: "Arial Narrow";
+    -fx-font-weight: bold;
+   -fx-border-color:null;
+   -fx-background-color:green;
+   -fx-background-radius: 0%;
+   -fx-background-color: null;
+  -fx-text-fill:green;
+  -fx-font-weight:bold; 
+  -fx-background-radius: 0%;
+  -fx-border-color: green;*/
+    /*
+    -fx-background-color:
+            #090a0c,
+            linear-gradient(#38424b 0%, #1f2429 20%, #191d22 100%),
+            linear-gradient(#20262b, #191d22),
+            radial-gradient(center 50% 0%, radius 100%, rgba(255,255,255,0),rgba(114,131,148,0.9) );
+    -fx-background-radius: 5,4,3,5;
+    -fx-background-insets: 0,1,2,0;
+    -fx-text-fill: white;
+    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 );
+    -fx-font-family: "Arial";
+    -fx-text-fill: linear-gradient(white, #d0d0d0);
+    -fx-font-size: 12px;
+    -fx-padding: 10 20 10 20;
+    */
+    
+    -fx-background-color:
+            #090a0c,
+            linear-gradient(#38424b 0%, #1f2429 20%, #191d22 100%),
+            linear-gradient(#20262b, #191d22),
+            radial-gradient(center 50% 0%, radius 100%, rgba(114,131,148,0.9), rgba(255,255,255,0));
+    -fx-background-radius: 5,4,3,5;
+    -fx-background-insets: 0,1,2,0;
+    -fx-text-fill: white;
+    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 );
+    -fx-font-family: "Arial";
+    -fx-text-fill: linear-gradient(white, #d0d0d0);
+    -fx-font-size: 12px;
+    -fx-padding: 10 20 10 20;
+}
+#AnchorPane{
+    -fx-background-color:  white  ;
+    -fx-border-color: black;
+}
+
+#lbl{
+       -fx-font-family: "Arial";
+       -fx-font-size: 13px;
+       
+}
+#txt{
+    -fx-border-color: black;
+
+}
+#btn{
+    -fx-border-color: red;
+    -fx-text-fill: red;
+    -fx-background-radius: 9,8,5,4,3;
+    -fx-font-family: "Helvetica";
+    -fx-font-size: 16px;
+    -fx-background-radius: 5,4,3,5;
+    -fx-background-insets: 0,1,2,0;   
+}
+#list{
+   -fx-border-color:  #0f6599 ; 
+   -fx-background-color:#7ebcea;
+   -fx-background-color: linear-gradient(#328BDB 0%, #207BCF 25%, #1973C9 75%, #0A65BF 100%);
+   /*-fx-background-color: transparent;
+    -fx-pref-width: 12;
+    -fx-pref-height: 12;
+    -fx-padding: 2;*/
+}
+/*
+#list-row-cell:empty {
+    -fx-background-color: khaki;
+    -fx-border-color: grey
+}
+ 
+#list-row-cell:hover{
+    -fx-background-color: blanchedalmond;
+}
+ 
+#list-row-cell:selected{
+    -fx-background-color: chocolate;
+}
+
+
+#list:filled:hover {
+    -fx-background-color: #0093ff;
+    -fx-text-fill: white;
+}
+*/
+#add{
+   -fx-background-color:
+            linear-gradient(#e68400, #ffd65b),
+            linear-gradient(#f2ba44, #ffef84),
+            linear-gradient(#efaa22, #ffea6a),
+            linear-gradient(#ffe657 0%, #f8c202 50%, #eea10b 100%),
+            linear-gradient(from 0% 0% to 15% 50%, rgba(255,255,255,0.9), rgba(255,255,255,0));
+    -fx-background-radius: 30;
+    -fx-background-insets: 0,1,2,3,0;
+    -fx-text-fill: #654b00;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-padding: 10 20 10 20;
+    
+     -fx-background-color:
+            linear-gradient(#ffd65b, #e68400),
+            linear-gradient(#ffef84, #f2ba44),
+            linear-gradient(#ffea6a, #efaa22),
+            linear-gradient(#ffe657 0%, #f8c202 50%, #eea10b 100%),
+            linear-gradient(from 0% 0% to 15% 50%, rgba(255,255,255,0.9), rgba(255,255,255,0));
+    -fx-background-radius: 30;
+    -fx-background-insets: 0,1,2,3,0;
+    -fx-text-fill: #654b00;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-padding: 10 20 10 20;
+     
+}
+
+#save{
+   -fx-background-color: red;
+  -fx-text-fill:white;
+  -fx-font-weight:bold;
+   -fx-text-fill: red;
+    -fx-font-family: "Arial Narrow";
+    -fx-font-weight: bold;
+   -fx-border-color:red;
+   -fx-background-color:null;
+    -fx-font-size: 14px; 
+}
+

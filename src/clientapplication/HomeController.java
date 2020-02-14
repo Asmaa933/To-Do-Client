@@ -7,11 +7,13 @@ package clientapplication;
 
 import java.io.IOException;
 import java.net.URL;
-import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -30,11 +32,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
-import javafx.scene.control.TabPane.TabClosingPolicy;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.control.TitledPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -64,13 +63,13 @@ public class HomeController implements Initializable {
     @FXML
     private Button makeNewListButton;
     @FXML
-    private ListView<String> toDoList;
+    private ListView<TaskModel> toDoList;
     @FXML
-    private ListView<String> doingList;
+    private ListView<TaskModel> inProgressList;
     @FXML
     private Button makeNewTaskButton;
     @FXML
-    private ListView<String> doneList;
+    private ListView<TaskModel> doneList;
     @FXML
     private ListView<String> friendList;
     @FXML
@@ -107,13 +106,16 @@ public class HomeController implements Initializable {
     @FXML
     private ListView<String> taskRequestList;
 
-    ObservableList<String> friendRequestObservable = FXCollections.observableArrayList("zeynab", "esma", "mazen", "remon", "ahmed");
-    ObservableList<String> listListsObservable = FXCollections.observableArrayList();
-    ObservableList<String> FriendListObservable = FXCollections.observableArrayList("zeynab", "esma", "mazen", "remon", "ahmed");
-    ObservableList<String> toDoListObservable = FXCollections.observableArrayList("zeynab", "esma", "mazen", "remon", "ahmed");
-    ObservableList<String> toDoListObservable2 = FXCollections.observableArrayList("zeynab", "esma", "mazen", "remon", "ahmed");
-    ObservableList<String> notificationObservable = FXCollections.observableArrayList("zeynab", "esma", "mazen", "remon", "ahmed");
-    ObservableList<String> taskRequestObservable = FXCollections.observableArrayList("zeynab", "esma", "mazen", "remon", "ahmed");
+    private ObservableList<String> friendRequestObservable = FXCollections.observableArrayList("zeynab", "esma", "mazen", "remon", "ahmed");
+    private ObservableList<String> listListsObservable = FXCollections.observableArrayList();
+    private ObservableList<String> FriendListObservable = FXCollections.observableArrayList("zeynab", "esma", "mazen", "remon", "ahmed");
+    private ObservableList<TaskModel> toDoListObservable = FXCollections.observableArrayList();
+    private ObservableList<TaskModel> inProgressListObservable = FXCollections.observableArrayList();
+   private ObservableList<TaskModel> doneListObservable = FXCollections.observableArrayList();
+
+    private ObservableList<String> toDoListObservable2 = FXCollections.observableArrayList("zeynab", "esma", "mazen", "remon", "ahmed");
+    private ObservableList<String> notificationObservable = FXCollections.observableArrayList("zeynab", "esma", "mazen", "remon", "ahmed");
+    private ObservableList<String> taskRequestObservable = FXCollections.observableArrayList("zeynab", "esma", "mazen", "remon", "ahmed");
 
     private int loginUserID;
 
@@ -123,6 +125,11 @@ public class HomeController implements Initializable {
 
     private ArrayList<ListModel> userLists;
     private ArrayList<ListModel> userCollaborateLists;
+    private List<TaskModel> tasks;
+    private ArrayList<TaskModel> toDoTasks;
+    private ArrayList<TaskModel> inProgressTasks;
+    private ArrayList<TaskModel> doneTasks;
+    private int listID;
 
     public void setLoginUserID(int loginUserID) {
         this.loginUserID = loginUserID;
@@ -138,6 +145,7 @@ public class HomeController implements Initializable {
         for (ListModel list : userLists) {
             listListsObservable.add(list.getTitle());
         }
+
         /*
         //UserCollabortorList
         JsonObject requestAllCollaborateLists = JsonUtil.fromId(JsonConst.TYPE_SELECT_ALL_COLLABORATOR_LIST, userID);
@@ -160,9 +168,6 @@ public class HomeController implements Initializable {
 
         friendRequestList.setItems(friendRequestObservable);
         friendRequestList.setCellFactory(param -> new CellFriendRequest());
-
-        toDoList.setItems(toDoListObservable);
-        toDoList.setCellFactory(param -> new CellToDO());
 
         notificationList.setItems(notificationObservable);
         notificationList.setCellFactory(param -> new CellNotification());
@@ -208,6 +213,7 @@ public class HomeController implements Initializable {
             Stage stage = new Stage();
             TaskViewController reg = (TaskViewController) fxload.getController();
             TaskModel task = new TaskModel();
+            task.setList_id(listID);
             reg.setFromLastView(true, task);
             stage.setScene(new Scene(root));
             stage.setTitle("Add Task");
@@ -283,6 +289,53 @@ public class HomeController implements Initializable {
 
     @FXML
     private void listItemClicked(MouseEvent event) {
+        int selectedindex = listsList.getSelectionModel().getSelectedIndex();
+        int listID = userLists.get(selectedindex).getList_id();
+        updateTasksLists(listID);
+    }
+
+    public void updateTasksLists(int listID) {
+        tasks = new ArrayList<>();
+        toDoTasks = new ArrayList<>();
+        inProgressTasks = new ArrayList<>();
+        doneTasks = new ArrayList<>();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                JsonObject request = JsonUtil.getTasks(listID);
+                JsonObject response = new RequestHandler().makeRequest(request);
+                tasks = JsonUtil.fromJsonTasksList(response);
+                for (TaskModel task : tasks) {
+                    switch (task.getTask_status()) {
+                        case TaskModel.TASK_STATUS.TODO:
+                            toDoTasks.add(task);
+                            break;
+                        case TaskModel.TASK_STATUS.INPROGRESS:
+                            inProgressTasks.add(task);
+                            break;
+                        case TaskModel.TASK_STATUS.DONE:
+                            doneTasks.add(task);
+                            break;
+                    }
+                }
+                System.out.println(toDoTasks.size());
+                Platform.runLater(() -> {
+
+                    toDoListObservable.setAll(toDoTasks);
+                    toDoList.setItems(toDoListObservable);
+                    toDoList.setCellFactory(param -> new CellTask());
+
+                    inProgressListObservable.setAll(inProgressTasks);
+                    inProgressList.setItems(inProgressListObservable);
+                    inProgressList.setCellFactory(param -> new CellTask());
+
+                    doneListObservable.setAll(doneTasks);
+                    doneList.setItems(doneListObservable);
+                    doneList.setCellFactory(param -> new CellTask());
+
+                });
+            }
+        }).start();
     }
 
     class CellFriendRequest extends ListCell<String> {
@@ -373,7 +426,7 @@ public class HomeController implements Initializable {
 
     }
 
-     class CellNotification extends ListCell<String> {
+    class CellNotification extends ListCell<String> {
 
         HBox hbox = new HBox();
         TextArea textArea = new TextArea();
@@ -399,7 +452,7 @@ public class HomeController implements Initializable {
         }
     }
 
-     class CellTaskRequest extends ListCell<String> {
+    class CellTaskRequest extends ListCell<String> {
 
         HBox hbox = new HBox();
         TextArea textArea = new TextArea();
@@ -456,7 +509,7 @@ public class HomeController implements Initializable {
 
     }
 
-    static class CellToDO extends ListCell<String> {
+    class CellTask extends ListCell<TaskModel> {
 
         VBox vbox = new VBox();
         HBox hbox1 = new HBox();
@@ -477,20 +530,24 @@ public class HomeController implements Initializable {
         Pane pane3 = new Pane();
         Pane pane4 = new Pane();
         Pane pane5 = new Pane();
+        private TaskModel selectedTask;
 
         @Override
-        protected void updateItem(String item, boolean empty) {
+        protected void updateItem(TaskModel item, boolean empty) {
+            selectedTask = item;
             super.updateItem(item, empty);
             setText(null);
             setGraphic(null);
 
             if (item != null && !empty) {
-                assignTotext.setText(item);
+                taskNameLabel.setText(item.getTitle());
+                assignTotext.setText(item.getUser_name());
+                deadlineLabel.setText(new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(item.getDeadline()));
                 setGraphic(vbox);
             }
         }
 
-        public CellToDO() {
+        public CellTask() {
             super();
             hbox1.getChildren().addAll(taskNameLabel, pane3, delete);
             hbox2.getChildren().addAll(assignToLabel, assignTotext);
@@ -503,9 +560,8 @@ public class HomeController implements Initializable {
             hbox1.setHgrow(pane3, Priority.ALWAYS);
             hbox4.setHgrow(pane, Priority.ALWAYS);
             vbox.setVgrow(pane5, Priority.ALWAYS);
-            taskNameLabel.setText("Title");
-            deadlinetext.setText("9/2/2020");
             VBox.setMargin(vbox, new Insets(10, 10, 10, 10));
+
             delete.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
@@ -521,9 +577,7 @@ public class HomeController implements Initializable {
                         root = (Parent) fxload.load();
                         Stage stage = new Stage();
                         TaskViewController taskControl = (TaskViewController) fxload.getController();
-                        //from db 
-                        TaskModel task = new TaskModel(1, "Asmaa", "test", "todo", new Timestamp(2020, 12, 12, 12, 00, 00, 00), 1, 1, new Timestamp(2020, 12, 15, 12, 00, 00, 00), "offline");
-
+                        TaskModel task = selectedTask;
                         taskControl.setFromLastView(false, task);
                         stage.setScene(new Scene(root));
                         stage.setTitle("Task Details");
@@ -532,6 +586,7 @@ public class HomeController implements Initializable {
                         stage.initModality(Modality.APPLICATION_MODAL);
 
                         stage.showAndWait();
+                        updateTasksLists(selectedTask.getList_id());
                     } catch (IOException ex) {
                         Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
                     }

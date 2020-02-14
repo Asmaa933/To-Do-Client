@@ -228,5 +228,38 @@ public class JsonUtil {
         
         return lists;        
     }
+  public static JsonObject getTasks(int listID) {
+        JsonObject obj = Json.createObjectBuilder()
+                .add(JsonConst.TYPE, JsonConst.TYPE_GET_ALL_TASKS)
+                .add("list_id", listID)
+                .build();
+        return obj;
+
+    }
+
+    public static List<TaskModel> fromJsonTasksList(JsonObject obj) {
+        List<TaskModel> tasks = new ArrayList<>();
+        JsonArray jsonArray = obj.getJsonArray("array");
+        if (jsonArray != null) {
+
+            for (int i = 0; i < jsonArray.size(); i++) {
+                JsonObject jObj = (JsonObject) jsonArray.get(i);
+                TaskModel task = new TaskModel();
+                task.setTask_id(jObj.getInt("task_id"));
+                task.setTitle(jObj.getString("title"));
+                task.setDescription(jObj.getString("description"));
+                task.setTask_status(jObj.getString("task_status"));
+                task.setAssign_date(Timestamp.valueOf(jObj.getString("assign_date")));
+                task.setDeadline(Timestamp.valueOf(jObj.getString("deadline")));
+                task.setList_id(jObj.getInt("list_id"));
+                task.setUser_id(jObj.getInt("user_id"));
+                task.setAssign_status(jObj.getString("assign_status"));
+                task.setUser_name(jObj.getString("user_name"));
+                tasks.add(task);
+            }
+        }
+
+        return tasks;
+    }
     
 }

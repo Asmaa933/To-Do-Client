@@ -26,7 +26,7 @@
          <padding>
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
          </padding></ListView>
-      <ListView fx:id="doingList" layoutX="532.0" layoutY="114.0" prefHeight="395.0" prefWidth="303.0" />
+      <ListView fx:id="inProgressList" layoutX="532.0" layoutY="114.0" prefHeight="395.0" prefWidth="303.0" />
       <ListView fx:id="doneList" layoutX="848.0" layoutY="114.0" prefHeight="395.0" prefWidth="295.0" />
       <Label layoutX="14.0" layoutY="74.0" prefHeight="33.0" prefWidth="120.0" text="Lists" />
       <ListView fx:id="listsList" layoutX="7.0" layoutY="114.0" onMouseClicked="#listItemClicked" prefHeight="395.0" prefWidth="187.0" />

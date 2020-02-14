@@ -16,8 +16,10 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
@@ -67,7 +69,6 @@ public class TaskViewController implements Initializable {
     private static final String IN_PROGRESS = "In Progress";
     private static final String DONE = "Done";
 
-    //private ObservableList<String> commentslist = FXCollections.observableArrayList("zeynab", "esma", "mazen", "remon", "ahmed");
     private ObservableList<String> statusList = FXCollections.observableArrayList(TO_DO, IN_PROGRESS, DONE);
     private ObservableList<String> collaboratorList = FXCollections.observableArrayList();
     private ObservableList<CommentModel> commentsList = FXCollections.observableArrayList();
@@ -101,7 +102,6 @@ public class TaskViewController implements Initializable {
         if (this.isNew) {
             editButton.setDisable(true);
             titleLabel.setText("Add Task");
-
             resetFields();
 
         } else {
@@ -111,8 +111,19 @@ public class TaskViewController implements Initializable {
             descriptionTextArea.setText(selectedTask.getDescription());
             assignDatePicker.setValue(selectedTask.getAssign_date().toLocalDateTime().toLocalDate());
             deadlineDatePicker.setValue(selectedTask.getDeadline().toLocalDateTime().toLocalDate());
-            statusComboBox.setValue(selectedTask.getTask_status());
-            //   assignToComboBox.setValue(selectedTask.get);
+            switch (selectedTask.getTask_status()) {
+                case TaskModel.TASK_STATUS.TODO:
+                    statusComboBox.setValue(TO_DO);
+                    break;
+                case TaskModel.TASK_STATUS.INPROGRESS:
+                    statusComboBox.setValue(IN_PROGRESS);
+                    break;
+                case TaskModel.TASK_STATUS.DONE:
+                    statusComboBox.setValue(DONE);
+                    break;
+            }
+
+            assignToComboBox.setValue(selectedTask.getUser_name());
             saveButton.setDisable(true);
             disableOrEnableFields(true);
             getAllComments();
@@ -127,7 +138,7 @@ public class TaskViewController implements Initializable {
             @Override
             public void run() {
                 //request the list of collaborators
-                JsonObject jsonObject = JsonUtil.fromId(JsonConst.TYPE_COLLABORATOR_LIST, 1); //list from captin mazen
+                JsonObject jsonObject = JsonUtil.fromId(JsonConst.TYPE_COLLABORATOR_LIST, selectedTask.getList_id());
                 JsonObject response = new RequestHandler().makeRequest(jsonObject);
                 users = JsonUtil.toUsersList(response);
                 for (UserModel user : users) {
@@ -192,9 +203,9 @@ public class TaskViewController implements Initializable {
                 task.setTask_status(status);
                 task.setDeadline(Timestamp.valueOf(deadlineDatePicker.getValue().atStartOfDay()));
                 //to get from List 
-                task.setList_id(1);
-                //to get from user
-                task.setUser_id(1);
+                task.setList_id(selectedTask.getList_id());
+                int userIndex = assignToComboBox.getSelectionModel().getSelectedIndex();
+                task.setUser_id(users.get(userIndex).getId());
                 task.setAssign_date(Timestamp.valueOf(assignDatePicker.getValue().atStartOfDay()));
                 task.setAssign_status(TaskModel.ASSIGN_STATUS.PENDING);
                 task.setTask_id(taskID);
@@ -207,8 +218,6 @@ public class TaskViewController implements Initializable {
                     JsonObject response = new RequestHandler().makeRequest(jsonObject);
                     taskID = response.getInt(JsonConst.ID);
                 }
-                JsonObject response = new RequestHandler().makeRequest(jsonObject);
-                taskID = response.getInt(JsonConst.ID);
                 Platform.runLater(new Runnable() {
                     @Override
                     public void run() {
@@ -258,9 +267,13 @@ public class TaskViewController implements Initializable {
 
     @FXML
     private void cancelButtonPressed(ActionEvent event) {
-        ((Node) (event.getSource())).getScene().getWindow().hide();
-        //((Stage)((Node) event.getSource()).getScene().getWindow()).close();
+//        FXMLLoader loader = new FXMLLoader(getClass().getResource("HomeView.fxml"));
+//                        HomeController homeController = loader.getController();
+//                        homeController.updateTasksLists(selectedTask.getList_id());
 
+        ((Node) (event.getSource())).getScene().getWindow().hide();
+
+        //((Stage)((Node) event.getSource()).getScene().getWindow()).close();
     }
 
     static class Cell extends ListCell<CommentModel> {

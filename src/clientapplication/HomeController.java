@@ -10,6 +10,7 @@ import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -25,7 +26,9 @@ import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
@@ -81,10 +84,6 @@ public class HomeController implements Initializable {
 
     @FXML
     private Button logOutButton;
-
-    @FXML
-    private ListView<String> listsList;
-
     @FXML
     private Tab friendTap;
 
@@ -107,7 +106,8 @@ public class HomeController implements Initializable {
     private ListView<String> taskRequestList;
 
     private ObservableList<String> friendRequestObservable = FXCollections.observableArrayList("zeynab", "esma", "mazen", "remon", "ahmed");
-    private ObservableList<String> listListsObservable = FXCollections.observableArrayList();
+
+//    private ObservableList<String> listListsObservable = FXCollections.observableArrayList();
     private ObservableList<String> FriendListObservable = FXCollections.observableArrayList("zeynab", "esma", "mazen", "remon", "ahmed");
     private ObservableList<TaskModel> toDoListObservable = FXCollections.observableArrayList();
     private ObservableList<TaskModel> inProgressListObservable = FXCollections.observableArrayList();
@@ -116,6 +116,9 @@ public class HomeController implements Initializable {
     private ObservableList<String> toDoListObservable2 = FXCollections.observableArrayList("zeynab", "esma", "mazen", "remon", "ahmed");
     private ObservableList<String> notificationObservable = FXCollections.observableArrayList("zeynab", "esma", "mazen", "remon", "ahmed");
     private ObservableList<String> taskRequestObservable = FXCollections.observableArrayList("zeynab", "esma", "mazen", "remon", "ahmed");
+
+    private ObservableList<String> listOfMyListsObservable;
+    private ObservableList<String> btnCollaborationListsObservable;
 
     private int loginUserID;
 
@@ -130,6 +133,16 @@ public class HomeController implements Initializable {
     private ArrayList<TaskModel> inProgressTasks;
     private ArrayList<TaskModel> doneTasks;
     private int listID;
+    @FXML
+    private AnchorPane listAnchor;
+    @FXML
+    private Tab btnMyLists;
+    @FXML
+    private ListView<String> listOfMyLists;
+    @FXML
+    private Tab btnCollaborationLists;
+    @FXML
+    private ListView<String> listOfCollaborationLists;
 
     public void setLoginUserID(int loginUserID) {
         this.loginUserID = loginUserID;
@@ -137,32 +150,39 @@ public class HomeController implements Initializable {
     }
 
     private void setLists(int userID) {
+        listOfMyListsObservable = FXCollections.observableArrayList();
+        btnCollaborationListsObservable = FXCollections.observableArrayList();
+
         //UserList
         JsonObject requestAllLists = JsonUtil.fromId(JsonConst.TYPE_SELECT_ALL_LIST, userID);
         JsonObject responseAllLists = new RequestHandler().makeRequest(requestAllLists);
         userLists = JsonUtil.toListOfListModels(responseAllLists);
 
         for (ListModel list : userLists) {
-            listListsObservable.add(list.getTitle());
+            listOfMyListsObservable.add(list.getTitle());
         }
 
-        /*
         //UserCollabortorList
         JsonObject requestAllCollaborateLists = JsonUtil.fromId(JsonConst.TYPE_SELECT_ALL_COLLABORATOR_LIST, userID);
         JsonObject responseAllCollaborateLists = new RequestHandler().makeRequest(requestAllCollaborateLists);
         userCollaborateLists = JsonUtil.toListOfListModels(responseAllCollaborateLists);
-        
+
         for (ListModel list : userCollaborateLists) {
-            listListsObservable.add(list.getTitle());
+            btnCollaborationListsObservable.add(list.getTitle());
         }
-         */
+        listOfMyLists.setItems(listOfMyListsObservable);
+        listOfMyLists.setCellFactory(param -> new CellLists());
+
+        listOfCollaborationLists.setItems(btnCollaborationListsObservable);
+        listOfCollaborationLists.setCellFactory(param -> new CellLists());
+
     }
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-                makeNewTaskButton.setDisable(true);
-        listsList.setItems(listListsObservable);
-        listsList.setCellFactory(param -> new CellLists());
+        makeNewTaskButton.setDisable(true);
+//        listsList.setItems(listListsObservable);
+//        listsList.setCellFactory(param -> new CellLists());
 
         friendList.setItems(FriendListObservable);
         friendList.setCellFactory(param -> new Cellfriend());
@@ -187,10 +207,13 @@ public class HomeController implements Initializable {
             Stage stage = new Stage();
             ListViewController listController = fxload.getController();
             ListModel list = new ListModel();
-            //change
-            list.setList_id(2);
-            list.getUser().setName("zeynab");
-            list.getUser().setId(1);
+
+            list.getUser().setId(loginUserID);
+            JsonObject jsonObject = JsonUtil.fromId(JsonConst.TYPE_SELECT_UESRMODEL, loginUserID);
+            JsonObject response = new RequestHandler().makeRequest(jsonObject);
+            UserModel userModel = JsonUtil.toUserModel(response);
+
+            list.setUser(userModel);
             listController.setList(list);
 
             stage.setScene(new Scene(root));
@@ -198,7 +221,11 @@ public class HomeController implements Initializable {
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setResizable(false);
             stage.setTitle("Add List");
+
             stage.showAndWait();
+             Platform.runLater(() -> {
+                setLists(listID);
+                        });
         } catch (IOException ex) {
             Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -221,6 +248,9 @@ public class HomeController implements Initializable {
             stage.initStyle(StageStyle.UNDECORATED);
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.showAndWait();
+                    Platform.runLater(() -> {
+                            updateTasksLists(listID);
+                        });
         } catch (IOException ex) {
             Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -289,10 +319,18 @@ public class HomeController implements Initializable {
     }
 
     @FXML
-    private void listItemClicked(MouseEvent event) {
-           makeNewTaskButton.setDisable(false);
-        int selectedindex = listsList.getSelectionModel().getSelectedIndex();
-         listID = userLists.get(selectedindex).getList_id();
+    private void mylistsItemClicked(MouseEvent event) {
+        makeNewTaskButton.setDisable(false);
+        int selectedindex = listOfMyLists.getSelectionModel().getSelectedIndex();
+        listID = userLists.get(selectedindex).getList_id();
+        updateTasksLists(listID);
+    }
+
+    @FXML
+    private void myCollobaratelistsItemClicked(MouseEvent event) {
+        makeNewTaskButton.setDisable(false);
+        int selectedindex = listOfCollaborationLists.getSelectionModel().getSelectedIndex();
+        listID = userCollaborateLists.get(selectedindex).getList_id();
         updateTasksLists(listID);
     }
 
@@ -411,13 +449,26 @@ public class HomeController implements Initializable {
                         FXMLLoader loader = new FXMLLoader(getClass().getResource("ListView.fxml"));
                         Parent root = loader.load();
                         ListViewController listController = loader.getController();
-                        listController.setList(userLists.get(getIndex()));
-                        Scene scene = new Scene(root);
-                        Stage stage = new Stage();
-                        stage.setResizable(false);
-                        stage.setScene(scene);
-                        stage.setTitle("Add List");
-                        stage.show();
+
+                        if (getListView().equals(listOfMyLists)) {
+                            listController.setList(userLists.get(getIndex()));
+                            Scene scene = new Scene(root);
+                            Stage stage = new Stage();
+                            stage.setResizable(false);
+                            stage.setScene(scene);
+                            stage.setTitle("Edit List");
+                            stage.showAndWait();
+                            setLists(loginUserID);
+
+                        } else {
+                            //listController.setList(userCollaborateLists.get(getIndex()));
+                            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                            alert.setHeaderText(null);
+                            alert.setTitle("Access Denied");
+                            alert.setContentText("You haven't permission to edit");
+                            alert.showAndWait();
+                        }
+
                     } catch (IOException ex) {
                         Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
                     }
@@ -566,17 +617,28 @@ public class HomeController implements Initializable {
             delete.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
-       new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            System.out.println(selectedTask.getTask_id());
-                     JsonObject request = JsonUtil.fromTaskId(selectedTask.getTask_id(), JsonConst.TYPE_DELETE_TASK_REQUEST);
-                     new RequestHandler().makeRequest(request);
-                                    Platform.runLater(() -> {
-                                        updateTasksLists(listID);
-                                    });
-                        }
-                    }).start();
+                    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                    alert.setTitle("Delete List");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Do you want to delete this Task ");
+
+                    Optional<ButtonType> result = alert.showAndWait();
+                    if (result.get() == ButtonType.OK) {
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                System.out.println(selectedTask.getTask_id());
+                                JsonObject request = JsonUtil.fromTaskId(selectedTask.getTask_id(), JsonConst.TYPE_DELETE_TASK_REQUEST);
+                                new RequestHandler().makeRequest(request);
+                                Platform.runLater(() -> {
+                                    updateTasksLists(listID);
+                                });
+                            }
+                        }).start();
+                    } else if (result.get() == ButtonType.CANCEL) {
+                        alert.close();
+                    }
+
                 }
             });
             readMore.setOnAction(new EventHandler<ActionEvent>() {
@@ -597,7 +659,9 @@ public class HomeController implements Initializable {
                         stage.initModality(Modality.APPLICATION_MODAL);
 
                         stage.showAndWait();
-                        updateTasksLists(selectedTask.getList_id());
+                        Platform.runLater(() -> {
+                            updateTasksLists(listID);
+                        });
                     } catch (IOException ex) {
                         Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
                     }

@@ -20,6 +20,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
@@ -271,18 +272,19 @@ public class TaskViewController implements Initializable {
                 });
             }
         }).start();
-
+// Alert alert = new Alert(Alert.AlertType.INFORMATION);
+//                        alert.setHeaderText(null);
+//                        alert.setTitle("Add Collaborator");
+//                        alert.setContentText("This teammate is already added in this list !!");
+//                        alert.showAndWait();
     }
 
     @FXML
     private void cancelButtonPressed(ActionEvent event) {
-//        FXMLLoader loader = new FXMLLoader(getClass().getResource("HomeView.fxml"));
-//                        HomeController homeController = loader.getController();
-//                        homeController.updateTasksLists(selectedTask.getList_id());
+
 
         ((Node) (event.getSource())).getScene().getWindow().hide();
 
-        //((Stage)((Node) event.getSource()).getScene().getWindow()).close();
     }
 
     static class Cell extends ListCell<CommentModel> {

@@ -261,5 +261,13 @@ public class JsonUtil {
 
         return tasks;
     }
+     public static UserModel toUserModel(JsonObject obj) {
+        UserModel user = new UserModel();
+        user.setId(obj.getInt("id"));
+        user.setName(obj.getString("name"));
+        user.setEmail(obj.getString("email"));
+        user.setOnline_status(obj.getString("online_status"));
+        return user;
+    }
     
 }

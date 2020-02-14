@@ -8,7 +8,7 @@
   </information>
   <resources>
     <j2se version="1.6+" href="http://java.sun.com/products/autodl/j2se"/>
-    <jar href="ClientApplication.jar" size="375894" download="eager" />
+    <jar href="ClientApplication.jar" size="375844" download="eager" />
     <jar href="lib/javax.json-1.0.4.jar" size="85147" download="eager" />
     <jar href="lib/javax.json-api-1.0.jar" size="19754" download="eager" />
   </resources>

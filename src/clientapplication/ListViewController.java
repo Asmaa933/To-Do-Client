@@ -7,6 +7,8 @@ package clientapplication;
 
 import java.net.URL;
 import java.text.SimpleDateFormat;
+import java.util.AbstractList;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -79,7 +81,8 @@ public class ListViewController implements Initializable {
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-
+        teammates = new ArrayList<>();  //13/2
+        collaborators = new ArrayList<>();  //13/
     }
 
     public void setList(ListModel listModel) {

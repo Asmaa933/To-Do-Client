@@ -7,6 +7,7 @@ package clientapplication;
 
 import java.net.URL;
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -23,6 +24,7 @@ import javafx.scene.Parent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.DateCell;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
@@ -93,8 +95,22 @@ public class TaskViewController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         statusComboBox.setItems(statusList);
-        assignDatePicker.getEditor().setDisable(true);
-        deadlineDatePicker.getEditor().setDisable(true);
+        assignDatePicker.setDayCellFactory(picker -> new DateCell() {
+            public void updateItem(LocalDate date, boolean empty) {
+                super.updateItem(date, empty);
+                LocalDate today = LocalDate.now();
+                setDisable(empty || date.compareTo(today) < 0);
+            }
+        });
+         deadlineDatePicker.setDayCellFactory(picker -> new DateCell() {
+            public void updateItem(LocalDate date, boolean empty) {
+                super.updateItem(date, empty);
+                LocalDate today = LocalDate.now();
+                setDisable(empty || date.compareTo(today) < 0);
+            }
+        });
+      assignDatePicker.getEditor().setDisable(true);
+      deadlineDatePicker.getEditor().setDisable(true);
 
     }
 

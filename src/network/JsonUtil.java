@@ -153,9 +153,9 @@ public class JsonUtil {
         return obj;
     }
     
-    public static JsonObject fromTaskId(int taskid) {
+    public static JsonObject fromTaskId(int taskid,String type) {
         JsonObject obj = Json.createObjectBuilder()
-                .add(JsonConst.TYPE, JsonConst.TYPE_COMMENT_LIST_REQUEST)
+                .add(JsonConst.TYPE, type)
                 .add(JsonConst.ID, taskid)
                 .build();
         return obj;
@@ -231,7 +231,7 @@ public class JsonUtil {
   public static JsonObject getTasks(int listID) {
         JsonObject obj = Json.createObjectBuilder()
                 .add(JsonConst.TYPE, JsonConst.TYPE_GET_ALL_TASKS)
-                .add("list_id", listID)
+                .add(JsonConst.ID, listID)
                 .build();
         return obj;
 

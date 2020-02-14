@@ -99,8 +99,9 @@ public class TaskViewController implements Initializable {
 
     public void setFromLastView(boolean isNew, TaskModel task, int loginUserID) {
         this.isNew = isNew;
-        this.taskID = task.getTask_id();
         this.selectedTask = task;
+        this.taskID = selectedTask.getTask_id();
+
         this.loginUserID = loginUserID;
         if (this.isNew) {
             editButton.setDisable(true);
@@ -162,7 +163,7 @@ public class TaskViewController implements Initializable {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                JsonObject commentsRequest = JsonUtil.fromTaskId(taskID);
+                JsonObject commentsRequest = JsonUtil.fromTaskId(taskID,JsonConst.TYPE_COMMENT_LIST_REQUEST);
                 JsonObject commentsResponse = new RequestHandler().makeRequest(commentsRequest);
                 comments = JsonUtil.fromJsonCommentsList(commentsResponse);
                 Platform.runLater(new Runnable() {

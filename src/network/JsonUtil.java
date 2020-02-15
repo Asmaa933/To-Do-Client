@@ -294,5 +294,15 @@ public class JsonUtil {
         }
         return tasks;
     }
+     public static JsonObject fromTeammateModel(TeammateModel teammate,String type) {
+        JsonObject obj = Json.createObjectBuilder()
+                .add(JsonConst.TYPE, type)
+                .add("user_id_1", teammate.getUser_id_1())
+                .add("user_id_2", teammate.getUser_id_2())
+                .add("teammate_status", teammate.getTeammate_status())
+                .build();
+        
+        return obj;
+    }
     
 }

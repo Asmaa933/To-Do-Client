@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -138,7 +139,7 @@ public class HomeController implements Initializable {
     private boolean notificationFlag = false;
     private boolean taskRequestFlag = false;
     private int listID;
-  
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         makeNewTaskButton.setDisable(true);
@@ -242,15 +243,27 @@ public class HomeController implements Initializable {
 
     @FXML
     private void taskRequestPressed(ActionEvent event) {
-
+        taskRequests = new ArrayList<>();
+        taskRequestObservable = FXCollections.observableArrayList();
         if (taskRequestFlag == false) {
             taskRequestAnchor.setVisible(true);
             taskRequestFlag = true;
-            JsonObject request = JsonUtil.getTaskRequests(loginUserID);
-            JsonObject response = new RequestHandler().makeRequest(request);
-            taskRequests = new ArrayList<>();
-            taskRequests = JsonUtil.fromJsonTaskRequests(response);
-            taskRequestObservable.addAll(taskRequests);
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    JsonObject request = JsonUtil.getTaskRequests(loginUserID);
+                    JsonObject response = new RequestHandler().makeRequest(request);
+                    taskRequests = JsonUtil.fromJsonTaskRequests(response);
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            taskRequestObservable.addAll(taskRequests);
+                            taskRequestList.setItems(taskRequestObservable);
+                            taskRequestList.setCellFactory(param -> new CellTaskRequest());
+                        }
+                    });
+                }
+            }).start();
 
         } else {
             taskRequestAnchor.setVisible(false);
@@ -298,6 +311,7 @@ public class HomeController implements Initializable {
         Platform.exit();
         System.exit(0);
     }
+
     @FXML
     private void btnChartPressed(ActionEvent event) {
     }
@@ -705,19 +719,19 @@ public class HomeController implements Initializable {
     }
 
     class CellTaskRequest extends ListCell<TaskModel> {
-
+private int currentTaskId;
         VBox vbox = new VBox();
         HBox hbox1 = new HBox();
-         Label taskNameLabel =new Label("Task                 : ");
+        Label taskNameLabel = new Label("Task                 : ");
 
         Label taskNametext = new Label();
         HBox hbox2 = new HBox();
         Button reject = new Button("Reject");
         Button accept = new Button("Accept");
-   Label assignToLabel =new Label("Assign Date     : ");
+        Label assignToLabel = new Label("Assign Date     : ");
         Label assignTotext = new Label();
         HBox hbox3 = new HBox();
-      Label deadlineLabel =new Label("Deadline Time : ");
+        Label deadlineLabel = new Label("Deadline Time : ");
         Label deadlinetext = new Label();
         HBox hbox4 = new HBox();
         Pane pane = new Pane();
@@ -731,16 +745,18 @@ public class HomeController implements Initializable {
 
         @Override
         protected void updateItem(TaskModel item, boolean empty) {
-            super.updateItem(item, empty);
+         super.updateItem(item, empty);
             setText(null);
             setGraphic(null);
 
             if (item != null && !empty) {
-                assignTotext.setText(item.getTitle());
+                taskNametext.setText(item.getTitle());
+                this.currentTaskId = item.getTask_id();
+                assignTotext.setText(new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(item.getAssign_date()));
+                deadlinetext.setText(new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(item.getDeadline()));
                 setGraphic(vbox);
             }
-        }
-
+        }    
         public CellTaskRequest() {
             super();
             hbox1.getChildren().addAll(taskNameLabel, taskNametext, pane7);
@@ -767,15 +783,32 @@ public class HomeController implements Initializable {
             reject.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            JsonObject jRejectRequest = JsonUtil.fromId(JsonConst.TYPE_REJECT_TASK_REQUEST, currentTaskId);
+                            JsonObject jRejectResponse = new RequestHandler().makeRequest(jRejectRequest);
+                        }
+                    }).start();
                     getListView().getItems().remove(getItem());
                 }
             });
             accept.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
-                    //accept friend request 
+                    //accept friend request
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            JsonObject jAcceptRequest = JsonUtil.fromId(JsonConst.TYPE_ACCEPT_TASK_REQUEST, currentTaskId);
+                            JsonObject jAcceptResponse = new RequestHandler().makeRequest(jAcceptRequest);
+                        }
+                    }).start();
+                    getListView().getItems().remove(getItem());
+
                 }
             });
+
         }
     }
 

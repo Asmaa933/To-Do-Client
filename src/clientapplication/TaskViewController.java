@@ -7,6 +7,7 @@ package clientapplication;
 
 import java.net.URL;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
@@ -380,7 +381,9 @@ public class TaskViewController implements Initializable {
             if (item != null && !empty) {
                 userName.setText(item.getUserName());
                 commentsArea.setText(item.getComment_text());
-                date.setText(item.getComment_date().toString());
+                                date.setText(new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(item.getComment_date()));
+
+//                date.setText(item.getComment_date().toString());
 
                 //setGraphic(image);
                 setGraphic(vbox);

@@ -269,9 +269,9 @@ public class JsonUtil {
         user.setOnline_status(obj.getString("online_status"));
         return user;
     }
-         public static JsonObject getTaskRequests(int userID) {
+        public static JsonObject getTaskRequests(int userID) {
         JsonObject obj = Json.createObjectBuilder()
-                .add(JsonConst.TYPE, JsonConst.TYPE_GET_ALL_TASKS)
+                .add(JsonConst.TYPE, JsonConst.TYPE_SELECT_TASK_REQUEST)
                 .add(JsonConst.ID, userID)
                 .build();
         return obj;
@@ -289,6 +289,7 @@ public class JsonUtil {
                 task.setTitle(jObj.getString("title"));
                 task.setAssign_date(Timestamp.valueOf(jObj.getString("assign_date")));
                 task.setDeadline(Timestamp.valueOf(jObj.getString("deadline")));
+                task.setTask_id(jObj.getInt("task_id"));
                 tasks.add(task);
             }
         }
@@ -304,5 +305,6 @@ public class JsonUtil {
         
         return obj;
     }
+     
     
 }

@@ -19,8 +19,7 @@ public class RegixMethods {
     }
 
     public static boolean isValidPassword(String pass) {
-        String passwordRegex
-                = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{6,50}$";
+        String passwordRegex = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{6,50}$";
         return pass.matches(passwordRegex);
 
     }

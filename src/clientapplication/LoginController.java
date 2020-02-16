@@ -134,20 +134,31 @@ public class LoginController {
 
     @FXML
     private void settingsButtonPressed(ActionEvent event) {
-
-        TextInputDialog dialog = new TextInputDialog("192.168.1.1");
+        boolean ipRegixFlag = false;
+        TextInputDialog dialog = new TextInputDialog(RequestHandler.getSTATIC_IP());
         dialog.setTitle("Change Server IP");
+        dialog.setHeaderText("");
         dialog.setContentText("Enter server ip:");
-        Optional<String> result = dialog.showAndWait();
-        if (result.isPresent()) {
-            if (RegixMethods.isValidIP(result.get())) {
-                //change server ip
-                System.out.println("IP: " + result.get());
+        do {
+            Optional<String> result = dialog.showAndWait();
+            if (result.isPresent()) {
+                if (RegixMethods.isValidIP(result.get())) {
+                    RequestHandler.setSTATIC_IP(result.get());
+                    ipRegixFlag = true;
+                    dialog.setHeaderText("");
+
+                } else {
+                    dialog.setHeaderText("Enter valid ip");
+                    ipRegixFlag = false;
+
+                }
 
             }
-
-        }
-
+            else{
+                dialog.close();
+                ipRegixFlag = true;
+            }
+        } while (!ipRegixFlag);
     }
 
     private void validateEmail() {

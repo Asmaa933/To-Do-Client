@@ -39,7 +39,14 @@ public class RequestHandler {
 
     public RequestHandler() {
     }
+    public static void setSTATIC_IP(String STATIC_IP) {
+        RequestHandler.STATIC_IP = STATIC_IP;
+    }
 
+    public static String getSTATIC_IP() {
+        return STATIC_IP;
+    }
+    
     synchronized public JsonObject makeRequest(JsonObject request) {
         JsonObject response = null;
         try {
@@ -94,4 +101,4 @@ public class RequestHandler {
             }
         });
     }
-}
+    }

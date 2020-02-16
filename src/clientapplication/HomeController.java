@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -35,6 +34,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
@@ -117,7 +117,7 @@ public class HomeController implements Initializable {
     private ObservableList<TaskModel> toDoListObservable;
     private ObservableList<TaskModel> inProgressListObservable;
     private ObservableList<TaskModel> doneListObservable;
-    private ObservableList<String> notificationObservable = FXCollections.observableArrayList("zeynab", "esma", "mazen", "remon", "ahmed");
+    private ObservableList<String> notificationObservable;
     private ObservableList<TaskModel> taskRequestObservable = FXCollections.observableArrayList();
     private ObservableList<String> listOfMyListsObservable;
     private ObservableList<String> btnCollaborationListsObservable;
@@ -132,6 +132,8 @@ public class HomeController implements Initializable {
     private List<TaskModel> taskRequests;
     private List<UserModel> listOfAllFriends;
     private List<UserModel> listOfAllFriendsRequest;
+    private List<String> listOfNotifications;
+
 
     //variables
     private int loginUserID;
@@ -139,14 +141,20 @@ public class HomeController implements Initializable {
     private boolean notificationFlag = false;
     private boolean taskRequestFlag = false;
     private int listID;
+    private boolean isCollaborator = false;
+    @FXML
+    private Button graphButton;
+    @FXML
+    private TabPane listsTapPane;
+    @FXML
+    private Pane pane2;
+    @FXML
+    private Pane pane1;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         makeNewTaskButton.setDisable(true);
 
-        //Move in their functions
-        notificationList.setItems(notificationObservable);
-        notificationList.setCellFactory(param -> new CellNotification());
         taskRequestList.setItems(taskRequestObservable);
         taskRequestList.setCellFactory(param -> new CellTaskRequest());
 
@@ -189,10 +197,10 @@ public class HomeController implements Initializable {
         try {
             root = (Parent) fxload.load();
             Stage stage = new Stage();
-            TaskViewController reg = (TaskViewController) fxload.getController();
+            TaskViewController taskController = (TaskViewController) fxload.getController();
             TaskModel task = new TaskModel();
             task.setList_id(listID);
-            reg.setFromLastView(true, task, loginUserID);
+            taskController.setFromLastView(true, task, loginUserID,isCollaborator);
             Scene scene = new Scene(root);
             scene.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
             stage.setScene(scene);
@@ -210,15 +218,22 @@ public class HomeController implements Initializable {
 
     @FXML
     private void mylistsItemClicked(MouseEvent event) {
+        isCollaborator = false;
         makeNewTaskButton.setDisable(false);
         int selectedindex = listOfMyLists.getSelectionModel().getSelectedIndex();
         listID = userLists.get(selectedindex).getList_id();
+        String color = userLists.get(selectedindex).getColor();
+        color = "#" + color.substring(2, 8);
+        pane1.setStyle("-fx-background-color:" + color + ";");
+        pane2.setStyle("-fx-background-color:" + color + ";");
         updateTasksLists(listID);
+        
     }
 
     @FXML
     private void myCollobaratelistsItemClicked(MouseEvent event) {
-        makeNewTaskButton.setDisable(false);
+        isCollaborator = true;
+        makeNewTaskButton.setDisable(true);
         int selectedindex = listOfCollaborationLists.getSelectionModel().getSelectedIndex();
         listID = userCollaborateLists.get(selectedindex).getList_id();
         updateTasksLists(listID);
@@ -273,6 +288,7 @@ public class HomeController implements Initializable {
 
     @FXML
     private void notificationPressed(ActionEvent event) {
+                setNotifications();
         if (notificationFlag == false) {
             notificationAnchor.setVisible(true);
             notificationFlag = true;
@@ -425,6 +441,24 @@ public class HomeController implements Initializable {
             });
         }).start();
     }
+    private void setNotifications() {
+        notificationObservable = FXCollections.observableArrayList();
+        notificationList.setItems(notificationObservable);
+        notificationList.setCellFactory(param -> new CellNotification());
+
+        new Thread(() -> {
+            //get all notifiaction
+            JsonObject jsonObject = JsonUtil.fromId(JsonConst.TYPE_GET_Notification, loginUserID);
+            JsonObject response = new RequestHandler().makeRequest(jsonObject);
+            listOfNotifications = JsonUtil.toNotificationAsString(response);
+
+            Platform.runLater(() -> {
+                for (String notif : listOfNotifications) {
+                    notificationObservable.add(notif);
+                }
+            });
+        }).start();
+    }
 
     //Cell classes
     class CellFriendRequest extends ListCell<String> {
@@ -571,6 +605,8 @@ public class HomeController implements Initializable {
             hbox.getChildren().addAll(textArea);
             textArea.setMaxWidth(198);
             textArea.setMaxHeight(70);
+              textArea.setWrapText(true);
+            textArea.setStyle("-fx-font-weight:bold;");
             textArea.setEditable(false);
         }
     }
@@ -619,7 +655,7 @@ public class HomeController implements Initializable {
         Label taskNameLabel = new Label();
         Button delete = new Button("Delete");
         HBox hbox2 = new HBox();
-        Label assignToLabel = new Label("Assign To        : ");
+        Label assignToLabel = new Label("Assign To: ");
         Label assignTotext = new Label();
         HBox hbox3 = new HBox();
         Label deadlineLabel = new Label("Deadline Time: ");
@@ -640,7 +676,7 @@ public class HomeController implements Initializable {
             setGraphic(null);
             if (item != null && !empty) {
                 taskNameLabel.setText(item.getTitle());
-                assignTotext.setText(item.getUser_name());
+                assignTotext.setText(item.getUser_name() + "     ("+item.getAssign_status() +")");
                 deadlineLabel.setText(new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(item.getDeadline()));
                 setGraphic(vbox);
             }
@@ -667,6 +703,7 @@ public class HomeController implements Initializable {
             delete.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
+                    if(!isCollaborator){
                     Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                     alert.setTitle("Delete List");
                     alert.setHeaderText(null);
@@ -688,7 +725,17 @@ public class HomeController implements Initializable {
                         alert.close();
                     }
                 }
+                    else {
+                         Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                            alert.setHeaderText(null);
+                            alert.setTitle("Access Denied");
+                            alert.setContentText("You haven't permission to delete task");
+                            alert.showAndWait();
+                       
+                    }
+                }
             });
+                    
             readMore.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
@@ -699,7 +746,7 @@ public class HomeController implements Initializable {
                         Stage stage = new Stage();
                         TaskViewController taskControl = (TaskViewController) fxload.getController();
                         TaskModel task = selectedTask;
-                        taskControl.setFromLastView(false, task, loginUserID);
+                        taskControl.setFromLastView(false, task, loginUserID,isCollaborator);
                         stage.setScene(new Scene(root));
                         stage.setTitle("Task Details");
 

@@ -305,6 +305,18 @@ public class JsonUtil {
         
         return obj;
     }
-     
+      public static List<String> toNotificationAsString(JsonObject obj) {
+        List<String> notifcationsString = new ArrayList<>();
+        JsonArray jsonArray = obj.getJsonArray("array");
+        if (jsonArray != null) {
+
+            for (int i = 0; i < jsonArray.size(); i++) {
+                JsonObject jObj = (JsonObject) jsonArray.get(i);
+                String notification = jObj.getString("getNotification");
+                notifcationsString.add(notification);
+            }
+        }
+        return notifcationsString;
+    }
     
 }

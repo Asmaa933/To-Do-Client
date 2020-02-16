@@ -41,8 +41,10 @@ public class JsonConst {
     public static final String TYPE_SELECT_ALL_COLLABORATOR_LIST = "TYPE_SELECT_ALL_COLLABORATOR_LIST";
     public static final String TYPE_SELECT_UESRMODEL = "TYPE_SELECT_UESRMODEL";
     public static final String TYPE_SELECT_TASK_REQUEST = "TYPE_SELECT_TASK_REQUEST";
-     public static final String TYPE_GET_ALL_FRIENDS_REQUEST = "TYPE_GET_ALL_FRIENDS_REQUEST";
+    public static final String TYPE_GET_ALL_FRIENDS_REQUEST = "TYPE_GET_ALL_FRIENDS_REQUEST";
     public static final String TYPE_FRIENDS_REQUEST_UPDATE = "TYPE_FRIENDS_REQUEST_UPDATE";
     public static final String TYPE_REJECT_TASK_REQUEST = "TYPE_REJECT_TASK_REQUEST";
     public static final String TYPE_ACCEPT_TASK_REQUEST = "TYPE_ACCEPT_TASK_REQUEST";
+    public static final String TYPE_GET_Notification = "TYPE_GET_Notification";
+
 }

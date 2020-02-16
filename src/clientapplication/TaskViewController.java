@@ -88,7 +88,7 @@ public class TaskViewController implements Initializable {
     private boolean isNew = true;
     private TaskModel selectedTask;
     private int loginUserID;
-
+    private boolean isCollaborator;
     /**
      * Initializes the controller class.
      */
@@ -235,17 +235,27 @@ public class TaskViewController implements Initializable {
         ((Node) (event.getSource())).getScene().getWindow().hide();
     }
 
-    public void setFromLastView(boolean isNew, TaskModel task, int loginUserID) {
+    public void setFromLastView(boolean isNew, TaskModel task, int loginUserID,boolean isCollaborator) {
         this.isNew = isNew;
         this.selectedTask = task;
         this.taskID = selectedTask.getTask_id();
         this.loginUserID = loginUserID;
+        this.isCollaborator = isCollaborator;
+        if(this.isCollaborator){
+            editButton.setDisable(true);
+        }else{
+            editButton.setDisable(false);
+        }
         if (this.isNew) {
             editButton.setDisable(true);
             titleLabel.setText("Add Task");
             resetFields();
         } else {
+              if(this.isCollaborator){
+            editButton.setDisable(true);
+        }else{
             editButton.setDisable(false);
+        }
             titleLabel.setText("Task Details");
             titleTextField.setText(selectedTask.getTitle());
             descriptionTextArea.setText(selectedTask.getDescription());
@@ -382,10 +392,6 @@ public class TaskViewController implements Initializable {
                 userName.setText(item.getUserName());
                 commentsArea.setText(item.getComment_text());
                                 date.setText(new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(item.getComment_date()));
-
-//                date.setText(item.getComment_date().toString());
-
-                //setGraphic(image);
                 setGraphic(vbox);
             }
         }

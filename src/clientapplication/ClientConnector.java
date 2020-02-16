@@ -22,8 +22,7 @@ public class ClientConnector {
     private static Socket socket;
     private static DataInputStream dis;
     private static PrintStream ps;
-    
-    private static Thread myThread;
+    private static Thread connectThread;
 
     /**
      * startConnection connection with the server
@@ -36,8 +35,7 @@ public class ClientConnector {
         } catch (IOException ex) {
             ex.printStackTrace();  
         }
-        
-        myThread = new Thread(new Runnable() {
+        connectThread = new Thread(new Runnable() {
             @Override
             public void run() {
                 while(true) {                    
@@ -52,7 +50,7 @@ public class ClientConnector {
                 }
             }
         });
-        myThread.start();
+        connectThread.start();
     }
 
     /**
@@ -77,7 +75,7 @@ public class ClientConnector {
             ps.close();
             dis.close();
             socket.close();
-            myThread.stop();
+            connectThread.stop();
         } catch (IOException ex) {
             ex.printStackTrace();
         }

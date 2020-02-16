@@ -82,10 +82,8 @@ public class RequestHandler {
                 ButtonType exit = new ButtonType("exit", ButtonBar.ButtonData.CANCEL_CLOSE);
                 Alert alert = new Alert(AlertType.WARNING,
                         "We are having a hard time connecting to the server!", retry, exit);
-
                 alert.setTitle("Couldn't connect to the server");
                 Optional<ButtonType> result = alert.showAndWait();
-
                 if (result.get() == retry) {
                     System.out.println("retry");
                 } else {
@@ -96,5 +94,4 @@ public class RequestHandler {
             }
         });
     }
-
 }

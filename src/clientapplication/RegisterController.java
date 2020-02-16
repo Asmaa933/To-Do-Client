@@ -22,7 +22,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TextField;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javax.json.JsonObject;
@@ -30,10 +29,6 @@ import model.UserModel;
 import network.JsonUtil;
 import network.RequestHandler;
 
-/**
- *
- * @author AhmedWagdy
- */
 public class RegisterController {
 
     @FXML
@@ -58,13 +53,13 @@ public class RegisterController {
     private ProgressIndicator progressIndicator;
     @FXML
     private Button signUpBtn;
-    @FXML
-    private AnchorPane AnchorPane;
-
+   
+    /**
+     *
+     * @param event Mouse click on button
+     */
     @FXML
     private void signUpPressed(ActionEvent event) {
-        //validate goto home page or errrors
-        // check if register before or not
         if (validateInputs()) {
             signUpBtn.setDisable(true);
             signUpBtn.setText("");
@@ -77,10 +72,9 @@ public class RegisterController {
                 boolean addFlag = JsonUtil.convertFromJsonPasswordResponse(response);
                 System.out.println("aaaaa" + addFlag);
                 Platform.runLater(() -> {
-                         signUpBtn.setDisable(false);
-            signUpBtn.setText("Sign Up");
-       
-            progressIndicator.setVisible(false);
+                    signUpBtn.setDisable(false);
+                    signUpBtn.setText("Sign Up");
+                    progressIndicator.setVisible(false);
                     if (addFlag == true) {
                         Parent loginScene;
                         try {
@@ -94,9 +88,7 @@ public class RegisterController {
                         }
                     } else {
                         emailErrorLabel.setText("This email already registered");
-                                    logInHyperlink.setVisible(true);
-
-                        // Aller Signup Again  // And Existes Email
+                        logInHyperlink.setVisible(true);
                     }
                 });
 
@@ -110,8 +102,7 @@ public class RegisterController {
      */
     @FXML
     private void closeButtonPressed(ActionEvent event) {
-
-        Platform.exit(); 
+        Platform.exit();
         System.exit(0);
     }
 
@@ -140,22 +131,22 @@ public class RegisterController {
      * @return true if all fields are right
      */
     private boolean validateInputs() {
-        boolean validateFlag = true; 
+        boolean validateFlag = true;
 
         if (nameTextField.getText().trim().isEmpty()) {
             nameErrorLabel.setText("Enter name");
-            validateFlag = false; 
+            validateFlag = false;
 
         } else if (!RegixMethods.isValidName(nameTextField.getText())) {
             nameErrorLabel.setText("Invalid Name");
             validateFlag = false;
         } else {
-            nameErrorLabel.setText(""); 
+            nameErrorLabel.setText("");
         }
 
-        if (passwordTextField.getText().trim().isEmpty()) { 
+        if (passwordTextField.getText().trim().isEmpty()) {
             passErrorLabel.setText("Enter password");
-            validateFlag = false; 
+            validateFlag = false;
 
         } else if (!RegixMethods.isValidPassword(passwordTextField.getText())) {
             passErrorLabel.setText("Password should be mix of letters,numbers and symbols");
@@ -166,24 +157,24 @@ public class RegisterController {
 
         if (emailTextField.getText().isEmpty()) {
             emailErrorLabel.setText("Enter email");
-            validateFlag = false; 
+            validateFlag = false;
 
         } else if (!RegixMethods.isValidEmail(emailTextField.getText())) {
             emailErrorLabel.setText("Invalid email");
             validateFlag = false;
         } else {
-            emailErrorLabel.setText("");  
+            emailErrorLabel.setText("");
         }
 
         if (confirmPassTextField.getText().isEmpty()) {
             confirmPassErrorLabel.setText("Enter confirm password");
-            validateFlag = false; 
+            validateFlag = false;
 
         } else if (!passwordTextField.getText().equals(confirmPassTextField.getText())) {
             confirmPassErrorLabel.setText("Password not matches");
             validateFlag = false;
         } else {
-            confirmPassErrorLabel.setText(""); 
+            confirmPassErrorLabel.setText("");
         }
 
         return validateFlag;

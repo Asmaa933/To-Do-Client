@@ -22,7 +22,7 @@
          <font>
             <Font size="14.0" />
          </font></Button>
-      <Hyperlink layoutX="443.0" layoutY="527.0" onAction="#newAccountPressed" text="Create New Account ?">
+      <Hyperlink layoutX="442.0" layoutY="543.0" onAction="#newAccountPressed" text="Create New Account ?">
          <font>
             <Font size="13.0" />
          </font>
@@ -60,6 +60,15 @@
             <Image url="@../images/avatar.png" />
          </image>
       </ImageView>
+      <Button layoutX="745.0" layoutY="540.0" mnemonicParsing="false" onAction="#settingsButtonPressed" prefHeight="25.0" prefWidth="30.0">
+         <graphic>
+            <ImageView fitHeight="25.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/settings.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </Button>
     </children>
    <effect>
       <Bloom threshold="1.0">

@@ -12,6 +12,7 @@ package clientapplication;
 // special character with no whitespaces
 import help.RegixMethods;
 import java.io.IOException;
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
@@ -27,6 +28,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
@@ -130,6 +132,24 @@ public class LoginController {
 
     }
 
+    @FXML
+    private void settingsButtonPressed(ActionEvent event) {
+
+        TextInputDialog dialog = new TextInputDialog("192.168.1.1");
+        dialog.setTitle("Change Server IP");
+        dialog.setContentText("Enter server ip:");
+        Optional<String> result = dialog.showAndWait();
+        if (result.isPresent()) {
+            if (RegixMethods.isValidIP(result.get())) {
+                //change server ip
+                System.out.println("IP: " + result.get());
+
+            }
+
+        }
+
+    }
+
     private void validateEmail() {
         if (emailText.getText().isEmpty()) {
             invalidLabel.setText("Enter email");
@@ -188,29 +208,21 @@ public class LoginController {
                 if (passflag == true) {
 
                     Platform.runLater(() -> {
-
                         passwordText.setText("");
                         invalidLabel.setText("");
-
-                        //   go to home page
-                        //  pass id to home
                         Parent root;
                         try {
                             FXMLLoader fxload = new FXMLLoader(getClass().getResource("HomeView.fxml"));
                             root = (Parent) fxload.load();
                             HomeController home = (HomeController) fxload.getController();
                             home.setLoginUserID(id);
-
                             Stage window = (Stage) ((Node) eventSource.getSource()).getScene().getWindow();
                             window.setScene(new Scene(root));
                             window.hide();
-
                             window.show();
-
                         } catch (IOException ex) {
                             Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
                         }
-
                     });
 
                 } else {

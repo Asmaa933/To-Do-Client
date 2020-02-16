@@ -29,7 +29,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
-import javafx.scene.control.CheckBox;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
@@ -133,58 +132,26 @@ public class HomeController implements Initializable {
     private List<UserModel> listOfAllFriends;
     private List<UserModel> listOfAllFriendsRequest;
 
+    //variables
     private int loginUserID;
     private boolean friendFlag = false;
     private boolean notificationFlag = false;
     private boolean taskRequestFlag = false;
     private int listID;
 
-    public void setLoginUserID(int loginUserID) {
-        this.loginUserID = loginUserID;
-        setLists(loginUserID);
-    }
-
-    private void setLists(int userID) {
-        listOfMyListsObservable = FXCollections.observableArrayList();
-        btnCollaborationListsObservable = FXCollections.observableArrayList();
-
-        //UserList
-        JsonObject requestAllLists = JsonUtil.fromId(JsonConst.TYPE_SELECT_ALL_LIST, userID);
-        JsonObject responseAllLists = new RequestHandler().makeRequest(requestAllLists);
-        userLists = JsonUtil.toListOfListModels(responseAllLists);
-
-        for (ListModel list : userLists) {
-            listOfMyListsObservable.add(list.getTitle());
-        }
-
-        //UserCollabortorList
-        JsonObject requestAllCollaborateLists = JsonUtil.fromId(JsonConst.TYPE_SELECT_ALL_COLLABORATOR_LIST, userID);
-        JsonObject responseAllCollaborateLists = new RequestHandler().makeRequest(requestAllCollaborateLists);
-        userCollaborateLists = JsonUtil.toListOfListModels(responseAllCollaborateLists);
-
-        for (ListModel list : userCollaborateLists) {
-            btnCollaborationListsObservable.add(list.getTitle());
-        }
-        listOfMyLists.setItems(listOfMyListsObservable);
-        listOfMyLists.setCellFactory(param -> new CellLists());
-
-        listOfCollaborationLists.setItems(btnCollaborationListsObservable);
-        listOfCollaborationLists.setCellFactory(param -> new CellLists());
-
-    }
-
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         makeNewTaskButton.setDisable(true);
 
+        //Move in their functions
         notificationList.setItems(notificationObservable);
         notificationList.setCellFactory(param -> new CellNotification());
-
         taskRequestList.setItems(taskRequestObservable);
         taskRequestList.setCellFactory(param -> new CellTaskRequest());
 
     }
 
+    //FXML Functions
     @FXML
     private void makeNewListPressed(ActionEvent event) {
         FXMLLoader fxload = new FXMLLoader(getClass().getResource("ListView.fxml"));
@@ -194,28 +161,22 @@ public class HomeController implements Initializable {
             Stage stage = new Stage();
             ListViewController listController = fxload.getController();
             ListModel list = new ListModel();
-
             list.getUser().setId(loginUserID);
             JsonObject jsonObject = JsonUtil.fromId(JsonConst.TYPE_SELECT_UESRMODEL, loginUserID);
             JsonObject response = new RequestHandler().makeRequest(jsonObject);
             UserModel userModel = JsonUtil.toUserModel(response);
-
             list.setUser(userModel);
             listController.setList(list);
-
             stage.setScene(new Scene(root));
             stage.initStyle(StageStyle.UNDECORATED);
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setResizable(false);
             stage.setTitle("Add List");
-
             stage.showAndWait();
             setLists(loginUserID);
-
         } catch (IOException ex) {
             Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
         }
-
     }
 
     @FXML
@@ -240,35 +201,26 @@ public class HomeController implements Initializable {
         } catch (IOException ex) {
             Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
 
+    @FXML
+    private void mylistsItemClicked(MouseEvent event) {
+        makeNewTaskButton.setDisable(false);
+        int selectedindex = listOfMyLists.getSelectionModel().getSelectedIndex();
+        listID = userLists.get(selectedindex).getList_id();
+        updateTasksLists(listID);
+    }
+
+    @FXML
+    private void myCollobaratelistsItemClicked(MouseEvent event) {
+        makeNewTaskButton.setDisable(false);
+        int selectedindex = listOfCollaborationLists.getSelectionModel().getSelectedIndex();
+        listID = userCollaborateLists.get(selectedindex).getList_id();
+        updateTasksLists(listID);
     }
 
     @FXML
     private void addFriendPressed(ActionEvent event) {
-    }
-
-    @FXML
-    private void logOutPressed(ActionEvent event) {
-        //make user offline
-        JsonObject request = JsonUtil.fromBoolean(false, loginUserID);
-        JsonObject response2 = new RequestHandler().makeRequest(request);
-        Parent root;
-        try {
-            FXMLLoader fxload = new FXMLLoader(getClass().getResource("LoginView.fxml"));
-            root = (Parent) fxload.load();
-            LoginController login = (LoginController) fxload.getController();
-            login.setId(-1);
-
-            //This line gets the Stage information
-            Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            window.setScene(new Scene(root));
-            window.hide();
-            window.show();
-
-        } catch (IOException ex) {
-            Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
     }
 
     @FXML
@@ -312,24 +264,56 @@ public class HomeController implements Initializable {
             notificationFlag = false;
         }
     }
-
-    @FXML
-    private void mylistsItemClicked(MouseEvent event) {
-        makeNewTaskButton.setDisable(false);
-        int selectedindex = listOfMyLists.getSelectionModel().getSelectedIndex();
-        listID = userLists.get(selectedindex).getList_id();
-        updateTasksLists(listID);
+     @FXML
+    private void logOutPressed(ActionEvent event) {
+        //make user offline
+        JsonObject request = JsonUtil.fromBoolean(false, loginUserID);
+        JsonObject response2 = new RequestHandler().makeRequest(request);
+        Parent root;
+        try {
+            FXMLLoader fxload = new FXMLLoader(getClass().getResource("LoginView.fxml"));
+            root = (Parent) fxload.load();
+            LoginController login = (LoginController) fxload.getController();
+            login.setId(-1);
+            Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            window.setScene(new Scene(root));
+            window.hide();
+            window.show();
+        } catch (IOException ex) {
+            Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
-    @FXML
-    private void myCollobaratelistsItemClicked(MouseEvent event) {
-        makeNewTaskButton.setDisable(false);
-        int selectedindex = listOfCollaborationLists.getSelectionModel().getSelectedIndex();
-        listID = userCollaborateLists.get(selectedindex).getList_id();
-        updateTasksLists(listID);
+    //setters
+    public void setLoginUserID(int loginUserID) {
+        this.loginUserID = loginUserID;
+        setLists(loginUserID);
     }
 
-    public void updateTasksLists(int listID) {
+    private void setLists(int userID) {
+        listOfMyListsObservable = FXCollections.observableArrayList();
+        btnCollaborationListsObservable = FXCollections.observableArrayList();
+        //UserList
+        JsonObject requestAllLists = JsonUtil.fromId(JsonConst.TYPE_SELECT_ALL_LIST, userID);
+        JsonObject responseAllLists = new RequestHandler().makeRequest(requestAllLists);
+        userLists = JsonUtil.toListOfListModels(responseAllLists);
+        for (ListModel list : userLists) {
+            listOfMyListsObservable.add(list.getTitle());
+        }
+        //UserCollabortorList
+        JsonObject requestAllCollaborateLists = JsonUtil.fromId(JsonConst.TYPE_SELECT_ALL_COLLABORATOR_LIST, userID);
+        JsonObject responseAllCollaborateLists = new RequestHandler().makeRequest(requestAllCollaborateLists);
+        userCollaborateLists = JsonUtil.toListOfListModels(responseAllCollaborateLists);
+        for (ListModel list : userCollaborateLists) {
+            btnCollaborationListsObservable.add(list.getTitle());
+        }
+        listOfMyLists.setItems(listOfMyListsObservable);
+        listOfMyLists.setCellFactory(param -> new CellLists());
+        listOfCollaborationLists.setItems(btnCollaborationListsObservable);
+        listOfCollaborationLists.setCellFactory(param -> new CellLists());
+    }
+
+    private void updateTasksLists(int listID) {
         tasks = new ArrayList<>();
         toDoTasks = new ArrayList<>();
         inProgressTasks = new ArrayList<>();
@@ -357,7 +341,6 @@ public class HomeController implements Initializable {
                     }
                 }
                 Platform.runLater(() -> {
-
                     toDoListObservable.setAll(toDoTasks);
                     toDoList.setItems(toDoListObservable);
                     toDoList.setCellFactory(param -> new CellTask());
@@ -375,6 +358,43 @@ public class HomeController implements Initializable {
         }).start();
     }
 
+    private void setAllFriends() {
+        FriendListObservable = FXCollections.observableArrayList();
+        friendList.setItems(FriendListObservable);
+        friendList.setCellFactory(param -> new Cellfriend());
+        new Thread(() -> {
+            // get friend
+            JsonObject jsonObject = JsonUtil.fromId(JsonConst.TYPE_GET_ALL_FRIENDS, loginUserID);
+            JsonObject response = new RequestHandler().makeRequest(jsonObject);
+            listOfAllFriends = JsonUtil.toUsersList(response);
+            Platform.runLater(() -> {
+                for (UserModel firend : listOfAllFriends) {
+                    FriendListObservable.add(firend.getName());
+                }
+            });
+        }).start();
+    }
+
+    private void setAllFriendsRequest() {
+        friendRequestObservable = FXCollections.observableArrayList();
+        friendRequestList.setItems(friendRequestObservable);
+        friendRequestList.setCellFactory(param -> new CellFriendRequest());
+
+        new Thread(() -> {
+            //get all friend request
+            JsonObject jsonObject = JsonUtil.fromId(JsonConst.TYPE_GET_ALL_FRIENDS_REQUEST, loginUserID);
+            JsonObject response = new RequestHandler().makeRequest(jsonObject);
+            listOfAllFriendsRequest = JsonUtil.toUsersList(response);
+
+            Platform.runLater(() -> {
+                for (UserModel firendrequest : listOfAllFriendsRequest) {
+                    friendRequestObservable.add(firendrequest.getName());
+                }
+            });
+        }).start();
+    }
+
+    //Cell classes
     class CellFriendRequest extends ListCell<String> {
 
         HBox hbox = new HBox();
@@ -388,7 +408,6 @@ public class HomeController implements Initializable {
             super.updateItem(item, empty);
             setText(null);
             setGraphic(null);
-
             if (item != null && !empty) {
                 friendRequestName.setText(item);
                 setGraphic(hbox);
@@ -403,7 +422,6 @@ public class HomeController implements Initializable {
                 @Override
                 public void handle(ActionEvent event) {
                     updateFriendRequest(TeammateModel.TEAMMATE_STATUS.REJECTED);
-
                 }
             });
             accept.setOnAction(new EventHandler<ActionEvent>() {
@@ -417,15 +435,12 @@ public class HomeController implements Initializable {
         private void updateFriendRequest(String type) {
             int uset2_ID = listOfAllFriendsRequest.get(getIndex()).getId();
             TeammateModel teammateModel = new TeammateModel(loginUserID, uset2_ID, type);
-
             accept.setDisable(true);
             reject.setDisable(true);
-
             new Thread(() -> {
                 JsonObject jsonObject = JsonUtil.fromTeammateModel(teammateModel, JsonConst.TYPE_FRIENDS_REQUEST_UPDATE);
                 JsonObject response = new RequestHandler().makeRequest(jsonObject);
                 boolean changeflag = JsonUtil.convertFromJsonPasswordResponse(response);
-
                 Platform.runLater(() -> {
                     if (!changeflag) {
                         accept.setDisable(false);
@@ -438,7 +453,6 @@ public class HomeController implements Initializable {
                 });
             }).start();
         }
-
     }
 
     class CellLists extends ListCell<String> {
@@ -453,7 +467,6 @@ public class HomeController implements Initializable {
             super.updateItem(item, empty);
             setText(null);
             setGraphic(null);
-
             if (item != null && !empty) {
                 listNameLabel.setText(item);
                 setGraphic(hbox);
@@ -467,8 +480,6 @@ public class HomeController implements Initializable {
             edit.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
-                    // ((Node) event.getSource()).getScene().getWindow().hide();
-
                     try {
                         FXMLLoader loader = new FXMLLoader(getClass().getResource("ListView.fxml"));
                         Parent root = loader.load();
@@ -485,7 +496,6 @@ public class HomeController implements Initializable {
                             setLists(loginUserID);
 
                         } else {
-                            //listController.setList(userCollaborateLists.get(getIndex()));
                             Alert alert = new Alert(Alert.AlertType.INFORMATION);
                             alert.setHeaderText(null);
                             alert.setTitle("Access Denied");
@@ -512,7 +522,6 @@ public class HomeController implements Initializable {
             super.updateItem(item, empty);
             setText(null);
             setGraphic(null);
-
             if (item != null && !empty) {
                 textArea.setText(item);
                 setGraphic(hbox);
@@ -533,7 +542,6 @@ public class HomeController implements Initializable {
         HBox hbox = new HBox();
         Label friendNameLabel = new Label();
         Pane pane = new Pane();
-
         Image profile = new Image(getClass().getResource("/images/profile.png").toExternalForm());
         ImageView image = new ImageView(profile);
 
@@ -542,7 +550,6 @@ public class HomeController implements Initializable {
             super.updateItem(item, empty);
             setText(null);
             setGraphic(null);
-
             if (item != null && !empty) {
                 friendNameLabel.setText(item);
                 if (listOfAllFriends.get(getIndex()).getOnline_status().equals(UserModel.ONLINE_STATUS.ONLINE)) {
@@ -590,7 +597,6 @@ public class HomeController implements Initializable {
             super.updateItem(item, empty);
             setText(null);
             setGraphic(null);
-
             if (item != null && !empty) {
                 taskNameLabel.setText(item.getTitle());
                 assignTotext.setText(item.getUser_name());
@@ -610,7 +616,6 @@ public class HomeController implements Initializable {
             hbox1.setHgrow(pane3, Priority.ALWAYS);
             hbox4.setHgrow(pane, Priority.ALWAYS);
             VBox.setMargin(vbox, new Insets(10, 10, 10, 10));
-
             delete.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
@@ -618,7 +623,6 @@ public class HomeController implements Initializable {
                     alert.setTitle("Delete List");
                     alert.setHeaderText(null);
                     alert.setContentText("Do you want to delete this Task ");
-
                     Optional<ButtonType> result = alert.showAndWait();
                     if (result.get() == ButtonType.OK) {
                         new Thread(new Runnable() {
@@ -635,7 +639,6 @@ public class HomeController implements Initializable {
                     } else if (result.get() == ButtonType.CANCEL) {
                         alert.close();
                     }
-
                 }
             });
             readMore.setOnAction(new EventHandler<ActionEvent>() {
@@ -662,7 +665,6 @@ public class HomeController implements Initializable {
                     } catch (IOException ex) {
                         Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
                     }
-
                 }
             });
         }
@@ -712,9 +714,6 @@ public class HomeController implements Initializable {
             hbox4.getChildren().addAll(pane2, accept, pane, reject, pane4);
             hbox5.getChildren().addAll(pane3);
             vbox.getChildren().addAll(hbox1, hbox2, hbox3, hbox4, pane5);
-            deadlinetext.setText("9/2/2020");
-            taskNametext.setText("TO DO");
-
             hbox1.setHgrow(pane7, Priority.ALWAYS);
             hbox4.setHgrow(pane4, Priority.ALWAYS);
             hbox4.setHgrow(pane, Priority.ALWAYS);
@@ -735,44 +734,6 @@ public class HomeController implements Initializable {
                 }
             });
         }
-    }
-
-    public void setAllFriends() {
-        FriendListObservable = FXCollections.observableArrayList();
-        friendList.setItems(FriendListObservable);
-        friendList.setCellFactory(param -> new Cellfriend());
-
-        new Thread(() -> {
-            // get friend
-            JsonObject jsonObject = JsonUtil.fromId(JsonConst.TYPE_GET_ALL_FRIENDS, loginUserID);
-            JsonObject response = new RequestHandler().makeRequest(jsonObject);
-            listOfAllFriends = JsonUtil.toUsersList(response);
-
-            Platform.runLater(() -> {
-                for (UserModel firend : listOfAllFriends) {
-                    FriendListObservable.add(firend.getName());
-                }
-            });
-        }).start();
-    }
-
-    public void setAllFriendsRequest() {
-        friendRequestObservable = FXCollections.observableArrayList();
-        friendRequestList.setItems(friendRequestObservable);
-        friendRequestList.setCellFactory(param -> new CellFriendRequest());
-
-        new Thread(() -> {
-            //get all friend request
-            JsonObject jsonObject = JsonUtil.fromId(JsonConst.TYPE_GET_ALL_FRIENDS_REQUEST, loginUserID);
-            JsonObject response = new RequestHandler().makeRequest(jsonObject);
-            listOfAllFriendsRequest = JsonUtil.toUsersList(response);
-
-            Platform.runLater(() -> {
-                for (UserModel firendrequest : listOfAllFriendsRequest) {
-                    friendRequestObservable.add(firendrequest.getName());
-                }
-            });
-        }).start();
     }
 
 }

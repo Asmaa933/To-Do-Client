@@ -7,7 +7,6 @@ package clientapplication;
 
 import java.net.URL;
 import java.text.SimpleDateFormat;
-import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -64,7 +63,11 @@ public class ListViewController implements Initializable {
     @FXML
     private Button cancelButton;
     @FXML
-    private ComboBox teammatesCombobox;
+    private ComboBox<String> teammatesCombobox;
+     @FXML
+    private ProgressIndicator ProgressIndicator;
+    @FXML
+    private ProgressIndicator ProgressIndicator2;
 
     ObservableList<String> teammatesList = FXCollections.observableArrayList();
     ObservableList<String> collaborateList = FXCollections.observableArrayList();
@@ -73,16 +76,12 @@ public class ListViewController implements Initializable {
     private List<UserModel> teammates;
     private List<UserModel> collaborators;
     private boolean editFlag;
-    @FXML
-    private ProgressIndicator ProgressIndicator;
-
-    @FXML
-    private ProgressIndicator ProgressIndicator2;
+   
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        teammates = new ArrayList<>();  //13/2
-        collaborators = new ArrayList<>();  //13/
+        teammates = new ArrayList<>(); 
+        collaborators = new ArrayList<>();  
     }
 
     public void setList(ListModel listModel) {
@@ -132,67 +131,7 @@ public class ListViewController implements Initializable {
         }).start();
 
     }
-
-    //static 
-    class Cell extends ListCell<String> {
-
-        HBox hbox = new HBox();
-        Label userName = new Label();
-        Pane pane = new Pane();
-        Button delete = new Button("Delete");
-
-        public Cell() {
-            super();
-            hbox.getChildren().addAll(userName, pane, delete);
-            hbox.setHgrow(pane, Priority.ALWAYS);
-
-            delete.setOnAction(new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent event) {
-                    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                    alert.setHeaderText(null);
-                    alert.setTitle("Delete Collaborator");
-                    alert.setContentText("Do you want to delete this Collaborator");
-                    Optional<ButtonType> result = alert.showAndWait();
-                    if (result.get() == ButtonType.OK) {
-                        //getListView().getItems().remove(getItem());
-                        int cellIndex = getIndex();
-                        CollaboratorModel collaborator = new CollaboratorModel(list.getList_id(), collaborators.get(cellIndex).getId());
-                        //remove from db
-                        new Thread(() -> {
-                            JsonObject jsonObject = JsonUtil.fromCollaborator(JsonConst.TYPE_REMOVE_COLLABORATOR, collaborator);
-                            JsonObject response = new RequestHandler().makeRequest(jsonObject);
-                            boolean deleteFlag = JsonUtil.convertFromJsonPasswordResponse(response); // change name of method
-                            if (deleteFlag) {
-                                Platform.runLater(() -> {
-                                    collaborators.remove(cellIndex);
-                                    collaborateList.remove(cellIndex);
-                                    collaborateListView.refresh(); // copy the write code
-                                });
-                            }
-                            //else // alert don't delete collaborate
-                        }).start();
-                    } else if (result.get() == ButtonType.CANCEL) {
-                        alert.close();
-                    }
-                }
-            });
-        }
-
-        @Override
-        protected void updateItem(String item, boolean empty) {
-            super.updateItem(item, empty); //To change body of generated methods, choose Tools | Templates.
-            setText(null);
-            setGraphic(null);
-
-            if (item != null && !empty) {
-                userName.setText(item);
-                setGraphic(hbox);
-            }
-        }
-    }
-
-    @FXML /////// indecator // stop button
+     @FXML 
     private void addButtonPressed(ActionEvent event) {
 
         boolean selectedFlag = false;
@@ -247,9 +186,7 @@ public class ListViewController implements Initializable {
             alert.setContentText("Please save the list first, then add Collaborators ");
             alert.showAndWait();
         }
-
     }
-
     @FXML
     private void saveButtonPressed(ActionEvent event) {
         saveButton.setDisable(true);
@@ -276,7 +213,6 @@ public class ListViewController implements Initializable {
                         alert.showAndWait();
                     }
                 }
-
                 Platform.runLater(() -> {
                     ProgressIndicator.setVisible(false);
                     saveButton.setDisable(false);
@@ -293,7 +229,6 @@ public class ListViewController implements Initializable {
 
     @FXML
     private void CancelButtonPressed(ActionEvent event) {
-        //((Node) event.getSource()).getScene().getWindow().hide();
         ((Stage) ((Node) event.getSource()).getScene().getWindow()).close();
     }
 
@@ -311,5 +246,60 @@ public class ListViewController implements Initializable {
             alert.close();
         }
     }
+    class Cell extends ListCell<String> {
+
+        HBox hbox = new HBox();
+        Label userName = new Label();
+        Pane pane = new Pane();
+        Button delete = new Button("Delete");
+
+        public Cell() {
+            super();
+            hbox.getChildren().addAll(userName, pane, delete);
+            hbox.setHgrow(pane, Priority.ALWAYS);
+
+            delete.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                    alert.setHeaderText(null);
+                    alert.setTitle("Delete Collaborator");
+                    alert.setContentText("Do you want to delete this Collaborator");
+                    Optional<ButtonType> result = alert.showAndWait();
+                    if (result.get() == ButtonType.OK) {
+                        int cellIndex = getIndex();
+                        CollaboratorModel collaborator = new CollaboratorModel(list.getList_id(), collaborators.get(cellIndex).getId());
+                        new Thread(() -> {
+                            JsonObject jsonObject = JsonUtil.fromCollaborator(JsonConst.TYPE_REMOVE_COLLABORATOR, collaborator);
+                            JsonObject response = new RequestHandler().makeRequest(jsonObject);
+                            boolean deleteFlag = JsonUtil.convertFromJsonPasswordResponse(response); // change name of method
+                            if (deleteFlag) {
+                                Platform.runLater(() -> {
+                                    collaborators.remove(cellIndex);
+                                    collaborateList.remove(cellIndex);
+                                    collaborateListView.refresh(); 
+                                });
+                            }
+                        }).start();
+                    } else if (result.get() == ButtonType.CANCEL) {
+                        alert.close();
+                    }
+                }
+            });
+        }
+        @Override
+        protected void updateItem(String item, boolean empty) {
+            super.updateItem(item, empty); 
+            setText(null);
+            setGraphic(null);
+
+            if (item != null && !empty) {
+                userName.setText(item);
+                setGraphic(hbox);
+            }
+        }
+    }
+
+   
 
 }

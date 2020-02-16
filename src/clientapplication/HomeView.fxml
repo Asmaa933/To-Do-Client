@@ -7,46 +7,161 @@
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="521.0" prefWidth="1157.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="clientapplication.HomeController">
+<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1014.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="clientapplication.HomeController">
    <children>
-      <Pane layoutX="1.0" prefHeight="74.0" prefWidth="1153.0">
+      <Pane id="pane1" layoutX="-5.0" prefHeight="84.0" prefWidth="1020.0" style="-fx-background-color: #2e86c1;">
          <children>
-            <Button fx:id="notificationButton" layoutX="315.0" layoutY="37.0" mnemonicParsing="false" onAction="#notificationPressed" text="Notification" />
-            <Button fx:id="makeNewListButton" layoutX="88.0" layoutY="37.0" mnemonicParsing="false" onAction="#makeNewListPressed" text="Make New List" />
-            <Button fx:id="logOutButton" layoutX="7.0" layoutY="37.0" mnemonicParsing="false" onAction="#logOutPressed" text="Log Out" />
-            <Button fx:id="makeNewTaskButton" layoutX="197.0" layoutY="37.0" mnemonicParsing="false" onAction="#makeNewTaskPressed" text="Make New Task" />
-            <Button fx:id="friendButton" layoutX="1087.0" layoutY="37.0" mnemonicParsing="false" onAction="#friendButtonPressed" text="Friends" />
-            <Button fx:id="taskRequestButton" layoutX="406.0" layoutY="37.0" mnemonicParsing="false" onAction="#taskRequestPressed" text="Task Request" />
+            <Button fx:id="notificationButton" layoutX="504.0" layoutY="34.0" mnemonicParsing="false" onAction="#notificationPressed" prefHeight="37.0" prefWidth="44.0" style="-fx-background-color: white;">
+               <graphic>
+                  <ImageView fitHeight="28.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/th%20(5).jpg" />
+                     </image>
+                  </ImageView>
+               </graphic></Button>
+            <Button fx:id="makeNewListButton" layoutX="204.0" layoutY="32.0" mnemonicParsing="false" onAction="#makeNewListPressed" prefHeight="40.0" prefWidth="78.0" style="-fx-background-color: white;" text=" List">
+               <font>
+                  <Font name="System Bold" size="13.0" />
+               </font>
+               <graphic>
+                  <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/th%20(8).jpg" />
+                     </image>
+                  </ImageView>
+               </graphic></Button>
+            <Button fx:id="logOutButton" layoutX="146.0" layoutY="33.0" mnemonicParsing="false" onAction="#logOutPressed" prefHeight="38.0" prefWidth="45.0" style="-fx-background-color: white;">
+               <graphic>
+                  <ImageView fitHeight="32.0" fitWidth="27.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/power-off-icon-md.png" />
+                     </image>
+                  </ImageView>
+               </graphic></Button>
+            <Button fx:id="makeNewTaskButton" layoutX="300.0" layoutY="32.0" mnemonicParsing="false" onAction="#makeNewTaskPressed" prefHeight="40.0" prefWidth="85.0" style="-fx-background-color: white;" text=" Task">
+               <font>
+                  <Font name="System Bold" size="13.0" />
+               </font>
+               <graphic>
+                  <ImageView fitHeight="30.0" fitWidth="27.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/Ic_add_circle_outline_48px.svg.png" />
+                     </image>
+                  </ImageView>
+               </graphic></Button>
+            <Button fx:id="friendButton" layoutX="907.0" layoutY="27.0" mnemonicParsing="false" onAction="#friendButtonPressed" prefHeight="43.0" prefWidth="32.0" style="-fx-background-color: white;">
+               <graphic>
+                  <ImageView fitHeight="38.0" fitWidth="33.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/contacts-icon.png" />
+                     </image>
+                  </ImageView>
+               </graphic></Button>
+            <Button fx:id="taskRequestButton" layoutX="403.0" layoutY="32.0" mnemonicParsing="false" onAction="#taskRequestPressed" prefHeight="40.0" prefWidth="85.0" style="-fx-background-color: white;" text=" Task">
+               <graphic>
+                  <ImageView fitHeight="28.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/modules_orders.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+               <font>
+                  <Font name="System Bold" size="13.0" />
+               </font></Button>
+            <ImageView fitHeight="77.0" fitWidth="69.0" layoutX="11.0" layoutY="8.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/logo2.png" />
+               </image>
+            </ImageView>
          </children>
       </Pane>
-      <ListView fx:id="toDoList" layoutX="228.0" layoutY="114.0" prefHeight="395.0" prefWidth="295.0">
+      <ListView id="todo" fx:id="toDoList" layoutX="284.0" layoutY="133.0" prefHeight="448.0" prefWidth="228.0">
          <padding>
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
          </padding></ListView>
-      <ListView fx:id="inProgressList" layoutX="532.0" layoutY="114.0" prefHeight="395.0" prefWidth="303.0" />
-      <ListView fx:id="doneList" layoutX="848.0" layoutY="114.0" prefHeight="395.0" prefWidth="295.0" />
-      <Label layoutX="14.0" layoutY="74.0" prefHeight="33.0" prefWidth="120.0" text="Lists" />
-      <AnchorPane fx:id="listAnchor" layoutX="7.0" layoutY="114.0" prefHeight="395.0" prefWidth="200.0">
+      <ListView id="todo" fx:id="inProgressList" layoutX="528.0" layoutY="133.0" prefHeight="448.0" prefWidth="228.0" />
+      <ListView id="todo" fx:id="doneList" layoutX="772.0" layoutY="133.0" prefHeight="448.0" prefWidth="228.0" />
+      <Pane id="pane1" layoutY="83.0" prefHeight="517.0" prefWidth="267.0" style="-fx-background-color: #2e86c1;" />
+      <Label id="text" layoutX="886.0" layoutY="91.0" prefHeight="33.0" prefWidth="120.0" text="Done" />
+      <ImageView fitHeight="42.0" fitWidth="32.0" layoutX="844.0" layoutY="92.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/task-done-flat.png" />
+         </image>
+      </ImageView>
+      <Label id="text" layoutX="400.0" layoutY="91.0" prefHeight="33.0" prefWidth="120.0" text="To Do" />
+      <ImageView fitHeight="33.0" fitWidth="32.0" layoutX="581.0" layoutY="91.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/in-progress-filled.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="33.0" fitWidth="32.0" layoutX="355.0" layoutY="92.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/th%20(7).jpg" />
+         </image>
+      </ImageView>
+      <Label id="text" layoutX="620.0" layoutY="91.0" prefHeight="33.0" prefWidth="120.0" text="In Progress" />
+      <AnchorPane fx:id="friendAnchor" layoutX="752.0" layoutY="71.0" prefHeight="479.0" prefWidth="200.0" style="-fx-background-color: white;" visible="false">
          <children>
-            <TabPane accessibleRole="BUTTON" prefHeight="395.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE">
+            <TabPane accessibleRole="BUTTON" prefHeight="458.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE">
+              <tabs>
+                <Tab id="req" fx:id="friendTap" text="Friends">
+                  <content>
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-background-color: #ffffff;">
+                           <children>
+                              <ListView fx:id="friendList" layoutX="8.0" layoutY="7.0" prefHeight="316.0" prefWidth="184.0" />
+                              <TextField fx:id="addFriendText" layoutX="14.0" layoutY="341.0" prefHeight="25.0" prefWidth="172.0" promptText="Enter Friend Email" />
+                              <Button id="nextBtn" fx:id="addFriendButton" layoutX="63.0" layoutY="378.0" mnemonicParsing="false" onAction="#addFriendPressed" text="Add Friend" />
+                           </children>
+                        </AnchorPane>
+                  </content>
+                </Tab>
+                <Tab id="req" fx:id="friendRequestTap" text="Friend Request">
+                     <content>
+                        <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                           <children>
+                              <ListView fx:id="friendRequestList" prefHeight="446.0" prefWidth="200.0" />
+                           </children>
+                        </AnchorPane>
+                     </content>
+                </Tab>
+              </tabs>
+            </TabPane>
+         </children>
+      </AnchorPane>
+      <AnchorPane fx:id="notificationAnchor" layoutX="498.0" layoutY="71.0" prefHeight="508.0" prefWidth="228.0" style="-fx-background-color: white;" visible="false">
+         <children>
+            <ListView fx:id="notificationList" layoutX="6.0" layoutY="8.0" prefHeight="495.0" prefWidth="214.0" />
+         </children>
+      </AnchorPane>
+      <AnchorPane fx:id="taskRequestAnchor" layoutX="397.0" layoutY="71.0" prefHeight="508.0" prefWidth="256.0" style="-fx-background-color: white;" visible="false">
+         <children>
+            <ListView fx:id="taskRequestList" layoutX="7.0" layoutY="8.0" prefHeight="495.0" prefWidth="239.0" />
+         </children>
+      </AnchorPane>
+      <AnchorPane fx:id="listAnchor" layoutX="14.0" layoutY="119.0" prefHeight="467.0" prefWidth="239.0">
+         <children>
+            <TabPane accessibleRole="BUTTON" layoutY="-9.0" prefHeight="467.0" prefWidth="239.0" style="-fx-background-color: white;" tabClosingPolicy="UNAVAILABLE">
                <tabs>
-                  <Tab id="MyListsBtn" fx:id="btnMyLists" text="My Lists">
+                  <Tab id="btnList" fx:id="btnMyLists" text="My Lists">
                      <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="355.0" prefWidth="200.0" style="-fx-background-color: #ffffff;">
                            <children>
-                              <ListView fx:id="listOfMyLists" onMouseClicked="#mylistsItemClicked" prefHeight="365.0" prefWidth="200.0" />
+                              <ListView id="lists" fx:id="listOfMyLists" layoutX="11.0" layoutY="14.0" onMouseClicked="#mylistsItemClicked" prefHeight="409.0" prefWidth="217.0" />
                            </children>
                         </AnchorPane>
                      </content>
                   </Tab>
-                  <Tab fx:id="btnCollaborationLists" text="Collaboration Lists">
+                  <Tab id="btnList" fx:id="btnCollaborationLists" text="Collaboration Lists">
                      <content>
-                        <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                        <AnchorPane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #ffffff;">
                            <children>
-                              <ListView fx:id="listOfCollaborationLists" onMouseClicked="#myCollobaratelistsItemClicked" prefHeight="365.0" prefWidth="200.0" />
+                              <ListView id="lists" fx:id="listOfCollaborationLists" layoutX="14.0" layoutY="14.0" onMouseClicked="#myCollobaratelistsItemClicked" prefHeight="410.0" prefWidth="211.0" />
                            </children>
                         </AnchorPane>
                      </content>
@@ -61,46 +176,14 @@
             <Insets bottom="5.0" />
          </padding>
       </AnchorPane>
-      <Label layoutX="347.0" layoutY="74.0" prefHeight="33.0" prefWidth="120.0" text="To Do" />
-      <Label layoutX="643.0" layoutY="74.0" prefHeight="33.0" prefWidth="120.0" text="In Progress" />
-      <Label layoutX="964.0" layoutY="74.0" prefHeight="33.0" prefWidth="120.0" text="Done" />
-      <AnchorPane fx:id="friendAnchor" layoutX="943.0" layoutY="62.0" prefHeight="447.0" prefWidth="200.0" visible="false">
-         <children>
-            <TabPane accessibleRole="BUTTON" prefHeight="458.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE">
-              <tabs>
-                <Tab fx:id="friendTap" text="Friends">
-                  <content>
-                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-background-color: #ffffff;">
-                           <children>
-                              <ListView fx:id="friendList" prefHeight="351.0" prefWidth="200.0" />
-                              <TextField fx:id="addFriendText" layoutX="14.0" layoutY="363.0" prefHeight="25.0" prefWidth="172.0" promptText="Enter Friend Email" />
-                              <Button fx:id="addFriendButton" layoutX="72.0" layoutY="397.0" mnemonicParsing="false" onAction="#addFriendPressed" text="Add Friend" />
-                           </children>
-                        </AnchorPane>
-                  </content>
-                </Tab>
-                <Tab fx:id="friendRequestTap" text="Friend Request">
-                     <content>
-                        <AnchorPane prefHeight="200.0" prefWidth="200.0">
-                           <children>
-                              <ListView fx:id="friendRequestList" prefHeight="446.0" prefWidth="200.0" />
-                           </children>
-                        </AnchorPane>
-                     </content>
-                </Tab>
-              </tabs>
-            </TabPane>
-         </children>
-      </AnchorPane>
-      <AnchorPane fx:id="notificationAnchor" layoutX="315.0" layoutY="62.0" prefHeight="448.0" prefWidth="257.0" visible="false">
-         <children>
-            <ListView fx:id="notificationList" layoutX="9.0" layoutY="8.0" prefHeight="432.0" prefWidth="239.0" />
-         </children>
-      </AnchorPane>
-      <AnchorPane fx:id="taskRequestAnchor" layoutX="407.0" layoutY="62.0" prefHeight="448.0" prefWidth="257.0" visible="false">
-         <children>
-            <ListView fx:id="taskRequestList" layoutX="7.0" layoutY="8.0" prefHeight="432.0" prefWidth="239.0" />
-         </children>
-      </AnchorPane>
+      <Button layoutX="977.0" layoutY="6.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#closeButtonPressed" prefHeight="25.0" prefWidth="32.0">
+         <graphic>
+            <ImageView fitHeight="40.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/4.jpg" />
+               </image>
+            </ImageView>
+         </graphic>
+      </Button>
    </children>
 </AnchorPane>

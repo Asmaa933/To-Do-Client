@@ -53,7 +53,7 @@ public class RegisterController {
     private ProgressIndicator progressIndicator;
     @FXML
     private Button signUpBtn;
-   
+
     /**
      *
      * @param event Mouse click on button
@@ -76,12 +76,14 @@ public class RegisterController {
                     signUpBtn.setText("Sign Up");
                     progressIndicator.setVisible(false);
                     if (addFlag == true) {
-                        Parent loginScene;
+                        Parent loginParent;
                         try {
-                            loginScene = FXMLLoader.load(getClass().getResource("LoginView.fxml"));
-                            Scene tableViewScene = new Scene(loginScene);
+                            loginParent = FXMLLoader.load(getClass().getResource("LoginView.fxml"));
+                            Scene loginScene = new Scene(loginParent);
+
                             Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
-                            window.setScene(tableViewScene);
+                            loginScene.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
+                            window.setScene(loginScene);
                             window.show();
                         } catch (IOException ex) {
                             Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
@@ -112,12 +114,14 @@ public class RegisterController {
      */
     @FXML
     private void loginPressed(ActionEvent event) {
-        Parent loginScene;
+        Parent loginParent;
         try {
-            loginScene = FXMLLoader.load(getClass().getResource("LoginView.fxml"));
-            Scene tableViewScene = new Scene(loginScene);
+            loginParent = FXMLLoader.load(getClass().getResource("LoginView.fxml"));
+            Scene loginScene = new Scene(loginParent);
             Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            window.setScene(tableViewScene);
+            loginScene.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
+
+            window.setScene(loginScene);
             window.show();
         } catch (IOException ex) {
             Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);

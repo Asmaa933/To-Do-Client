@@ -167,7 +167,9 @@ public class HomeController implements Initializable {
             UserModel userModel = JsonUtil.toUserModel(response);
             list.setUser(userModel);
             listController.setList(list);
-            stage.setScene(new Scene(root));
+            Scene scene = new Scene(root);
+                    scene.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
+            stage.setScene(scene);   
             stage.initStyle(StageStyle.UNDECORATED);
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setResizable(false);
@@ -190,7 +192,9 @@ public class HomeController implements Initializable {
             TaskModel task = new TaskModel();
             task.setList_id(listID);
             reg.setFromLastView(true, task, loginUserID);
-            stage.setScene(new Scene(root));
+              Scene scene = new Scene(root);
+                    scene.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
+            stage.setScene(scene);
             stage.setTitle("Add Task");
             stage.initStyle(StageStyle.UNDECORATED);
             stage.initModality(Modality.APPLICATION_MODAL);
@@ -264,7 +268,8 @@ public class HomeController implements Initializable {
             notificationFlag = false;
         }
     }
-     @FXML
+
+    @FXML
     private void logOutPressed(ActionEvent event) {
         //make user offline
         JsonObject request = JsonUtil.fromBoolean(false, loginUserID);
@@ -276,12 +281,20 @@ public class HomeController implements Initializable {
             LoginController login = (LoginController) fxload.getController();
             login.setId(-1);
             Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            window.setScene(new Scene(root));
+              Scene scene = new Scene(root);
+                    scene.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
+            window.setScene(scene);
             window.hide();
             window.show();
         } catch (IOException ex) {
             Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    @FXML
+    private void closeButtonPressed(ActionEvent event) {
+        Platform.exit();
+        System.exit(0);
     }
 
     //setters
@@ -418,6 +431,9 @@ public class HomeController implements Initializable {
             super();
             hbox.getChildren().addAll(friendRequestName, pane, accept, reject);
             hbox.setHgrow(pane, Priority.ALWAYS);
+            friendRequestName.setId("lbl2");
+            accept.setId("save1");
+            reject.setId("save");
             reject.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
@@ -477,6 +493,9 @@ public class HomeController implements Initializable {
             super();
             hbox.getChildren().addAll(listNameLabel, pane, edit);
             hbox.setHgrow(pane, Priority.ALWAYS);
+            edit.setId("nextBtn");
+            listNameLabel.setId("lbl2");
+
             edit.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
@@ -531,7 +550,7 @@ public class HomeController implements Initializable {
         public CellNotification() {
             super();
             hbox.getChildren().addAll(textArea);
-            textArea.setMaxWidth(223);
+            textArea.setMaxWidth(198);
             textArea.setMaxHeight(70);
             textArea.setEditable(false);
         }
@@ -557,15 +576,18 @@ public class HomeController implements Initializable {
                 } else if (listOfAllFriends.get(getIndex()).getOnline_status().equals(UserModel.ONLINE_STATUS.OFFLINE)) {
                     image = new ImageView(new Image(getClass().getResource("/images/offline.png").toExternalForm()));
                 }
-                hbox.getChildren().add(image);
+                hbox.getChildren().clear();
+                hbox.getChildren().addAll(friendNameLabel, pane, image);
                 setGraphic(hbox);
             }
         }
 
         public Cellfriend() {
             super();
-            hbox.getChildren().addAll(friendNameLabel, pane);
+
+            //hbox.getChildren().addAll(friendNameLabel, pane);
             hbox.setHgrow(pane, Priority.ALWAYS);
+            friendNameLabel.setId("lbl2");
 
         }
 
@@ -616,6 +638,13 @@ public class HomeController implements Initializable {
             hbox1.setHgrow(pane3, Priority.ALWAYS);
             hbox4.setHgrow(pane, Priority.ALWAYS);
             VBox.setMargin(vbox, new Insets(10, 10, 10, 10));
+            taskNameLabel.setId("lbl1");
+            assignToLabel.setId("lbl");
+            assignTotext.setId("lbl");
+            deadlineLabel.setId("lbl");
+            deadlinetext.setId("lbl");
+            delete.setId("save");
+
             delete.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
@@ -714,6 +743,14 @@ public class HomeController implements Initializable {
             hbox4.getChildren().addAll(pane2, accept, pane, reject, pane4);
             hbox5.getChildren().addAll(pane3);
             vbox.getChildren().addAll(hbox1, hbox2, hbox3, hbox4, pane5);
+            taskNameLabel.setId("lbl");
+            taskNametext.setId("lbl");
+            assignToLabel.setId("lbl");
+            assignTotext.setId("lbl");
+            deadlineLabel.setId("lbl");
+            deadlinetext.setId("lbl");
+            accept.setId("save1");
+            reject.setId("save");
             hbox1.setHgrow(pane7, Priority.ALWAYS);
             hbox4.setHgrow(pane4, Priority.ALWAYS);
             hbox4.setHgrow(pane, Priority.ALWAYS);

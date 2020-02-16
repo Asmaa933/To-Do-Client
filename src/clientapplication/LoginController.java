@@ -153,8 +153,7 @@ public class LoginController {
 
                 }
 
-            }
-            else{
+            } else {
                 dialog.close();
                 ipRegixFlag = true;
             }
@@ -228,7 +227,9 @@ public class LoginController {
                             HomeController home = (HomeController) fxload.getController();
                             home.setLoginUserID(id);
                             Stage window = (Stage) ((Node) eventSource.getSource()).getScene().getWindow();
-                            window.setScene(new Scene(root));
+                            Scene scene = new Scene(root);
+                            scene.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
+                            window.setScene(scene);
                             window.hide();
                             window.show();
                         } catch (IOException ex) {

@@ -138,7 +138,7 @@ public class HomeController implements Initializable {
     private boolean notificationFlag = false;
     private boolean taskRequestFlag = false;
     private int listID;
-
+  
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         makeNewTaskButton.setDisable(true);
@@ -168,8 +168,8 @@ public class HomeController implements Initializable {
             list.setUser(userModel);
             listController.setList(list);
             Scene scene = new Scene(root);
-                    scene.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
-            stage.setScene(scene);   
+            scene.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
+            stage.setScene(scene);
             stage.initStyle(StageStyle.UNDECORATED);
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setResizable(false);
@@ -192,8 +192,8 @@ public class HomeController implements Initializable {
             TaskModel task = new TaskModel();
             task.setList_id(listID);
             reg.setFromLastView(true, task, loginUserID);
-              Scene scene = new Scene(root);
-                    scene.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
+            Scene scene = new Scene(root);
+            scene.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
             stage.setScene(scene);
             stage.setTitle("Add Task");
             stage.initStyle(StageStyle.UNDECORATED);
@@ -273,7 +273,7 @@ public class HomeController implements Initializable {
     private void logOutPressed(ActionEvent event) {
         //make user offline
         JsonObject request = JsonUtil.fromBoolean(false, loginUserID);
-        JsonObject response2 = new RequestHandler().makeRequest(request);
+        new RequestHandler().makeRequest(request);
         Parent root;
         try {
             FXMLLoader fxload = new FXMLLoader(getClass().getResource("LoginView.fxml"));
@@ -281,8 +281,8 @@ public class HomeController implements Initializable {
             LoginController login = (LoginController) fxload.getController();
             login.setId(-1);
             Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
-              Scene scene = new Scene(root);
-                    scene.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
+            Scene scene = new Scene(root);
+            scene.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
             window.setScene(scene);
             window.hide();
             window.show();
@@ -293,8 +293,13 @@ public class HomeController implements Initializable {
 
     @FXML
     private void closeButtonPressed(ActionEvent event) {
+        JsonObject request = JsonUtil.fromBoolean(false, loginUserID);
+        new RequestHandler().makeRequest(request);
         Platform.exit();
         System.exit(0);
+    }
+    @FXML
+    private void btnChartPressed(ActionEvent event) {
     }
 
     //setters
@@ -600,7 +605,7 @@ public class HomeController implements Initializable {
         Label taskNameLabel = new Label();
         Button delete = new Button("Delete");
         HBox hbox2 = new HBox();
-        Label assignToLabel = new Label("Assign To:        ");
+        Label assignToLabel = new Label("Assign To        : ");
         Label assignTotext = new Label();
         HBox hbox3 = new HBox();
         Label deadlineLabel = new Label("Deadline Time: ");
@@ -639,9 +644,9 @@ public class HomeController implements Initializable {
             hbox4.setHgrow(pane, Priority.ALWAYS);
             VBox.setMargin(vbox, new Insets(10, 10, 10, 10));
             taskNameLabel.setId("lbl1");
-            assignToLabel.setId("lbl");
+            assignToLabel.setId("lbl3");
             assignTotext.setId("lbl");
-            deadlineLabel.setId("lbl");
+            deadlineLabel.setId("lbl3");
             deadlinetext.setId("lbl");
             delete.setId("save");
 
@@ -703,15 +708,16 @@ public class HomeController implements Initializable {
 
         VBox vbox = new VBox();
         HBox hbox1 = new HBox();
-        Label taskNameLabel = new Label("Task                 :");
+         Label taskNameLabel =new Label("Task                 : ");
+
         Label taskNametext = new Label();
         HBox hbox2 = new HBox();
         Button reject = new Button("Reject");
         Button accept = new Button("Accept");
-        Label assignToLabel = new Label("Assign Date     :          ");
+   Label assignToLabel =new Label("Assign Date     : ");
         Label assignTotext = new Label();
         HBox hbox3 = new HBox();
-        Label deadlineLabel = new Label("Deadline Time : ");
+      Label deadlineLabel =new Label("Deadline Time : ");
         Label deadlinetext = new Label();
         HBox hbox4 = new HBox();
         Pane pane = new Pane();
@@ -743,11 +749,11 @@ public class HomeController implements Initializable {
             hbox4.getChildren().addAll(pane2, accept, pane, reject, pane4);
             hbox5.getChildren().addAll(pane3);
             vbox.getChildren().addAll(hbox1, hbox2, hbox3, hbox4, pane5);
-            taskNameLabel.setId("lbl");
+            taskNameLabel.setId("lbl3");
             taskNametext.setId("lbl");
-            assignToLabel.setId("lbl");
+            assignToLabel.setId("lbl3");
             assignTotext.setId("lbl");
-            deadlineLabel.setId("lbl");
+            deadlineLabel.setId("lbl3");
             deadlinetext.setId("lbl");
             accept.setId("save1");
             reject.setId("save");

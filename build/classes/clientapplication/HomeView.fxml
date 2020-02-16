@@ -40,7 +40,7 @@
                <graphic>
                   <ImageView fitHeight="32.0" fitWidth="27.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../images/power-off-icon-md.png" />
+                        <Image url="@../images/Logout-icon.png" />
                      </image>
                   </ImageView>
                </graphic></Button>
@@ -79,6 +79,15 @@
                   <Image url="@../images/logo2.png" />
                </image>
             </ImageView>
+            <Button id="lion" fx:id="graphButton" layoutX="842.0" layoutY="27.0" mnemonicParsing="false" onAction="#btnChartPressed" prefHeight="43.0" prefWidth="52.0" style="-fx-background-color: white;">
+               <graphic>
+                  <ImageView fitHeight="34.0" fitWidth="43.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../../Server/ServerApplication/src/images/graph.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
          </children>
       </Pane>
       <ListView id="todo" fx:id="toDoList" layoutX="284.0" layoutY="133.0" prefHeight="448.0" prefWidth="228.0">
@@ -134,14 +143,14 @@
             </TabPane>
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="notificationAnchor" layoutX="498.0" layoutY="71.0" prefHeight="508.0" prefWidth="228.0" style="-fx-background-color: white;" visible="false">
+      <AnchorPane fx:id="notificationAnchor" layoutX="498.0" layoutY="71.0" prefHeight="354.0" prefWidth="228.0" style="-fx-background-color: white;" visible="false">
          <children>
-            <ListView fx:id="notificationList" layoutX="6.0" layoutY="8.0" prefHeight="495.0" prefWidth="214.0" />
+            <ListView fx:id="notificationList" layoutX="6.0" layoutY="8.0" prefHeight="338.0" prefWidth="215.0" />
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="taskRequestAnchor" layoutX="397.0" layoutY="71.0" prefHeight="508.0" prefWidth="256.0" style="-fx-background-color: white;" visible="false">
+      <AnchorPane fx:id="taskRequestAnchor" layoutX="397.0" layoutY="71.0" prefHeight="331.0" prefWidth="256.0" style="-fx-background-color: white;" visible="false">
          <children>
-            <ListView fx:id="taskRequestList" layoutX="7.0" layoutY="8.0" prefHeight="495.0" prefWidth="239.0" />
+            <ListView fx:id="taskRequestList" layoutX="7.0" layoutY="8.0" prefHeight="313.0" prefWidth="239.0" />
          </children>
       </AnchorPane>
       <AnchorPane fx:id="listAnchor" layoutX="14.0" layoutY="119.0" prefHeight="467.0" prefWidth="239.0">

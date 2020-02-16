@@ -1,51 +1,11 @@
-/*
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
-*/
-/* 
-    Created on : Feb 14, 2020, 10:47:55 AM
-    Author     : ghost
-*/
-#cancel{/*
-  -fx-text-fill: white;
-    -fx-font-family: "Arial Narrow";
-    -fx-font-weight: bold;
-    -fx-background-color: linear-gradient(#61a2b1, #2A5058);
-    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 );
-    */
-    /*  -fx-text-fill: white;
-    -fx-font-family: "Arial Narrow";
-    -fx-font-weight: bold;
-   -fx-border-color:null;
-   -fx-background-color:green;
-   -fx-background-radius: 0%;
-   -fx-background-color: null;
-  -fx-text-fill:green;
-  -fx-font-weight:bold; 
-  -fx-background-radius: 0%;
-  -fx-border-color: green;*/
-    /*
+
+#cancel{
+
     -fx-background-color:
-            #090a0c,
-            linear-gradient(#38424b 0%, #1f2429 20%, #191d22 100%),
-            linear-gradient(#20262b, #191d22),
-            radial-gradient(center 50% 0%, radius 100%, rgba(255,255,255,0),rgba(114,131,148,0.9) );
-    -fx-background-radius: 5,4,3,5;
-    -fx-background-insets: 0,1,2,0;
-    -fx-text-fill: white;
-    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 );
-    -fx-font-family: "Arial";
-    -fx-text-fill: linear-gradient(white, #d0d0d0);
-    -fx-font-size: 12px;
-    -fx-padding: 10 20 10 20;
-    */
-    
-    -fx-background-color:
-            #090a0c,
-            linear-gradient(#38424b 0%, #1f2429 20%, #191d22 100%),
-            linear-gradient(#20262b, #191d22),
-            radial-gradient(center 50% 0%, radius 100%, rgba(114,131,148,0.9), rgba(255,255,255,0));
+        #090a0c,
+        linear-gradient(#38424b 0%, #1f2429 20%, #191d22 100%),
+        linear-gradient(#20262b, #191d22),
+        radial-gradient(center 50% 0%, radius 100%, rgba(114,131,148,0.9), rgba(255,255,255,0));
     -fx-background-radius: 5,4,3,5;
     -fx-background-insets: 0,1,2,0;
     -fx-text-fill: white;
@@ -61,22 +21,16 @@ and open the template in the editor.
 }
 
 #lbl{
-       -fx-font-family: "Arial";
-       -fx-font-size: 13px;
-       
-}
-#lbl1{
-       -fx-font-family: "Arial";
-       -fx-font-size: 15px;
-       -fx-text-fill: blueviolet;
-       
+    -fx-font-family: "Arial";
+    -fx-font-size: 13px;
+
 }
 #lbl2{
-       -fx-font-family: "Arial";
-       -fx-font-size: 15px;
-       -fx-text-fill: black;
-       -fx-font-weight:bold
-       
+    -fx-font-family: "Arial";
+    -fx-font-size: 15px;
+    -fx-text-fill: black;
+    -fx-font-weight:bold
+
 }
 #txt{
     -fx-border-color: black;
@@ -92,151 +46,126 @@ and open the template in the editor.
     -fx-background-insets: 0,1,2,0;   
 }
 #list{
-   -fx-border-color:  #0f6599 ; 
-   -fx-background-color:#7ebcea;
-   -fx-background-color: linear-gradient(#328BDB 0%, #207BCF 25%, #1973C9 75%, #0A65BF 100%);
-   /*-fx-background-color: transparent;
-    -fx-pref-width: 12;
-    -fx-pref-height: 12;
-    -fx-padding: 2;*/
+    -fx-border-color:  #0f6599 ; 
+    -fx-background-color:#7ebcea;
+    -fx-background-color: linear-gradient(#328BDB 0%, #207BCF 25%, #1973C9 75%, #0A65BF 100%);
 }
-/*
-#list-row-cell:empty {
-    -fx-background-color: khaki;
-    -fx-border-color: grey
-}
- 
-#list-row-cell:hover{
-    -fx-background-color: blanchedalmond;
-}
- 
-#list-row-cell:selected{
-    -fx-background-color: chocolate;
-}
-
-
-#list:filled:hover {
-    -fx-background-color: #0093ff;
-    -fx-text-fill: white;
-}
-*/
 #add{
-   -fx-background-color:
-            linear-gradient(#e68400, #ffd65b),
-            linear-gradient(#f2ba44, #ffef84),
-            linear-gradient(#efaa22, #ffea6a),
-            linear-gradient(#ffe657 0%, #f8c202 50%, #eea10b 100%),
-            linear-gradient(from 0% 0% to 15% 50%, rgba(255,255,255,0.9), rgba(255,255,255,0));
+    -fx-background-color:
+        linear-gradient(#e68400, #ffd65b),
+        linear-gradient(#f2ba44, #ffef84),
+        linear-gradient(#efaa22, #ffea6a),
+        linear-gradient(#ffe657 0%, #f8c202 50%, #eea10b 100%),
+        linear-gradient(from 0% 0% to 15% 50%, rgba(255,255,255,0.9), rgba(255,255,255,0));
     -fx-background-radius: 30;
     -fx-background-insets: 0,1,2,3,0;
     -fx-text-fill: #654b00;
     -fx-font-weight: bold;
     -fx-font-size: 14px;
     -fx-padding: 10 20 10 20;
-    
-     -fx-background-color:
-            linear-gradient(#ffd65b, #e68400),
-            linear-gradient(#ffef84, #f2ba44),
-            linear-gradient(#ffea6a, #efaa22),
-            linear-gradient(#ffe657 0%, #f8c202 50%, #eea10b 100%),
-            linear-gradient(from 0% 0% to 15% 50%, rgba(255,255,255,0.9), rgba(255,255,255,0));
+
+    -fx-background-color:
+        linear-gradient(#ffd65b, #e68400),
+        linear-gradient(#ffef84, #f2ba44),
+        linear-gradient(#ffea6a, #efaa22),
+        linear-gradient(#ffe657 0%, #f8c202 50%, #eea10b 100%),
+        linear-gradient(from 0% 0% to 15% 50%, rgba(255,255,255,0.9), rgba(255,255,255,0));
     -fx-background-radius: 30;
     -fx-background-insets: 0,1,2,3,0;
     -fx-text-fill: #654b00;
     -fx-font-weight: bold;
     -fx-font-size: 14px;
     -fx-padding: 10 20 10 20;
-     
+
 }
 
 #save{
-   -fx-background-color: red;
-  -fx-text-fill:white;
-  -fx-font-weight:bold;
-   -fx-text-fill: red;
+    -fx-background-color: red;
+    -fx-text-fill:white;
+    -fx-font-weight:bold;
+    -fx-text-fill: red;
     -fx-font-family: "Arial Narrow";
     -fx-font-weight: bold;
-   -fx-border-color:red;
-   -fx-background-color:null;
+    -fx-border-color:red;
+    -fx-background-color:null;
     -fx-font-size: 14px; 
 }
 
 #save1{
-   -fx-background-color:  darkgreen;
-  -fx-text-fill:white;
-  -fx-font-weight:bold;
-   -fx-text-fill: darkgreen;
+    -fx-background-color:  darkgreen;
+    -fx-text-fill:white;
+    -fx-font-weight:bold;
+    -fx-text-fill: darkgreen;
     -fx-font-family: "Arial Narrow";
     -fx-font-weight: bold;
-   -fx-border-color:darkgreen;
-   -fx-background-color:null;
+    -fx-border-color:darkgreen;
+    -fx-background-color:null;
     -fx-font-size: 14px; 
 }
 
 .list-view .list-cell:even {
-/*-fx-background-color: #CEECF5;*/
--fx-text-fill: white;
+    -fx-text-fill: white;
 
 }
 
 .list-view .list-cell:odd {
--fx-background-color: #A9D0F5;
--fx-text-fill: black;
+    -fx-background-color: #A9D0F5;
+    -fx-text-fill: black;
 
 }
 .list-view .list-cell:empty{
-   visibility: hidden; 
-   -fx-background-color: white;
+    visibility: hidden; 
+    -fx-background-color: white;
 }
 
 #todo{
-   -fx-background-color: #F2F2F2;
--fx-text-fill: black;
--fx-border-color: black;
+    -fx-background-color: #F2F2F2;
+    -fx-text-fill: black;
+    -fx-border-color: black;
 }
 #todo .list-cell:empty{
-   -fx-background-color: white;
--fx-text-fill: black; 
+    -fx-background-color: white;
+    -fx-text-fill: black; 
 }
 
 #btnList{
-   -fx-background-color:
-            #c3c4c4,
-            linear-gradient(#d6d6d6 50%, white 100%),
-            radial-gradient(center 50% -40%, radius 200%, #e6e6e6 45%, rgba(230,230,230,0) 50%);
+    -fx-background-color:
+        #c3c4c4,
+        linear-gradient(#d6d6d6 50%, white 100%),
+        radial-gradient(center 50% -40%, radius 200%, #e6e6e6 45%, rgba(230,230,230,0) 50%);
     -fx-background-radius: 30;
     -fx-background-insets: 0,1,1;
     -fx-text-fill: black;
     -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 3, 0.0 , 0 , 1 ); 
 }
 #req{
-   -fx-background-color:
-            #c3c4c4,
-            linear-gradient(#d6d6d6 50%, white 100%),
-            radial-gradient(center 50% -40%, radius 200%, #e6e6e6 45%, rgba(230,230,230,0) 50%);
+    -fx-background-color:
+        #c3c4c4,
+        linear-gradient(#d6d6d6 50%, white 100%),
+        radial-gradient(center 50% -40%, radius 200%, #e6e6e6 45%, rgba(230,230,230,0) 50%);
     -fx-background-radius: 30;
     -fx-background-insets: 0,1,1;
     -fx-text-fill: black;
     -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 3, 0.0 , 0 , 1 ); 
 }
 #lists .list-cell:empty{
-   -fx-background-color: white;
+    -fx-background-color: white;
 }
 #lists .list-cell:odd {
-   -fx-background-color: #E0F8F7;
-   -fx-text-fill: black; 
+    -fx-background-color: #E0F8F7;
+    -fx-text-fill: black; 
 }
 #lists .list-cell:even {
-   -fx-background-color: #E0F8F7;
-   -fx-text-fill: black; 
+    -fx-background-color: #E0F8F7;
+    -fx-text-fill: black; 
 }
 #nextBtn{
 
-  -fx-background-color:#0B729C; 
-  -fx-text-fill:white;
-  -fx-font-weight:bold; 
-  -fx-border-color:#168FC1;
-    
+    -fx-background-color:#0B729C; 
+    -fx-text-fill:white;
+    -fx-font-weight:bold; 
+    -fx-border-color:#168FC1;
+
 }
 
 #task{
@@ -252,4 +181,14 @@ and open the template in the editor.
     -fx-text-fill: #090a0c;
     -fx-font-weight:bold;
 }
-
+#lbl3{
+    -fx-font-family: "Arial";
+    -fx-font-size: 13px;
+    -fx-font-weight:bold;
+}
+#lbl1{
+    -fx-font-family: "Arial";
+    -fx-font-size: 17px;
+    -fx-text-fill: blueviolet;
+    -fx-font-weight:bold;
+}

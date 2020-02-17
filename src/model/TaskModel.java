@@ -7,10 +7,6 @@ package model;
 
 import java.sql.Timestamp;
 
-/**
- *
- * @author Mazen Mohamed
- */
 public class TaskModel {
     private int task_id = -1;
     private String title;
@@ -32,6 +28,8 @@ public class TaskModel {
     public static final class ASSIGN_STATUS{
         public static final String PENDING = "pending";
         public static final String ACCEPTED = "accepted";
+        public static final String REJECTED = "rejected";
+
     }
     
     public TaskModel() {

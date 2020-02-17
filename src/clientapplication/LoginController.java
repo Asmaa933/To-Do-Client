@@ -212,7 +212,7 @@ public class LoginController {
                 JsonObject jsonObject = JsonUtil.createJsonPassword(passwordText.getText(), id);
                 JsonObject response = new RequestHandler().makeRequest(jsonObject);
                 boolean passflag = JsonUtil.convertFromJsonPasswordResponse(response);
-//change status
+                //change status
                 JsonObject request = JsonUtil.fromBoolean(passflag, id);
                 JsonObject response2 = new RequestHandler().makeRequest(request);
                 if (passflag == true) {

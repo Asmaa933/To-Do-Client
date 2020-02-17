@@ -38,10 +38,6 @@ import javax.json.JsonObject;
 import model.*;
 import network.*;
 
-/**
- *
- * @author ghost color & date....
- */
 public class ListViewController implements Initializable {
 
     @FXML

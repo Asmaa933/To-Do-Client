@@ -39,11 +39,7 @@ import model.CommentModel;
 import model.*;
 import network.*;
 
-/**
- * FXML Controller class
- *
- * @author esma
- */
+
 public class TaskViewController implements Initializable {
 
     //FXML
@@ -75,7 +71,7 @@ public class TaskViewController implements Initializable {
     private static final String IN_PROGRESS = "In Progress";
     private static final String DONE = "Done";
 
-//Lists
+    //Lists
     private ObservableList<String> statusList = FXCollections.observableArrayList(TO_DO, IN_PROGRESS, DONE);
     private ObservableList<String> collaboratorList = FXCollections.observableArrayList();
     private ObservableList<CommentModel> commentsList = FXCollections.observableArrayList();
@@ -89,6 +85,7 @@ public class TaskViewController implements Initializable {
     private TaskModel selectedTask;
     private int loginUserID;
     private boolean isCollaborator;
+
     /**
      * Initializes the controller class.
      */
@@ -193,7 +190,7 @@ public class TaskViewController implements Initializable {
 
     @FXML
     private void addCommentPressed(ActionEvent event) {
-        if (selectedTask.getTask_id() != -1 ) {
+        if (taskID != -1) {
             new Thread(new Runnable() {
                 @Override
                 public void run() {
@@ -220,13 +217,13 @@ public class TaskViewController implements Initializable {
             alert.setContentText("Add task first then add comment");
             alert.showAndWait();
         }
-          if (commentTextArea.getText().isEmpty() && selectedTask.getTask_id() != -1) {
+        if (commentTextArea.getText().isEmpty() && taskID != -1) {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setHeaderText(null);
             alert.setTitle("Add Comment");
             alert.setContentText("Enter the comment");
             alert.showAndWait();
-    }
+        }
     }
 
     @FXML
@@ -235,15 +232,15 @@ public class TaskViewController implements Initializable {
         ((Node) (event.getSource())).getScene().getWindow().hide();
     }
 
-    public void setFromLastView(boolean isNew, TaskModel task, int loginUserID,boolean isCollaborator) {
+    public void setFromLastView(boolean isNew, TaskModel task, int loginUserID, boolean isCollaborator) {
         this.isNew = isNew;
         this.selectedTask = task;
         this.taskID = selectedTask.getTask_id();
         this.loginUserID = loginUserID;
         this.isCollaborator = isCollaborator;
-        if(this.isCollaborator){
+        if (this.isCollaborator) {
             editButton.setDisable(true);
-        }else{
+        } else {
             editButton.setDisable(false);
         }
         if (this.isNew) {
@@ -251,11 +248,11 @@ public class TaskViewController implements Initializable {
             titleLabel.setText("Add Task");
             resetFields();
         } else {
-              if(this.isCollaborator){
-            editButton.setDisable(true);
-        }else{
-            editButton.setDisable(false);
-        }
+            if (this.isCollaborator) {
+                editButton.setDisable(true);
+            } else {
+                editButton.setDisable(false);
+            }
             titleLabel.setText("Task Details");
             titleTextField.setText(selectedTask.getTitle());
             descriptionTextArea.setText(selectedTask.getDescription());
@@ -391,7 +388,7 @@ public class TaskViewController implements Initializable {
             if (item != null && !empty) {
                 userName.setText(item.getUserName());
                 commentsArea.setText(item.getComment_text());
-                                date.setText(new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(item.getComment_date()));
+                date.setText(new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(item.getComment_date()));
                 setGraphic(vbox);
             }
         }

@@ -5,10 +5,6 @@
  */
 package model;
 
-/**
- *
- * @author Mazen Mohamed
- */
 public class UserModel {
     private int id = -1;
     private String name = "";
@@ -20,9 +16,7 @@ public class UserModel {
         public static final String OFFLINE = "offline";
         public static final String ONLINE = "online";
     }
-    
-    
-    
+
     public UserModel() {
     }
     

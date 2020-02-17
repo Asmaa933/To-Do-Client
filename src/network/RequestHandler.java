@@ -23,11 +23,6 @@ import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
 
-
-/**
- *
- * @author Mazen Mohamed
- */
 public class RequestHandler {
 
     private static String STATIC_IP = "127.0.0.1";
@@ -51,7 +46,7 @@ public class RequestHandler {
         JsonObject response = null;
         try {
             socket = new Socket(STATIC_IP, PORT_NO);
-            //time out in 0.5 mins
+            //time out in 0.5 min
             socket.setSoTimeout(30000);
             dis = new DataInputStream(socket.getInputStream());
             ps = new PrintStream(socket.getOutputStream());

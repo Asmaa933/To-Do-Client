@@ -7,10 +7,6 @@ package model;
 
 import java.sql.Timestamp;
 
-/**
- *
- * @author esma
- */
 public class CommentModel {
 
     private int comment_id;

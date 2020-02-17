@@ -13,23 +13,26 @@ import javafx.scene.chart.StackedBarChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import model.TaskModel;
 
-/**
- *
- * @author AhmedWagdy
- */
 public class ClientChart extends Application {
 
-    public static int allLists;
-    public static int allTasks;
-    public static int todoTasks;
-    public static int inprogressTasks;
-    public static int doneTasks;
+    private static int allLists;
+    private static int allTasks;
+    private static int todoTasks;
+    private static int inprogressTasks;
+    private static int doneTasks;
+
+    public static void setInputs(int allLists, int allTasks, int todoTasks, int inprogressTasks, int doneTasks) {
+        ClientChart.allLists = allLists;
+        ClientChart.allTasks = allTasks;
+        ClientChart.todoTasks = todoTasks;
+        ClientChart.inprogressTasks = inprogressTasks;
+        ClientChart.doneTasks = doneTasks;
+    }
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        
+
         primaryStage.setTitle("Statistics Of Your Activity");
 
         CategoryAxis xAxis = new CategoryAxis();
@@ -80,5 +83,4 @@ public class ClientChart extends Application {
         primaryStage.show();
 
     }
-
 }

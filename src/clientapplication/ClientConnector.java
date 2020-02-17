@@ -10,10 +10,6 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.net.Socket;
 
-/**
- *
- * @author remon
- */
 public class ClientConnector {
 
     private static final String STATIC_IP = "127.0.0.1";
@@ -40,10 +36,7 @@ public class ClientConnector {
             public void run() {
                 while(true) {                    
                     try {   
-                        //checkMyConnection();
-                        String replyMsg = dis.readLine();
-                        //Use Massage 
-                        System.out.println("Client Message From Server (replyMsg)= " + replyMsg);
+                        String replyMsg = dis.readLine();                    
                     } catch (IOException ex) {
                        ex.printStackTrace();
                     }
@@ -61,10 +54,6 @@ public class ClientConnector {
     public static void sendMessage(String msg) {
         ps.println(msg);
     }
-    
-    /* public static void sendMessage(JSONObject msg) {
-        ps.println(msg);
-    }*/
 
     /**
      * close connection and release resources
@@ -79,7 +68,5 @@ public class ClientConnector {
         } catch (IOException ex) {
             ex.printStackTrace();
         }
-    }
-    
-    
+    }    
 }

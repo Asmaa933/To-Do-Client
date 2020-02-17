@@ -13,12 +13,14 @@
             <url>src/clientapplication/HomeController.java</url>
             <bookmark id="2">
                 <name/>
-                <line>339</line>
+                <line>356</line>
                 <key/>
             </bookmark>
         </file>
     </editor-bookmarks>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group/>
+        <group>
+            <file>file:/Users/esma/Desktop/java%20Projects/Client/ClientApplication/src/clientapplication/HomeController.java</file>
+        </group>
     </open-files>
 </project-private>

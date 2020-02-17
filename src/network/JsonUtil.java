@@ -13,10 +13,6 @@ import javax.json.JsonArray;
 import javax.json.JsonObject;
 import model.*;
 
-/**
- *
- * @author remon
- */
 public class JsonUtil {
 
     /**
@@ -330,12 +326,14 @@ public class JsonUtil {
     public static boolean toBoolean(JsonObject obj) {
         return obj.getBoolean("status");
     }
-    public static JsonObject fromStats() {
+    public static JsonObject fromStats(int id) {
         JsonObject obj = Json.createObjectBuilder()
                 .add(JsonConst.TYPE, JsonConst.TYPE_STATISTICS_REQUEST)
+                .add(JsonConst.ID, id)
                 .build();
         return obj;
     }
+    
        
     public static int[] fromJsonStatisticsArray(JsonObject obj) {
         int[] statisticsArray = new int[5];

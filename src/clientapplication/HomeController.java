@@ -52,11 +52,6 @@ import javax.json.JsonObject;
 import model.*;
 import network.*;
 
-/**
- * FXML Controller class
- *
- * @author ghost
- */
 public class HomeController implements Initializable {
 
     //FXML
@@ -118,7 +113,7 @@ public class HomeController implements Initializable {
     private ObservableList<TaskModel> inProgressListObservable;
     private ObservableList<TaskModel> doneListObservable;
     private ObservableList<String> notificationObservable;
-    private ObservableList<TaskModel> taskRequestObservable = FXCollections.observableArrayList();
+    private ObservableList<TaskModel> taskRequestObservable;
     private ObservableList<String> listOfMyListsObservable;
     private ObservableList<String> btnCollaborationListsObservable;
 
@@ -153,26 +148,26 @@ public class HomeController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         makeNewTaskButton.setDisable(true);
-          notificationAnchor.setOnMouseExited(new EventHandler<MouseEvent>() {
+        notificationAnchor.setOnMouseExited(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                    notificationAnchor.setVisible(false);
-                }
-            });
-        
+                notificationAnchor.setVisible(false);
+            }
+        });
+
         taskRequestAnchor.setOnMouseExited(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                    taskRequestAnchor.setVisible(false);
-                }
-            });
-        
+                taskRequestAnchor.setVisible(false);
+            }
+        });
+
         friendAnchor.setOnMouseExited(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                    friendAnchor.setVisible(false);
-                }
-            });
+                friendAnchor.setVisible(false);
+            }
+        });
 
     }
 
@@ -252,6 +247,10 @@ public class HomeController implements Initializable {
         makeNewTaskButton.setDisable(true);
         int selectedindex = listOfCollaborationLists.getSelectionModel().getSelectedIndex();
         listID = userCollaborateLists.get(selectedindex).getList_id();
+        String color = userLists.get(selectedindex).getColor();
+        color = "#" + color.substring(2, 8);
+        pane1.setStyle("-fx-background-color:" + color + ";");
+        pane2.setStyle("-fx-background-color:" + color + ";");
         updateTasksLists(listID);
     }
 
@@ -382,7 +381,16 @@ public class HomeController implements Initializable {
 
     @FXML
     private void btnChartPressed(ActionEvent event) {
-        Stage stageold = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        JsonObject request = JsonUtil.fromStats(loginUserID);
+        JsonObject response = new RequestHandler().makeRequest(request);
+        int allLists = response.getInt("all_lists");
+        int allTasks = response.getInt("all_tasks");
+        int todoTasks = response.getInt("todo_tasks");
+        int inprogressTasks = response.getInt("in_progress_tasks");
+        int doneTasks = response.getInt("done_tasks");
+        ClientChart.setInputs(allLists, allTasks, todoTasks, inprogressTasks, doneTasks);
+
+        Stage stageOld = (Stage) ((Node) event.getSource()).getScene().getWindow();
         Stage window = new Stage();
         window.initModality(Modality.APPLICATION_MODAL);
         try {
@@ -392,9 +400,6 @@ public class HomeController implements Initializable {
             Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        window.setOnCloseRequest((ev) -> {
-            stageold.show();
-        });
     }
 
     //setters
@@ -514,7 +519,7 @@ public class HomeController implements Initializable {
 
         new Thread(() -> {
             //get all notifiaction
-            JsonObject jsonObject = JsonUtil.fromId(JsonConst.TYPE_GET_Notification, loginUserID);
+            JsonObject jsonObject = JsonUtil.fromId(JsonConst.TYPE_GET_NOTIFICATION, loginUserID);
             JsonObject response = new RequestHandler().makeRequest(jsonObject);
             listOfNotifications = JsonUtil.toNotificationAsString(response);
 
@@ -627,6 +632,7 @@ public class HomeController implements Initializable {
                             listController.setList(userLists.get(getIndex()));
                             Scene scene = new Scene(root);
                             Stage stage = new Stage();
+                            stage.initStyle(StageStyle.UNDECORATED);
                             stage.setResizable(false);
                             stage.setScene(scene);
                             stage.setTitle("Edit List");

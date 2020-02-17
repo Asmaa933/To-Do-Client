@@ -318,5 +318,33 @@ public class JsonUtil {
         }
         return notifcationsString;
     }
+    public static JsonObject toJsonAddFriend(int senderId, String recieverEmail) {
+        JsonObject obj = Json.createObjectBuilder()
+                .add(JsonConst.TYPE, JsonConst.TYPE_ADD_FRIEND_REQUEST)
+                .add(JsonConst.ID, senderId)
+                .add(JsonConst.EMAIL, recieverEmail)
+                .build();
+        return obj;
+    }
+    
+    public static boolean toBoolean(JsonObject obj) {
+        return obj.getBoolean("status");
+    }
+    public static JsonObject fromStats() {
+        JsonObject obj = Json.createObjectBuilder()
+                .add(JsonConst.TYPE, JsonConst.TYPE_STATISTICS_REQUEST)
+                .build();
+        return obj;
+    }
+       
+    public static int[] fromJsonStatisticsArray(JsonObject obj) {
+        int[] statisticsArray = new int[5];
+        statisticsArray[0]=obj.getInt("allLists");
+        statisticsArray[1]=obj.getInt("allTasks");
+        statisticsArray[2]=obj.getInt("todoTasks");
+        statisticsArray[3]=obj.getInt("inprogressTasks");
+        statisticsArray[4]=obj.getInt("doneTasks");  
+        return statisticsArray;
+    }
     
 }

@@ -46,5 +46,9 @@ public class JsonConst {
     public static final String TYPE_REJECT_TASK_REQUEST = "TYPE_REJECT_TASK_REQUEST";
     public static final String TYPE_ACCEPT_TASK_REQUEST = "TYPE_ACCEPT_TASK_REQUEST";
     public static final String TYPE_GET_Notification = "TYPE_GET_Notification";
+    public static final String TYPE_ADD_FRIEND_REQUEST = "type_add_friend_request";
+    public static final String SENDER_ID = "sender_id";
+    public static final String RECIEVER_EMAIL = "reciever_email";
+    public static final String TYPE_STATISTICS_REQUEST = "type_statistics_request";
 
 }

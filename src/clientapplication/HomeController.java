@@ -134,7 +134,6 @@ public class HomeController implements Initializable {
     private List<UserModel> listOfAllFriendsRequest;
     private List<String> listOfNotifications;
 
-
     //variables
     private int loginUserID;
     private boolean friendFlag = false;
@@ -154,9 +153,26 @@ public class HomeController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         makeNewTaskButton.setDisable(true);
-
-        taskRequestList.setItems(taskRequestObservable);
-        taskRequestList.setCellFactory(param -> new CellTaskRequest());
+          notificationAnchor.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                    notificationAnchor.setVisible(false);
+                }
+            });
+        
+        taskRequestAnchor.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                    taskRequestAnchor.setVisible(false);
+                }
+            });
+        
+        friendAnchor.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                    friendAnchor.setVisible(false);
+                }
+            });
 
     }
 
@@ -200,7 +216,7 @@ public class HomeController implements Initializable {
             TaskViewController taskController = (TaskViewController) fxload.getController();
             TaskModel task = new TaskModel();
             task.setList_id(listID);
-            taskController.setFromLastView(true, task, loginUserID,isCollaborator);
+            taskController.setFromLastView(true, task, loginUserID, isCollaborator);
             Scene scene = new Scene(root);
             scene.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
             stage.setScene(scene);
@@ -227,7 +243,7 @@ public class HomeController implements Initializable {
         pane1.setStyle("-fx-background-color:" + color + ";");
         pane2.setStyle("-fx-background-color:" + color + ";");
         updateTasksLists(listID);
-        
+
     }
 
     @FXML
@@ -241,6 +257,42 @@ public class HomeController implements Initializable {
 
     @FXML
     private void addFriendPressed(ActionEvent event) {
+        if (addFriendText.getText().trim().isEmpty()) {
+
+        } else {
+            String recieverEmail = addFriendText.getText().trim();
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    JsonObject addFriendRequest = JsonUtil.toJsonAddFriend(loginUserID, recieverEmail);
+                    JsonObject addFriendResponse = new RequestHandler().makeRequest(addFriendRequest);
+                    boolean isRequestSent = JsonUtil.toBoolean(addFriendResponse);
+
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (!isRequestSent) {
+                                addFriendText.setText("");
+                                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                                alert.setHeaderText("Can't add friend!");
+                                alert.setTitle("Can't add friend!");
+                                alert.setContentText("the email you are trying to add either doesn't exsist or is already in your friend list");
+                                alert.showAndWait();
+                            } else {
+                                addFriendText.setText("");
+                                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                                alert.setHeaderText("Friend Request is on the way!");
+                                alert.setTitle("Friend Request is on the way!");
+                                alert.setContentText("your friend has recived the friend request. pending acceptance...");
+                                alert.showAndWait();
+                            }
+                        }
+                    });
+
+                }
+            }).start();
+        }
+
     }
 
     @FXML
@@ -288,7 +340,7 @@ public class HomeController implements Initializable {
 
     @FXML
     private void notificationPressed(ActionEvent event) {
-                setNotifications();
+        setNotifications();
         if (notificationFlag == false) {
             notificationAnchor.setVisible(true);
             notificationFlag = true;
@@ -330,6 +382,19 @@ public class HomeController implements Initializable {
 
     @FXML
     private void btnChartPressed(ActionEvent event) {
+        Stage stageold = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        Stage window = new Stage();
+        window.initModality(Modality.APPLICATION_MODAL);
+        try {
+            ClientChart clientChart = new ClientChart();
+            clientChart.start(window);
+        } catch (Exception ex) {
+            Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        window.setOnCloseRequest((ev) -> {
+            stageold.show();
+        });
     }
 
     //setters
@@ -441,6 +506,7 @@ public class HomeController implements Initializable {
             });
         }).start();
     }
+
     private void setNotifications() {
         notificationObservable = FXCollections.observableArrayList();
         notificationList.setItems(notificationObservable);
@@ -605,7 +671,7 @@ public class HomeController implements Initializable {
             hbox.getChildren().addAll(textArea);
             textArea.setMaxWidth(198);
             textArea.setMaxHeight(70);
-              textArea.setWrapText(true);
+            textArea.setWrapText(true);
             textArea.setStyle("-fx-font-weight:bold;");
             textArea.setEditable(false);
         }
@@ -676,7 +742,7 @@ public class HomeController implements Initializable {
             setGraphic(null);
             if (item != null && !empty) {
                 taskNameLabel.setText(item.getTitle());
-                assignTotext.setText(item.getUser_name() + "     ("+item.getAssign_status() +")");
+                assignTotext.setText(item.getUser_name() + "     (" + item.getAssign_status() + ")");
                 deadlineLabel.setText(new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(item.getDeadline()));
                 setGraphic(vbox);
             }
@@ -703,39 +769,38 @@ public class HomeController implements Initializable {
             delete.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
-                    if(!isCollaborator){
-                    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                    alert.setTitle("Delete List");
-                    alert.setHeaderText(null);
-                    alert.setContentText("Do you want to delete this Task ");
-                    Optional<ButtonType> result = alert.showAndWait();
-                    if (result.get() == ButtonType.OK) {
-                        new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                System.out.println(selectedTask.getTask_id());
-                                JsonObject request = JsonUtil.fromTaskId(selectedTask.getTask_id(), JsonConst.TYPE_DELETE_TASK_REQUEST);
-                                new RequestHandler().makeRequest(request);
-                                Platform.runLater(() -> {
-                                    updateTasksLists(listID);
-                                });
-                            }
-                        }).start();
-                    } else if (result.get() == ButtonType.CANCEL) {
-                        alert.close();
-                    }
-                }
-                    else {
-                         Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                            alert.setHeaderText(null);
-                            alert.setTitle("Access Denied");
-                            alert.setContentText("You haven't permission to delete task");
-                            alert.showAndWait();
-                       
+                    if (!isCollaborator) {
+                        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                        alert.setTitle("Delete List");
+                        alert.setHeaderText(null);
+                        alert.setContentText("Do you want to delete this Task ");
+                        Optional<ButtonType> result = alert.showAndWait();
+                        if (result.get() == ButtonType.OK) {
+                            new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    System.out.println(selectedTask.getTask_id());
+                                    JsonObject request = JsonUtil.fromTaskId(selectedTask.getTask_id(), JsonConst.TYPE_DELETE_TASK_REQUEST);
+                                    new RequestHandler().makeRequest(request);
+                                    Platform.runLater(() -> {
+                                        updateTasksLists(listID);
+                                    });
+                                }
+                            }).start();
+                        } else if (result.get() == ButtonType.CANCEL) {
+                            alert.close();
+                        }
+                    } else {
+                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                        alert.setHeaderText(null);
+                        alert.setTitle("Access Denied");
+                        alert.setContentText("You haven't permission to delete task");
+                        alert.showAndWait();
+
                     }
                 }
             });
-                    
+
             readMore.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
@@ -746,7 +811,7 @@ public class HomeController implements Initializable {
                         Stage stage = new Stage();
                         TaskViewController taskControl = (TaskViewController) fxload.getController();
                         TaskModel task = selectedTask;
-                        taskControl.setFromLastView(false, task, loginUserID,isCollaborator);
+                        taskControl.setFromLastView(false, task, loginUserID, isCollaborator);
                         stage.setScene(new Scene(root));
                         stage.setTitle("Task Details");
 
@@ -766,7 +831,8 @@ public class HomeController implements Initializable {
     }
 
     class CellTaskRequest extends ListCell<TaskModel> {
-private int currentTaskId;
+
+        private int currentTaskId;
         VBox vbox = new VBox();
         HBox hbox1 = new HBox();
         Label taskNameLabel = new Label("Task                 : ");
@@ -792,7 +858,7 @@ private int currentTaskId;
 
         @Override
         protected void updateItem(TaskModel item, boolean empty) {
-         super.updateItem(item, empty);
+            super.updateItem(item, empty);
             setText(null);
             setGraphic(null);
 
@@ -803,7 +869,8 @@ private int currentTaskId;
                 deadlinetext.setText(new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(item.getDeadline()));
                 setGraphic(vbox);
             }
-        }    
+        }
+
         public CellTaskRequest() {
             super();
             hbox1.getChildren().addAll(taskNameLabel, taskNametext, pane7);

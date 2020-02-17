@@ -48,7 +48,7 @@ public class RequestHandler {
         try {
             socket = new Socket(STATIC_IP, PORT_NO);
             //time out in 0.5 min
-            socket.setSoTimeout(1000 * 20);
+            socket.setSoTimeout(1000 * 5);
             dis = new DataInputStream(socket.getInputStream());
             ps = new PrintStream(socket.getOutputStream());
 
@@ -69,8 +69,7 @@ public class RequestHandler {
             showTimeoutAlert();
         } catch (IOException ex) {
             Logger.getLogger(RequestHandler.class.getName()).log(Level.SEVERE, null, ex);
-            //{"type":"EXption"}
-
+            showTimeoutAlert();
         }
 
         return response;

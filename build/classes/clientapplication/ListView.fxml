@@ -23,7 +23,7 @@
       <ListView id="list" fx:id="collaborateListView" layoutX="155.0" layoutY="391.0" prefHeight="111.0" prefWidth="174.0" />
       <ButtonBar layoutX="23.0" layoutY="7.0" prefHeight="40.0" prefWidth="395.0">
         <buttons>
-            <Button id="save" fx:id="deleteButton" minWidth="69.0" mnemonicParsing="false" onAction="#deleteButtonPressed" prefHeight="36.0" prefWidth="75.0" text="Delete" />
+            <Button id="save" fx:id="deleteButton" minWidth="69.0" mnemonicParsing="false" onAction="#deleteButtonPressed" prefHeight="36.0" prefWidth="75.0" text="Delete" visible="false" />
         </buttons>
       </ButtonBar>
       <Button id="cancel" fx:id="cancelButton" layoutX="331.0" layoutY="521.0" mnemonicParsing="false" onAction="#CancelButtonPressed" text="Cancel" />

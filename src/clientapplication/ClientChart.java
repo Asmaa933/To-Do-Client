@@ -5,7 +5,10 @@
  */
 package clientapplication;
 
+import java.net.URL;
+import java.util.ResourceBundle;
 import javafx.application.Application;
+import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
@@ -13,21 +16,27 @@ import javafx.scene.chart.StackedBarChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javax.json.JsonObject;
+import network.JsonUtil;
+import network.RequestHandler;
 
-public class ClientChart extends Application {
+public class ClientChart extends Application implements Initializable{
 
     private static int allLists;
     private static int allTasks;
     private static int todoTasks;
     private static int inprogressTasks;
     private static int doneTasks;
+     
 
-    public static void setInputs(int allLists, int allTasks, int todoTasks, int inprogressTasks, int doneTasks) {
-        ClientChart.allLists = allLists;
-        ClientChart.allTasks = allTasks;
-        ClientChart.todoTasks = todoTasks;
-        ClientChart.inprogressTasks = inprogressTasks;
-        ClientChart.doneTasks = doneTasks;
+    public static void setInputs(int loginUserID) {
+        JsonObject request = JsonUtil.fromStats(loginUserID);
+        JsonObject response = new RequestHandler().makeRequest(request);
+         allLists = response.getInt("all_lists");
+         allTasks = response.getInt("all_tasks");
+         todoTasks = response.getInt("todo_tasks");
+         inprogressTasks = response.getInt("in_progress_tasks");
+         doneTasks = response.getInt("done_tasks");
     }
 
     @Override
@@ -83,4 +92,10 @@ public class ClientChart extends Application {
         primaryStage.show();
 
     }
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+    }
+
+  
 }

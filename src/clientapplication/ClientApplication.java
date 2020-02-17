@@ -10,6 +10,7 @@ import static javafx.application.Application.launch;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
@@ -21,6 +22,7 @@ public class ClientApplication extends Application {
         Scene scene = new Scene(root);
         scene.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
         stage.initStyle(StageStyle.UNDECORATED);
+        stage.getIcons().add(new Image("/images/logo1.png"));
         stage.setScene(scene);
         stage.show();
     }

@@ -34,6 +34,7 @@ public class RequestHandler {
 
     public RequestHandler() {
     }
+
     public static void setSTATIC_IP(String STATIC_IP) {
         RequestHandler.STATIC_IP = STATIC_IP;
     }
@@ -41,13 +42,13 @@ public class RequestHandler {
     public static String getSTATIC_IP() {
         return STATIC_IP;
     }
-    
+
     synchronized public JsonObject makeRequest(JsonObject request) {
         JsonObject response = null;
         try {
             socket = new Socket(STATIC_IP, PORT_NO);
             //time out in 0.5 min
-            socket.setSoTimeout(30000);
+            socket.setSoTimeout(1000 * 20);
             dis = new DataInputStream(socket.getInputStream());
             ps = new PrintStream(socket.getOutputStream());
 
@@ -65,7 +66,7 @@ public class RequestHandler {
             showAlert();
         } catch (SocketTimeoutException ste) {
             System.out.println("socket time out");
-            showAlert();
+            showTimeoutAlert();
         } catch (IOException ex) {
             Logger.getLogger(RequestHandler.class.getName()).log(Level.SEVERE, null, ex);
             //{"type":"EXption"}
@@ -82,18 +83,43 @@ public class RequestHandler {
                 System.out.println("couldn't connect...");
                 ButtonType retry = new ButtonType("Retry?", ButtonBar.ButtonData.OK_DONE);
                 ButtonType exit = new ButtonType("exit", ButtonBar.ButtonData.CANCEL_CLOSE);
+                ButtonType ignore = new ButtonType("Ignore", ButtonBar.ButtonData.OK_DONE);
                 Alert alert = new Alert(AlertType.WARNING,
-                        "We are having a hard time connecting to the server!", retry, exit);
+                        "We are having a hard time connecting to the server!", retry, exit, ignore);
                 alert.setTitle("Couldn't connect to the server");
                 Optional<ButtonType> result = alert.showAndWait();
                 if (result.get() == retry) {
                     System.out.println("retry");
-                } else {
+                } else if (result.get() == exit) {
                     System.out.println("exit");
                     Platform.exit();
                     System.exit(0);
+                } else {
+                    //do nothing
                 }
             }
         });
     }
+
+    private void showTimeoutAlert() {
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                System.out.println("timed out...");
+                ButtonType exit = new ButtonType("exit", ButtonBar.ButtonData.CANCEL_CLOSE);
+                ButtonType ignore = new ButtonType("Ignore", ButtonBar.ButtonData.OK_DONE);
+                Alert alert = new Alert(AlertType.WARNING,
+                        "The request is taking so long..", exit, ignore);
+                alert.setTitle("request timed out");
+                Optional<ButtonType> result = alert.showAndWait();
+                if (result.get() == exit) {
+                    System.out.println("exit");
+                    Platform.exit();
+                    System.exit(0);
+                } else {
+                    //do nothing
+                }
+            }
+        });
     }
+}

@@ -188,6 +188,7 @@ public class HomeController implements Initializable {
             list.setUser(userModel);
             listController.setList(list);
             Scene scene = new Scene(root);
+            stage.getIcons().add(new Image("/images/logo1.png"));
             scene.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
             stage.setScene(scene);
             stage.initStyle(StageStyle.UNDECORATED);
@@ -213,6 +214,7 @@ public class HomeController implements Initializable {
             task.setList_id(listID);
             taskController.setFromLastView(true, task, loginUserID, isCollaborator);
             Scene scene = new Scene(root);
+            stage.getIcons().add(new Image("/images/logo1.png"));
             scene.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
             stage.setScene(scene);
             stage.setTitle("Add Task");
@@ -362,6 +364,7 @@ public class HomeController implements Initializable {
             login.setId(-1);
             Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
             Scene scene = new Scene(root);
+            window.getIcons().add(new Image("/images/logo1.png"));
             scene.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
             window.setScene(scene);
             window.hide();
@@ -381,15 +384,8 @@ public class HomeController implements Initializable {
 
     @FXML
     private void btnChartPressed(ActionEvent event) {
-        JsonObject request = JsonUtil.fromStats(loginUserID);
-        JsonObject response = new RequestHandler().makeRequest(request);
-        int allLists = response.getInt("all_lists");
-        int allTasks = response.getInt("all_tasks");
-        int todoTasks = response.getInt("todo_tasks");
-        int inprogressTasks = response.getInt("in_progress_tasks");
-        int doneTasks = response.getInt("done_tasks");
-        ClientChart.setInputs(allLists, allTasks, todoTasks, inprogressTasks, doneTasks);
-
+        
+        ClientChart.setInputs(loginUserID);
         Stage stageOld = (Stage) ((Node) event.getSource()).getScene().getWindow();
         Stage window = new Stage();
         window.initModality(Modality.APPLICATION_MODAL);
@@ -609,7 +605,18 @@ public class HomeController implements Initializable {
             setGraphic(null);
             if (item != null && !empty) {
                 listNameLabel.setText(item);
+
+                if (getListView().equals(listOfMyLists)) {
+                    String color = userLists.get(getIndex()).getColor();
+                    color = "#" + color.substring(2, 8);
+                    edit.setStyle("-fx-background-color:" + color + ";");
+                } else if (getListView().equals(listOfCollaborationLists)) {
+                    String color = userLists.get(getIndex()).getColor();
+                    color = "#" + color.substring(2, 8);
+                    edit.setStyle("-fx-background-color:" + color + ";");
+                }
                 setGraphic(hbox);
+
             }
         }
 
@@ -636,6 +643,8 @@ public class HomeController implements Initializable {
                             stage.setResizable(false);
                             stage.setScene(scene);
                             stage.setTitle("Edit List");
+                                    stage.getIcons().add(new Image("/images/logo1.png"));
+
                             stage.showAndWait();
                             setLists(loginUserID);
 

@@ -45,11 +45,21 @@
     -fx-background-radius: 5,4,3,5;
     -fx-background-insets: 0,1,2,0;   
 }
-#list{
+#statusComboBox .list-cell{
     -fx-border-color:  #0f6599 ; 
-    -fx-background-color:#7ebcea;
-    -fx-background-color: linear-gradient(#328BDB 0%, #207BCF 25%, #1973C9 75%, #0A65BF 100%);
+    -fx-background-color: white;
+    -fx-text-fill: black;
+
 }
+assignToComboBox .list-cell{
+    -fx-border-color:  #0f6599 ; 
+        -fx-background-color: white;
+
+    -fx-text-fill: black;
+
+}
+
+
 #add{
     -fx-background-color:
         linear-gradient(#e68400, #ffd65b),
@@ -212,6 +222,60 @@
     -fx-background-color: #E0F8F7;
     -fx-text-fill: black; 
 }
+
+#lists .list-cell:selected {
+    -fx-background-color: #E0F8F7;
+    -fx-text-fill: black;
+    -fx-font-weight:bold;
+    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 ); 
+
+}
+
+
+#lists .list-cell:hover {
+    -fx-background-color: #E0F8F7;
+    -fx-text-fill: black;
+    -fx-font-weight:bold;
+    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 ); 
+
+}
+
+
+#lists .list-cell:even:selected {
+    -fx-background-color: #E0F8F7;
+    -fx-text-fill: black;
+    -fx-font-weight:bold;
+    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 ); 
+
+}
+
+
+#lists .list-cell:even:hover {
+    -fx-background-color: #E0F8F7;
+    -fx-text-fill: black;
+    -fx-font-weight:bold;
+    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 ); 
+
+}
+
+
+#lists .list-cell:odd:selected {
+    -fx-background-color: #E0F8F7;
+    -fx-text-fill: black;
+    -fx-font-weight:bold;
+    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 ); 
+
+}
+
+
+#lists .list-cell:odd:hover {
+    -fx-background-color: #E0F8F7;
+    -fx-text-fill: black;
+    -fx-font-weight:bold;
+    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 ); 
+
+}
+
 #nextBtn{
 
     -fx-background-color:#0B729C; 

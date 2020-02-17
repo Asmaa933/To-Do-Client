@@ -39,7 +39,6 @@ import model.CommentModel;
 import model.*;
 import network.*;
 
-
 public class TaskViewController implements Initializable {
 
     //FXML
@@ -85,6 +84,9 @@ public class TaskViewController implements Initializable {
     private TaskModel selectedTask;
     private int loginUserID;
     private boolean isCollaborator;
+    int assignUserID;
+    String assignUserName = "";
+
 
     /**
      * Initializes the controller class.
@@ -140,12 +142,17 @@ public class TaskViewController implements Initializable {
                     task.setDeadline(Timestamp.valueOf(deadlineDatePicker.getValue().atStartOfDay()));
                     //to get from List 
                     task.setList_id(selectedTask.getList_id());
-                    String assignUserName = assignToComboBox.getValue().toString();
-                    int assignUserID = 0;
+                     if(assignToComboBox.getValue()!=null){
+                         assignUserName = assignToComboBox.getValue().toString();
+                         
                     for (UserModel user : users) {
                         if (user.getName().equals(assignUserName)) {
                             assignUserID = user.getId();
                         }
+                        
+                     }
+                       
+                    
                     }
                     task.setUser_id(assignUserID);
                     task.setAssign_date(Timestamp.valueOf(assignDatePicker.getValue().atStartOfDay()));
@@ -353,8 +360,7 @@ public class TaskViewController implements Initializable {
 
         }
         if (assignToComboBox.getValue() == null) {
-            validateFlag = false;
-
+             assignUserID = loginUserID;
         }
         if (deadlineDatePicker.getValue() == null) {
             validateFlag = false;

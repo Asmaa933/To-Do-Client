@@ -60,7 +60,7 @@ public class ListViewController implements Initializable {
     private Button cancelButton;
     @FXML
     private ComboBox<String> teammatesCombobox;
-     @FXML
+    @FXML
     private ProgressIndicator ProgressIndicator;
     @FXML
     private ProgressIndicator ProgressIndicator2;
@@ -72,12 +72,11 @@ public class ListViewController implements Initializable {
     private List<UserModel> teammates;
     private List<UserModel> collaborators;
     private boolean editFlag;
-   
-    
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        teammates = new ArrayList<>(); 
-        collaborators = new ArrayList<>();  
+        teammates = new ArrayList<>();
+        collaborators = new ArrayList<>();
     }
 
     public void setList(ListModel listModel) {
@@ -127,7 +126,8 @@ public class ListViewController implements Initializable {
         }).start();
 
     }
-     @FXML 
+
+    @FXML
     private void addButtonPressed(ActionEvent event) {
 
         boolean selectedFlag = false;
@@ -169,11 +169,11 @@ public class ListViewController implements Initializable {
                             addButton.setDisable(false);
                         });
                     }).start();
-                }else{
+                } else {
                     ProgressIndicator2.setVisible(false);
                 }
             }
-            
+
         } else {
             ProgressIndicator2.setVisible(false);
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -183,10 +183,11 @@ public class ListViewController implements Initializable {
             alert.showAndWait();
         }
     }
+
     @FXML
     private void saveButtonPressed(ActionEvent event) {
         saveButton.setDisable(true);
-        
+
         if (!titleText.getText().trim().isEmpty()) {
             ProgressIndicator.setVisible(true);
             list.setTitle(titleText.getText());
@@ -237,11 +238,29 @@ public class ListViewController implements Initializable {
 
         Optional<ButtonType> result = alert.showAndWait();
         if (result.get() == ButtonType.OK) {
-            // ...Function Query to delete the List
+
+//            new Thread(() -> {
+//                JsonObject jsonObject = JsonUtil.fromId(JsonConst.TYPE_DELETE_LIST, list.getList_id());
+//                JsonObject response = new RequestHandler().makeRequest(jsonObject);
+//                boolean deleteFlag = JsonUtil.convertFromJsonPasswordResponse(response); // change name of method
+//                if (deleteFlag) {
+//                    Platform.runLater(() -> {          
+//                        Alert alertDelete = new Alert(Alert.AlertType.INFORMATION);
+//                        alertDelete.setHeaderText(null);
+//                        alertDelete.setTitle("Delete List");
+//                        alertDelete.setContentText("List Delete Sucessfully");
+//                        alertDelete.showAndWait();
+//                        ((Node) (event.getSource())).getScene().getWindow().hide();
+//                    });
+//                }
+//            }).start();
+
         } else if (result.get() == ButtonType.CANCEL) {
             alert.close();
         }
+
     }
+
     class Cell extends ListCell<String> {
 
         HBox hbox = new HBox();
@@ -273,7 +292,7 @@ public class ListViewController implements Initializable {
                                 Platform.runLater(() -> {
                                     collaborators.remove(cellIndex);
                                     collaborateList.remove(cellIndex);
-                                    collaborateListView.refresh(); 
+                                    collaborateListView.refresh();
                                 });
                             }
                         }).start();
@@ -283,9 +302,10 @@ public class ListViewController implements Initializable {
                 }
             });
         }
+
         @Override
         protected void updateItem(String item, boolean empty) {
-            super.updateItem(item, empty); 
+            super.updateItem(item, empty);
             setText(null);
             setGraphic(null);
 
@@ -295,7 +315,5 @@ public class ListViewController implements Initializable {
             }
         }
     }
-
-   
 
 }

@@ -12,7 +12,7 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="578.0" prefWidth="428.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="clientapplication.ListViewController">
+<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="578.0" prefWidth="428.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="clientapplication.ListViewController">
    <children>
       <TextField id="txt" fx:id="titleText" layoutX="196.0" layoutY="149.0" prefHeight="25.0" prefWidth="174.0" promptText="Enter List Name" />
       <Label id="lbl" layoutX="102.0" layoutY="196.0" stylesheets="@style.css" text="List Color" />
@@ -29,7 +29,7 @@
       <Button id="cancel" fx:id="cancelButton" layoutX="331.0" layoutY="521.0" mnemonicParsing="false" onAction="#CancelButtonPressed" text="Cancel" />
       <Label id="lbl" layoutX="102.0" layoutY="149.0" prefHeight="25.0" prefWidth="75.0" stylesheets="@style.css" text="List Name" />
       <Label id="lbl" layoutX="103.0" layoutY="108.0" prefHeight="25.0" prefWidth="50.0" stylesheets="@style.css" text="Owner" />
-      <ComboBox id="txt" fx:id="teammatesCombobox" layoutX="154.0" layoutY="347.0" prefHeight="25.0" prefWidth="174.0" promptText="Select Friend" />
+      <ComboBox fx:id="teammatesCombobox" layoutX="154.0" layoutY="347.0" prefHeight="25.0" prefWidth="174.0" promptText="Select Friend" />
       <TextField id="txt" fx:id="dateText" editable="false" layoutX="196.0" layoutY="234.0" prefHeight="25.0" prefWidth="174.0" />
       <TextField id="txt" fx:id="OwnerNameText" editable="false" layoutX="196.0" layoutY="108.0" prefHeight="25.0" prefWidth="174.0" />
       <Button id="add" fx:id="saveButton" layoutX="176.0" layoutY="280.0" mnemonicParsing="false" onAction="#saveButtonPressed" prefHeight="25.0" prefWidth="75.0" text="Save" />

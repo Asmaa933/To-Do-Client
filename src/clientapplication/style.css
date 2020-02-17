@@ -51,9 +51,16 @@
     -fx-text-fill: black;
 
 }
-assignToComboBox .list-cell{
+#assignToComboBox .list-cell{
     -fx-border-color:  #0f6599 ; 
-        -fx-background-color: white;
+    -fx-background-color: white;
+
+    -fx-text-fill: black;
+
+}
+#teammatesCombobox .list-cell{
+    -fx-border-color:  #0f6599 ; 
+    -fx-background-color: white;
 
     -fx-text-fill: black;
 
@@ -203,11 +210,11 @@ assignToComboBox .list-cell{
     -fx-font-weight:bold;
 }
 #hov:hover{
-   -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 ); 
+    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 ); 
     -fx-font-weight:bold; 
 }
 #hov:selected{
-   -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 ); 
+    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 ); 
     -fx-font-weight:bold; 
 }
 

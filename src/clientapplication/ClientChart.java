@@ -29,16 +29,13 @@ public class ClientChart extends Application implements Initializable{
     private static int doneTasks;
      
 
-    public static void setInputs(int loginUserID) {
-        JsonObject request = JsonUtil.fromStats(loginUserID);
-        JsonObject response = new RequestHandler().makeRequest(request);
-         allLists = response.getInt("all_lists");
-         allTasks = response.getInt("all_tasks");
-         todoTasks = response.getInt("todo_tasks");
-         inprogressTasks = response.getInt("in_progress_tasks");
-         doneTasks = response.getInt("done_tasks");
+    public static void setInputs(int allLists, int allTasks, int todoTasks, int inprogressTasks, int doneTasks) {
+        ClientChart.allLists = allLists;
+        ClientChart.allTasks = allTasks;
+        ClientChart.todoTasks = todoTasks;
+        ClientChart.inprogressTasks = inprogressTasks;
+        ClientChart.doneTasks = doneTasks;
     }
-
     @Override
     public void start(Stage primaryStage) throws Exception {
 
@@ -66,17 +63,17 @@ public class ClientChart extends Application implements Initializable{
         XYChart.Series dataSeries3 = new XYChart.Series();
         dataSeries3.setName("Todo Tasks");
         dataSeries3.setNode(yAxis);
-        dataSeries3.getData().add(new XYChart.Data("Todo Tasks", todoTasks));
+        dataSeries3.getData().add(new XYChart.Data("To Do", todoTasks));
 
         XYChart.Series dataSeries4 = new XYChart.Series();
-        dataSeries4.setName("Inprogress Tasks");
+        dataSeries4.setName("In progress Tasks");
         dataSeries4.setNode(yAxis);
-        dataSeries4.getData().add(new XYChart.Data("InprogressTasks", inprogressTasks));
+        dataSeries4.getData().add(new XYChart.Data("In progress", inprogressTasks));
 
         XYChart.Series dataSeries5 = new XYChart.Series();
         dataSeries5.setName("Done Tasks");
         dataSeries5.setNode(yAxis);
-        dataSeries5.getData().add(new XYChart.Data("Done Tasks", doneTasks));
+        dataSeries5.getData().add(new XYChart.Data("Done", doneTasks));
 
         stackedBarChart.getData().addAll(dataSeries1, dataSeries2, dataSeries3, dataSeries4, dataSeries5);
 

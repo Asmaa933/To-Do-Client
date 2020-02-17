@@ -385,7 +385,15 @@ public class HomeController implements Initializable {
     @FXML
     private void btnChartPressed(ActionEvent event) {
         
-        ClientChart.setInputs(loginUserID);
+JsonObject request = JsonUtil.fromStats(loginUserID);
+        JsonObject response = new RequestHandler().makeRequest(request);
+        int allLists = response.getInt("all_lists");
+        int allTasks = response.getInt("all_tasks");
+        int todoTasks = response.getInt("todo_tasks");
+        int inprogressTasks = response.getInt("in_progress_tasks");
+        int doneTasks = response.getInt("done_tasks");
+        ClientChart.setInputs(allLists, allTasks, todoTasks, inprogressTasks, doneTasks);
+
         Stage stageOld = (Stage) ((Node) event.getSource()).getScene().getWindow();
         Stage window = new Stage();
         window.initModality(Modality.APPLICATION_MODAL);
@@ -646,6 +654,7 @@ public class HomeController implements Initializable {
                                     stage.getIcons().add(new Image("/images/logo1.png"));
 
                             stage.showAndWait();
+                           
                             setLists(loginUserID);
 
                         } else {
@@ -654,6 +663,7 @@ public class HomeController implements Initializable {
                             alert.setTitle("Access Denied");
                             alert.setContentText("You haven't permission to edit");
                             alert.showAndWait();
+                           
                         }
 
                     } catch (IOException ex) {
